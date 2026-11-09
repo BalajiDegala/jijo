@@ -1,0 +1,1390 @@
+# Build a Premium Interview Preparation & Learning PWA
+
+## 1. PRODUCT VISION
+
+I want to build a mobile-first Progressive Web App (PWA) for technical interview preparation.
+
+I have a large collection of interview questions and answers in documents. The collection is not limited to 600 questions. It may contain hundreds, thousands, or eventually many more questions.
+
+The documents are the source of knowledge.
+
+The application should transform that raw content into an engaging, structured and interactive learning experience.
+
+### The ultimate goal is NOT:
+
+"Help me read my interview documents."
+
+### The ultimate goal IS:
+
+> **Help me become genuinely ready to answer technical interview questions confidently.**
+
+The application should take the user through:
+
+**Learn → Understand → Remember → Recall → Explain → Practice → Review → Interview Ready**
+
+The application should feel like a combination of:
+
+* Technical learning platform
+* Interview preparation system
+* Flashcard system
+* Personal revision tool
+* Mock interviewer
+* Progress tracker
+
+It should NOT feel like a PDF reader or documentation website.
+
+---
+
+# 2. THE CORE PROBLEM
+
+Reading large interview documents is boring and difficult.
+
+Common problems:
+
+* Too much text
+* Long paragraphs
+* Difficult technical explanations
+* Poor navigation
+* Difficult to remember concepts
+* No indication of what to study next
+* No way to know whether I actually understand something
+* Reading an answer does not mean I can explain it in an interview
+* Difficult to practice
+* Difficult to identify weak areas
+
+The application must solve these problems.
+
+Do not simply take the documents and display them as cards.
+
+The application must transform the information into small, understandable learning experiences.
+
+If the result feels like:
+
+"PDF but with rounded corners"
+
+then the implementation has failed.
+
+---
+
+# 3. TECHNOLOGY
+
+Build this as a Progressive Web App.
+
+Requirements:
+
+* Mobile-first
+* iPhone compatible
+* Android compatible
+* Desktop compatible
+* Installable from Safari/Chrome
+* No Xcode
+* No Android Studio
+* No App Store
+* No Google Play Store
+* Shareable through a URL
+* Offline-friendly
+* Fast
+* Responsive
+* Accessible
+
+I am using an iPhone and Android devices will also be used by my team.
+
+The application should work by opening a URL in a browser and using:
+
+iPhone:
+Safari → Share → Add to Home Screen
+
+Android:
+Chrome → Add to Home Screen / Install
+
+Use the technology stack that works best with Astra/Codex and is appropriate for a modern PWA.
+
+Keep the architecture simple and maintainable.
+
+Do not introduce unnecessary backend infrastructure for Version 1.
+
+---
+
+# 4. CONTENT MUST BE SCALABLE
+
+There must be NO hard-coded limit such as 600 questions.
+
+The system should comfortably support:
+
+* 500 questions
+* 1,000 questions
+* 5,000 questions
+* 10,000+ questions
+
+New questions should be addable without modifying the application code.
+
+The question database must be completely separated from the UI.
+
+The UI should dynamically consume the content.
+
+---
+
+# 5. CONTENT MODEL
+
+Create a flexible content schema.
+
+A question should support fields such as:
+
+```json
+{
+  "id": "docker-001",
+  "topic": "Docker",
+  "subtopic": "Fundamentals",
+  "question": "What is Docker?",
+  "difficulty": "easy",
+  "quickAnswer": "",
+  "simpleExplanation": "",
+  "analogy": "",
+  "whyItMatters": [],
+  "howItWorks": [],
+  "example": "",
+  "interviewAnswer": "",
+  "keyPoints": [],
+  "commonMistakes": [],
+  "followUps": [],
+  "relatedQuestions": [],
+  "tags": []
+}
+```
+
+Make this extensible.
+
+Different question types may eventually exist:
+
+* Definition
+* Concept
+* Comparison
+* Scenario
+* Troubleshooting
+* Architecture
+* Command-based
+* Coding
+* Behavioral/technical discussion
+* Follow-up question
+
+Do not assume every question needs exactly the same content.
+
+---
+
+# 6. DOCUMENTS ARE RAW SOURCE MATERIAL
+
+The source material may exist as:
+
+* PDF
+* DOCX
+* TXT
+* Markdown
+* CSV
+* Excel
+* JSON
+
+Design the content pipeline so source documents can eventually be converted into structured learning content.
+
+Separate:
+
+RAW SOURCE CONTENT
+
+from
+
+PROCESSED LEARNING CONTENT
+
+Do not blindly copy long answers from the documents.
+
+Where appropriate, transform the content into:
+
+* Simple explanations
+* Short paragraphs
+* Bullet points
+* Examples
+* Analogies
+* Key points
+* Interview-ready answers
+* Follow-up questions
+* Revision material
+
+Technical accuracy must be preserved while making explanations easier to understand.
+
+---
+
+# 7. QUESTION EXPERIENCE
+
+Every question should feel like an interactive learning experience.
+
+Example:
+
+```text
+Docker
+
+Question 24 / 150
+
+What is Docker?
+
+🤔 Think about it first.
+
+[ Reveal Answer ]
+```
+
+Before revealing the answer, encourage the user to think.
+
+After tapping Reveal, progressively reveal information.
+
+Do NOT dump the entire answer immediately.
+
+---
+
+# 8. PROGRESSIVE ANSWER REVEAL
+
+For a typical technical question, use this structure:
+
+## Quick Answer
+
+One or two sentences.
+
+## In Simple Words
+
+Explain the concept in beginner-friendly language.
+
+## Analogy
+
+Use a real-world analogy when it genuinely helps.
+
+## Why Do We Use It?
+
+3-5 concise points.
+
+## How It Works
+
+Explain the technical flow.
+
+Use a diagram when appropriate.
+
+## Real-World Example
+
+Show where the concept is used.
+
+## Key Points
+
+3-6 things to remember.
+
+## Interview Answer
+
+Provide a concise answer that can be spoken naturally in an interview.
+
+## Go Deeper
+
+Allow advanced details to be expanded only when the user wants them.
+
+The default screen should never feel overwhelming.
+
+---
+
+# 9. INTERVIEW ANSWER
+
+Every suitable question should have a dedicated:
+
+"Interview Answer"
+
+section.
+
+The answer should be:
+
+* Accurate
+* Concise
+* Conversational
+* Easy to speak
+* Technically meaningful
+* Appropriate for an interview
+
+Avoid overly academic language.
+
+Example:
+
+Question:
+
+"What is Docker?"
+
+Interview Answer:
+
+"Docker is a containerization platform that packages an application and its dependencies into a lightweight container. This allows the application to run consistently across different environments."
+
+Then:
+
+### Key points to remember
+
+* Containerization
+* Isolation
+* Portability
+* Consistency
+
+The user should be able to actually say the answer aloud.
+
+---
+
+# 10. EXPLAIN IT YOURSELF
+
+This is a core feature.
+
+After learning a question, the app should encourage:
+
+> "Now explain this concept without looking at the answer."
+
+The user should be able to:
+
+* Think silently
+* Type an answer
+* Optionally use voice input if supported by the browser
+
+Then show the important concepts/key points they should have covered.
+
+For example:
+
+Question:
+
+"What is Kubernetes?"
+
+Expected concepts:
+
+* Open source
+* Container orchestration
+* Deployment
+* Scaling
+* Management
+* Self-healing
+
+The goal is NOT perfect wording.
+
+The goal is conceptual understanding and the ability to explain it.
+
+---
+
+# 11. LEARNING STATUS
+
+Each question should have a learning state.
+
+For example:
+
+### Not Started
+
+User has not studied it.
+
+### Learning
+
+User has opened/studied it.
+
+### Understood
+
+User understands the concept.
+
+### Practiced
+
+User has attempted to explain it.
+
+### Interview Ready
+
+User can confidently explain it without looking at the answer.
+
+Do not mark a question "Interview Ready" merely because the user opened it.
+
+---
+
+# 12. INTERVIEW READINESS
+
+The application should focus on interview readiness rather than simply counting viewed questions.
+
+Do NOT make:
+
+"1,000 questions viewed"
+
+the main success metric.
+
+Instead track:
+
+* Questions learned
+* Questions practiced
+* Questions interview-ready
+* Difficult questions
+* Questions needing revision
+* Topic readiness
+
+Example dashboard:
+
+```text
+INTERVIEW READINESS
+
+68%
+
+█████████████░░░░░
+
+Learned             740
+Practiced           510
+Interview Ready     360
+Needs Revision      150
+Difficult            75
+```
+
+The readiness calculation should be transparent and based on the user's activity.
+
+Do not create a meaningless arbitrary score.
+
+---
+
+# 13. HOME SCREEN
+
+The home screen is extremely important.
+
+It should immediately tell the user:
+
+1. What should I study today?
+2. Where did I stop?
+3. What am I weak at?
+4. What should I revise?
+5. How am I progressing?
+
+Example:
+
+```text
+Good evening 👋
+
+INTERVIEW PREPARATION
+
+68% Ready
+
+Continue Learning
+
+┌─────────────────────────────┐
+│ Kubernetes                  │
+│ What is a Pod?              │
+│                             │
+│ Continue →                  │
+└─────────────────────────────┘
+
+TODAY'S PRACTICE
+
+🎯 10 Questions
+🎤 Mock Interview
+🔄 Review Difficult
+⚡ Random Question
+
+WEAK AREAS
+
+Kubernetes Networking
+Jenkins Pipelines
+AWS IAM
+
+YOUR TOPICS
+
+Docker          82%
+Git             76%
+Linux           64%
+Kubernetes      51%
+Jenkins         48%
+AWS             39%
+```
+
+The design should be clean and motivating.
+
+---
+
+# 14. TOPIC STRUCTURE
+
+The application should organize questions into:
+
+Topic
+
+→ Subtopic
+
+→ Questions
+
+Example:
+
+Docker
+
+* Fundamentals
+* Images
+* Containers
+* Networking
+* Volumes
+* Docker Compose
+* Security
+* Troubleshooting
+
+Kubernetes
+
+* Fundamentals
+* Pods
+* Deployments
+* Services
+* Networking
+* Storage
+* ConfigMaps
+* Secrets
+* Ingress
+* Troubleshooting
+* Security
+
+The system should support unlimited topics and subtopics.
+
+---
+
+# 15. TOPIC PAGE
+
+Each topic should show:
+
+* Topic description
+* Number of questions
+* Learning progress
+* Interview readiness
+* Weak areas
+* Subtopics
+* Continue learning button
+
+Do not simply show a giant list of questions.
+
+Make it feel like a learning path.
+
+---
+
+# 16. SEARCH
+
+Implement fast global search.
+
+Search:
+
+* Questions
+* Answers
+* Topics
+* Subtopics
+* Tags
+* Key concepts
+
+Example:
+
+Search:
+
+"network"
+
+Results may include:
+
+Docker Networking
+
+Kubernetes Networking
+
+Linux Networking
+
+CI/CD Networking
+
+Search should feel instant.
+
+---
+
+# 17. FAVORITES
+
+Allow users to favorite/bookmark questions.
+
+Create a dedicated Favorites section.
+
+---
+
+# 18. DIFFICULTY
+
+Support:
+
+* Easy
+* Medium
+* Hard
+
+Allow the user to manually change difficulty if necessary.
+
+Do not assume that difficulty alone determines readiness.
+
+---
+
+# 19. REVIEW SYSTEM
+
+Allow users to mark:
+
+* Review Later
+* Difficult
+* Need More Practice
+
+Create a Review section.
+
+The app should prioritize questions that need attention.
+
+---
+
+# 20. PRACTICE MODES
+
+Implement:
+
+## Learn Mode
+
+Normal progressive learning.
+
+## Quick Practice
+
+10 random questions.
+
+## Random Question
+
+One random question.
+
+## Difficult Questions
+
+Practice only difficult questions.
+
+## Favorites
+
+Practice bookmarked questions.
+
+## Review Mode
+
+Practice questions that need revision.
+
+## Mock Interview
+
+Simulate an interview.
+
+---
+
+# 21. MOCK INTERVIEW MODE
+
+This is one of the most important features.
+
+Example:
+
+```text
+🎤 MOCK INTERVIEW
+
+Question 7
+
+Explain the difference between
+Docker containers and virtual machines.
+
+Take a moment.
+
+Explain your answer as if
+you are speaking to an interviewer.
+
+[ I'm Ready ]
+
+[ Reveal Answer ]
+```
+
+The answer should NOT automatically appear.
+
+The user should first attempt to answer.
+
+Then show:
+
+### What a strong answer should cover
+
+* Container architecture
+* Host OS/kernel sharing
+* VM hypervisor
+* Isolation
+* Startup/resource differences
+
+Then show:
+
+### Sample Interview Answer
+
+Provide a natural interview response.
+
+Then allow the user to self-assess:
+
+* Couldn't answer
+* Partially answered
+* Good
+* Interview Ready
+
+This self-assessment should update progress.
+
+---
+
+# 22. FOLLOW-UP QUESTIONS
+
+Interviewers frequently ask follow-up questions.
+
+For important questions provide:
+
+"Interviewer may ask..."
+
+Example:
+
+What is Docker?
+
+Follow-ups:
+
+* Docker vs VM?
+* Image vs Container?
+* CMD vs ENTRYPOINT?
+* COPY vs ADD?
+* Docker networking?
+* Docker volumes?
+* Docker Compose?
+
+Make follow-ups clickable.
+
+This creates a natural learning tree.
+
+---
+
+# 23. MEMORY SYSTEM
+
+Every question should have a concise:
+
+"Remember This"
+
+section.
+
+Example:
+
+```text
+🧠 REMEMBER
+
+Image       → Blueprint
+Container   → Running instance
+Dockerfile  → Build instructions
+Compose     → Multi-container management
+```
+
+Keep this visually distinct.
+
+The purpose is rapid revision.
+
+---
+
+# 24. COMPARISON QUESTIONS
+
+For comparison questions, use visual comparison layouts.
+
+Example:
+
+Docker CMD vs ENTRYPOINT
+
+Use a clean comparison card/table.
+
+Avoid huge paragraphs.
+
+---
+
+# 25. SCENARIO QUESTIONS
+
+Scenario-based questions should feel different from definition questions.
+
+Example:
+
+"Your Kubernetes pod is continuously restarting. How would you troubleshoot it?"
+
+Present:
+
+### Scenario
+
+### What would you check first?
+
+### Troubleshooting flow
+
+1. Check pod status
+2. Describe pod
+3. Check logs
+4. Check previous logs
+5. Check events
+6. Check resource limits
+7. Check probes
+8. Check configuration
+
+### Interview Answer
+
+Then:
+
+### Follow-up Questions
+
+This should train the user to think, not memorize.
+
+---
+
+# 26. VISUAL LEARNING
+
+Use visuals where they genuinely improve understanding.
+
+Examples:
+
+Docker:
+
+Developer → Dockerfile → Image → Container
+
+Kubernetes:
+
+User → Service → Pod → Container
+
+CI/CD:
+
+Code → Git → Build → Test → Deploy → Production
+
+Use:
+
+* Simple diagrams
+* Flow charts
+* Architecture cards
+* Step-by-step visuals
+* Icons
+* Comparison cards
+
+Do NOT add decorative graphics just to make the screen busy.
+
+Every visual must improve comprehension.
+
+---
+
+# 27. DESIGN LANGUAGE
+
+The app should feel premium, modern and calm.
+
+It should look like a serious learning product.
+
+Prefer:
+
+* Excellent typography
+* Generous spacing
+* Rounded cards
+* Clear hierarchy
+* Subtle shadows
+* Restrained color palette
+* Consistent icons
+* Smooth but subtle animations
+* Strong readability
+* Clean layouts
+
+Avoid:
+
+* Corporate-looking dashboards
+* Excessive gradients
+* Too many colors
+* Giant blocks of text
+* Tiny fonts
+* Clutter
+* Excessive animation
+* Unnecessary charts
+* Too many buttons
+
+The interface should make studying feel easy.
+
+---
+
+# 28. MOBILE-FIRST DESIGN
+
+Design primarily for phones.
+
+Support:
+
+* iPhone
+* Android
+* Tablets
+* Desktop
+
+Important:
+
+* Large touch targets
+* Comfortable typography
+* No horizontal scrolling
+* One-handed usability
+* Swipe between questions
+* Bottom navigation
+* Sticky important actions where appropriate
+* Clear back navigation
+
+Question content should occupy most of the screen.
+
+---
+
+# 29. NAVIGATION
+
+Use simple bottom navigation:
+
+Home
+Topics
+Practice
+Favorites
+Progress
+
+Do not create complicated navigation.
+
+---
+
+# 30. DARK MODE
+
+Support:
+
+* Light mode
+* Dark mode
+
+Initially respect the device preference.
+
+Allow manual switching.
+
+---
+
+# 31. PROGRESS TRACKING
+
+Track locally:
+
+* Questions viewed
+* Questions completed
+* Learning state
+* Favorites
+* Difficulty
+* Review status
+* Practice attempts
+* Self-assessment
+* Topic progress
+* Last viewed question
+* Mock interview history
+
+Use IndexedDB/localStorage or an appropriate client-side storage solution for Version 1.
+
+The user should not lose progress when closing the app.
+
+---
+
+# 32. OFFLINE SUPPORT
+
+After the application has loaded once, the core learning experience should work offline.
+
+Cache:
+
+* Application assets
+* Question data
+* UI resources
+
+The user should be able to study without internet access.
+
+---
+
+# 33. PWA REQUIREMENTS
+
+Implement:
+
+* manifest.json
+* service worker
+* installable PWA
+* proper icons
+* standalone display
+* responsive viewport
+* offline caching
+* appropriate theme colors
+* splash/loading experience where supported
+
+The app should feel like an installed mobile application.
+
+---
+
+# 34. PERFORMANCE
+
+The application must remain fast with thousands of questions.
+
+Avoid:
+
+* Loading the entire question dataset into expensive UI components unnecessarily
+* Excessive re-rendering
+* Huge image assets
+* Unnecessary dependencies
+
+Use appropriate lazy loading, indexing and efficient data access.
+
+---
+
+# 35. ACCESSIBILITY
+
+Support:
+
+* Good contrast
+* Readable font sizes
+* Semantic HTML
+* Keyboard navigation
+* Focus states
+* Screen-reader-friendly controls
+* Accessible touch targets
+
+---
+
+# 36. CONTENT INTELLIGENCE
+
+Design the system so that content can eventually become richer than the original documents.
+
+A single source question can generate:
+
+* Simple explanation
+* Analogy
+* Example
+* Key points
+* Interview answer
+* Follow-up questions
+* Related concepts
+* Scenario questions
+* Revision cards
+
+The application should therefore treat questions as structured learning objects rather than simple text records.
+
+---
+
+# 37. RELATED QUESTIONS
+
+Allow relationships between questions.
+
+Example:
+
+Docker
+
+"What is Docker?"
+
+Related:
+
+"What is a Docker image?"
+
+"What is a container?"
+
+"What is a Dockerfile?"
+
+"What is Docker Compose?"
+
+"What is Docker networking?"
+
+This creates connected learning instead of isolated flashcards.
+
+---
+
+# 38. CONTENT DEDUPLICATION
+
+The question library may contain duplicate or very similar questions.
+
+Design the content pipeline so similar questions can eventually be identified.
+
+For example:
+
+"What is Docker?"
+
+"Explain Docker."
+
+"What do you understand by Docker?"
+
+These should be recognized as potentially related rather than blindly treated as completely separate concepts.
+
+Do not delete content automatically. Provide a safe way to identify duplicates later.
+
+---
+
+# 39. DAILY LEARNING
+
+Provide a lightweight daily learning experience.
+
+Example:
+
+```text
+TODAY
+
+🎯 Learn 5 new questions
+🔄 Review 5 old questions
+🎤 Practice 3 interview questions
+```
+
+The daily plan should be based on the user's progress.
+
+Avoid forcing gamification.
+
+---
+
+# 40. PERSONALIZED REVISION
+
+The app should eventually prioritize questions based on:
+
+* Questions frequently missed
+* Difficult questions
+* Questions not practiced recently
+* Questions marked for review
+* Weak topics
+* Interview readiness
+* Recent practice history
+
+The purpose is to spend time where it matters most.
+
+---
+
+# 41. INTERVIEW READINESS SHOULD BE TOPIC-AWARE
+
+Example:
+
+```text
+Docker
+
+Knowledge       85%
+Practice        70%
+Interview Ready 64%
+
+Kubernetes
+
+Knowledge       62%
+Practice        41%
+Interview Ready 35%
+```
+
+This is more useful than one global number.
+
+---
+
+# 42. VERSION 1 DEVELOPMENT PLAN
+
+Do NOT immediately attempt to build the entire application with thousands of questions.
+
+Build incrementally.
+
+## Phase 1 - Product Foundation
+
+Build:
+
+* Application shell
+* Home
+* Topics
+* Question screen
+* Progressive answer experience
+* Sample question data
+
+Use approximately 10 realistic DevOps questions.
+
+## Phase 2 - Learning System
+
+Implement:
+
+* Learning states
+* Favorites
+* Difficulty
+* Review Later
+* Progress
+
+## Phase 3 - Practice
+
+Implement:
+
+* Quick Practice
+* Random Question
+* Difficult Questions
+* Review Mode
+* Mock Interview
+
+## Phase 4 - Content System
+
+Implement:
+
+* Scalable data structure
+* Import-ready architecture
+* Relationships
+* Topic/subtopic hierarchy
+
+## Phase 5 - PWA
+
+Implement:
+
+* Manifest
+* Service worker
+* Offline support
+* Installability
+
+## Phase 6 - Real Content
+
+Integrate my actual interview documents.
+
+The application must support large amounts of content without architectural changes.
+
+## Phase 7 - Polish
+
+Improve:
+
+* UX
+* Animations
+* Accessibility
+* Performance
+* Mobile responsiveness
+* Empty states
+* Loading states
+* Error handling
+
+---
+
+# 43. FIRST IMPLEMENTATION
+
+Start by building a polished working prototype with sample DevOps questions.
+
+Use examples from:
+
+* Linux
+* Git
+* Docker
+* Kubernetes
+* Jenkins
+* Ansible
+
+The first prototype should demonstrate:
+
+1. Home screen
+2. Topic navigation
+3. Question experience
+4. Progressive answer reveal
+5. Simple explanation
+6. Example
+7. Interview answer
+8. Key points
+9. Follow-up questions
+10. Learning status
+11. Favorites
+12. Progress
+13. Practice mode
+14. Mock interview
+
+Do not use the real large dataset yet.
+
+---
+
+# 44. QUALITY BAR
+
+Before considering the prototype complete, evaluate it against these questions:
+
+### Can a user understand a difficult technical concept quickly?
+
+### Can the user remember the key points?
+
+### Can the user explain the concept without looking?
+
+### Can the user practice answering naturally?
+
+### Can the user identify weak topics?
+
+### Can the user quickly revise?
+
+### Does the application make studying more enjoyable than reading the original document?
+
+### Does it feel good on an iPhone?
+
+### Does it also work naturally on Android?
+
+### Does the application remain usable with thousands of questions?
+
+If any answer is "no", improve the design before adding more features.
+
+---
+
+# 45. IMPORTANT DEVELOPMENT PRINCIPLE
+
+Do not over-engineer.
+
+Do not create unnecessary:
+
+* Microservices
+* Authentication systems
+* Databases
+* APIs
+* Kubernetes infrastructure
+* Cloud infrastructure
+
+for Version 1.
+
+The primary challenge is the learning experience, not infrastructure.
+
+Keep the first version simple.
+
+---
+
+# 46. FINAL PRODUCT PRINCIPLE
+
+Always remember:
+
+The user does not want to "finish reading 1,000 questions."
+
+The user wants to be able to sit in an interview and think:
+
+"I understand this concept, I know the important points, and I can explain it clearly."
+
+Every feature should move the user toward that outcome.
+
+Build the application around that principle.
+
+---
+
+# 47. CODE QUALITY
+
+Write production-quality, maintainable code.
+
+Requirements:
+
+* Clean component architecture
+* Reusable components
+* Clear naming
+* Separation of data and UI
+* Modular code
+* Minimal duplication
+* Error handling
+* Responsive design
+* Comments only where useful
+* Avoid giant components
+* Avoid hard-coded content in UI
+* Keep configuration separate
+
+---
+
+# 48. DELIVERABLES
+
+At the end of the initial implementation, provide:
+
+1. Complete source code
+2. Clear project structure
+3. Local development instructions
+4. Build instructions
+5. PWA installation instructions
+6. iPhone testing instructions
+7. Android testing instructions
+8. Production deployment instructions
+9. Explanation of how to add new questions
+10. Explanation of how the content schema works
+
+Also provide a short explanation of the architectural decisions.
+
+---
+
+# MOST IMPORTANT INSTRUCTION
+
+Do not optimize for the number of features.
+
+Optimize for:
+
+**UNDERSTANDING**
+
+**RECALL**
+
+**CONFIDENCE**
+
+**INTERVIEW PERFORMANCE**
+
+The application should make technical interview preparation feel significantly easier and more engaging than reading a large document.
+
+Build the product around the user's journey from:
+
+**"I don't understand this."**
+
+to
+
+**"I understand this."**
+
+to
+
+**"I can explain this."**
+
+to
+
+**"I can answer this confidently in an interview."**
+
+
+you can find all the quetons and answers from docs folder 

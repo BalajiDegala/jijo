@@ -1,0 +1,11 @@
+.git
+.local
+.openai
+node_modules
+dist
+test-results
+playwright-report
+e2e
+*.tsbuildinfo
+*.tar.gz
+.env.local

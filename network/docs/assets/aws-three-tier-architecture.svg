@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1760" viewBox="0 0 1600 1760" role="img" aria-labelledby="title description">
+<title id="title">AWS three-tier architecture plan across two Availability Zones</title>
+<desc id="description">One VPC, 10.0.0.0/16, contains two Availability Zones. Each has a public subnet with nodes of a shared public load balancer and its own NAT gateway; private web and application subnets with active replicas; and an isolated database subnet. One shared internal load balancer routes to application replicas. RDS has a primary in A, synchronous standby in B, and a shared DNS endpoint. Public default routes use the VPC internet gateway; private compute default routes use their own zone's NAT; database subnets have only local routes. Diagram is a proposed design, not a deployment.</desc>
+<defs>
+  <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#52647a"/></marker>
+  <marker id="dbArrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#93600b"/></marker>
+</defs>
+<g font-family="Segoe UI, Arial, sans-serif">
+<rect x="0" y="0" width="1600" height="1760" rx="0" fill="#fff" stroke="#fff"/>
+<text x="64" y="57" font-size="18" fill="#08786c" font-weight="700" letter-spacing="2">NETVERSE  /  ARCHITECTURE PLAN</text>
+<rect x="1290" y="32" width="246" height="34" rx="17" fill="#f4f7fb" stroke="#f4f7fb"/>
+<text x="1413" y="55" font-size="16" fill="#52647a" font-weight="600" text-anchor="middle">PROPOSED · 26 OCT 2026</text>
+<text x="64" y="116" font-size="46" fill="#16283d" font-weight="700" >Three tiers. Two Availability Zones.</text>
+<text x="64" y="158" font-size="23" fill="#52647a" font-weight="400" >Repeat the web and application tiers in both zones. Give the database a managed failover partner.</text>
+<text x="64" y="208" font-size="17" fill="#52647a" font-weight="700" letter-spacing="1.7">REQUEST FLOW</text>
+<rect x="64" y="226" width="180" height="82" rx="14" fill="#f4f7fb" stroke="#f4f7fb"/>
+<text x="154" y="260" font-size="23" fill="#16283d" font-weight="700" text-anchor="middle">Browser</text>
+<text x="154" y="287" font-size="16" fill="#52647a" font-weight="400" text-anchor="middle">HTTPS · TCP 443</text>
+<path d="M 251 267 H 274" fill="none" stroke="#52647a" stroke-width="2.5"  marker-end="url(#arrow)"/>
+<rect x="282" y="226" width="234" height="82" rx="14" fill="#edf5ff" stroke="#edf5ff"/>
+<text x="399" y="260" font-size="23" fill="#2163b4" font-weight="700" text-anchor="middle">Public ALB</text>
+<text x="399" y="287" font-size="16" fill="#52647a" font-weight="400" text-anchor="middle">One service · two AZs</text>
+<path d="M 523 267 H 546" fill="none" stroke="#52647a" stroke-width="2.5"  marker-end="url(#arrow)"/>
+<rect x="554" y="226" width="190" height="82" rx="14" fill="#eaf8f5" stroke="#eaf8f5"/>
+<text x="649" y="260" font-size="23" fill="#08786c" font-weight="700" text-anchor="middle">1 · Web tier</text>
+<text x="649" y="287" font-size="16" fill="#52647a" font-weight="400" text-anchor="middle">Frontend + API proxy</text>
+<path d="M 751 267 H 774" fill="none" stroke="#52647a" stroke-width="2.5"  marker-end="url(#arrow)"/>
+<rect x="782" y="226" width="234" height="82" rx="14" fill="#f4effb" stroke="#f4effb"/>
+<text x="899" y="260" font-size="23" fill="#6d49a1" font-weight="700" text-anchor="middle">Internal ALB</text>
+<text x="899" y="287" font-size="16" fill="#52647a" font-weight="400" text-anchor="middle">One service · two AZs</text>
+<path d="M 1023 267 H 1046" fill="none" stroke="#52647a" stroke-width="2.5"  marker-end="url(#arrow)"/>
+<rect x="1054" y="226" width="190" height="82" rx="14" fill="#f4effb" stroke="#f4effb"/>
+<text x="1149" y="260" font-size="23" fill="#6d49a1" font-weight="700" text-anchor="middle">2 · App tier</text>
+<text x="1149" y="287" font-size="16" fill="#52647a" font-weight="400" text-anchor="middle">Business logic + API</text>
+<path d="M 1251 267 H 1274" fill="none" stroke="#52647a" stroke-width="2.5"  marker-end="url(#arrow)"/>
+<rect x="1282" y="226" width="250" height="82" rx="14" fill="#fff7e7" stroke="#fff7e7"/>
+<text x="1407" y="260" font-size="23" fill="#93600b" font-weight="700" text-anchor="middle">3 · Database</text>
+<text x="1407" y="287" font-size="16" fill="#52647a" font-weight="400" text-anchor="middle">RDS endpoint → primary</text>
+<text x="64" y="338" font-size="18" fill="#52647a" font-weight="400" >DNS resolves the public ALB name before the request. NAT handles separate outbound connections.</text>
+<rect x="40" y="362" width="1520" height="1068" rx="24" fill="#f4f7fb" stroke="#d7e1ec"/>
+<text x="64" y="402" font-size="20" fill="#16283d" font-weight="700" >AWS REGION · us-east-1</text>
+<rect x="350" y="377" width="285" height="34" rx="17" fill="#e5ecf5" stroke="#e5ecf5"/>
+<text x="492.5" y="400" font-size="18" fill="#16283d" font-weight="600" text-anchor="middle">ONE VPC · 10.0.0.0/16</text>
+<rect x="1216" y="377" width="320" height="34" rx="17" fill="#e5ecf5" stroke="#e5ecf5"/>
+<text x="1376" y="400" font-size="16" fill="#16283d" font-weight="600" text-anchor="middle">Internet gateway · VPC attachment</text>
+<rect x="64" y="432" width="720" height="818" rx="18" fill="#fff" stroke="#d7e1ec"/>
+<text x="88" y="474" font-size="28" fill="#16283d" font-weight="700" >Availability Zone A</text>
+<text x="760" y="471" font-size="18" fill="#52647a" font-weight="500" text-anchor="end">us-east-1a</text>
+<rect x="88" y="500" width="672" height="156" rx="14" fill="#edf5ff" stroke="#b7d2f0"/>
+<text x="106" y="531" font-size="20" fill="#2163b4" font-weight="700" >PUBLIC ENTRY</text>
+<text x="742" y="531" font-size="19" fill="#2163b4" font-weight="600" text-anchor="end" font-family="Consolas, monospace">10.0.0.0/24</text>
+<rect x="104" y="550" width="364" height="84" rx="10" fill="#fff" stroke="#b7d2f0"/>
+<text x="120" y="581" font-size="22" fill="#16283d" font-weight="600" >Public ALB node A</text>
+<text x="120" y="610" font-size="17" fill="#52647a" font-weight="400" >Same public ALB across both zones</text>
+<rect x="484" y="550" width="260" height="84" rx="10" fill="#fff" stroke="#b7d2f0"/>
+<text x="500" y="581" font-size="22" fill="#16283d" font-weight="600" >NAT gateway A</text>
+<text x="500" y="610" font-size="17" fill="#52647a" font-weight="400" >EIP · outbound IPv4</text>
+<rect x="88" y="674" width="672" height="152" rx="14" fill="#eaf8f5" stroke="#a8d9ce"/>
+<text x="106" y="705" font-size="20" fill="#08786c" font-weight="700" >1 · PRIVATE WEB</text>
+<text x="742" y="705" font-size="19" fill="#08786c" font-weight="600" text-anchor="end" font-family="Consolas, monospace">10.0.10.0/24</text>
+<rect x="104" y="724" width="640" height="80" rx="10" fill="#fff" stroke="#a8d9ce"/>
+<text x="120" y="756" font-size="24" fill="#16283d" font-weight="600" >Web server A</text>
+<text x="726" y="754" font-size="19" fill="#08786c" font-weight="500" text-anchor="end" font-family="Consolas, monospace">10.0.10.10</text>
+<text x="120" y="784" font-size="18" fill="#52647a" font-weight="400" >Frontend + API proxy · member of web-asg</text>
+<rect x="88" y="844" width="672" height="226" rx="14" fill="#f4effb" stroke="#d1c1e8"/>
+<text x="106" y="875" font-size="20" fill="#6d49a1" font-weight="700" >2 · PRIVATE APPLICATION</text>
+<text x="742" y="875" font-size="19" fill="#6d49a1" font-weight="600" text-anchor="end" font-family="Consolas, monospace">10.0.20.0/24</text>
+<rect x="104" y="894" width="640" height="62" rx="10" fill="#fff" stroke="#d1c1e8"/>
+<text x="120" y="920" font-size="21" fill="#16283d" font-weight="600" >Internal ALB node A</text>
+<text x="120" y="944" font-size="17" fill="#52647a" font-weight="400" >Same internal ALB across both zones</text>
+<path d="M 424 957 V 975" fill="none" stroke="#52647a" stroke-width="2.5"  marker-end="url(#arrow)"/>
+<rect x="104" y="976" width="640" height="72" rx="10" fill="#fff" stroke="#d1c1e8"/>
+<text x="120" y="1005" font-size="23" fill="#16283d" font-weight="600" >Application server A</text>
+<text x="726" y="1003" font-size="19" fill="#6d49a1" font-weight="500" text-anchor="end" font-family="Consolas, monospace">10.0.20.10</text>
+<text x="120" y="1031" font-size="18" fill="#52647a" font-weight="400" >Business logic + API · member of app-asg</text>
+<rect x="88" y="1088" width="672" height="160" rx="14" fill="#fff7e7" stroke="#e7cf9b"/>
+<text x="106" y="1119" font-size="20" fill="#93600b" font-weight="700" >3 · ISOLATED DATABASE</text>
+<text x="742" y="1119" font-size="19" fill="#93600b" font-weight="600" text-anchor="end" font-family="Consolas, monospace">10.0.30.0/24</text>
+<rect x="104" y="1138" width="640" height="88" rx="10" fill="#fff" stroke="#e7cf9b"/>
+<text x="120" y="1172" font-size="24" fill="#16283d" font-weight="600" >RDS PostgreSQL · primary</text>
+<text x="120" y="1203" font-size="18" fill="#52647a" font-weight="400" >Serves reads and writes · initial placement</text>
+<rect x="816" y="432" width="720" height="818" rx="18" fill="#fff" stroke="#d7e1ec"/>
+<text x="840" y="474" font-size="28" fill="#16283d" font-weight="700" >Availability Zone B</text>
+<text x="1512" y="471" font-size="18" fill="#52647a" font-weight="500" text-anchor="end">us-east-1b</text>
+<rect x="840" y="500" width="672" height="156" rx="14" fill="#edf5ff" stroke="#b7d2f0"/>
+<text x="858" y="531" font-size="20" fill="#2163b4" font-weight="700" >PUBLIC ENTRY</text>
+<text x="1494" y="531" font-size="19" fill="#2163b4" font-weight="600" text-anchor="end" font-family="Consolas, monospace">10.0.1.0/24</text>
+<rect x="856" y="550" width="364" height="84" rx="10" fill="#fff" stroke="#b7d2f0"/>
+<text x="872" y="581" font-size="22" fill="#16283d" font-weight="600" >Public ALB node B</text>
+<text x="872" y="610" font-size="17" fill="#52647a" font-weight="400" >Same public ALB across both zones</text>
+<rect x="1236" y="550" width="260" height="84" rx="10" fill="#fff" stroke="#b7d2f0"/>
+<text x="1252" y="581" font-size="22" fill="#16283d" font-weight="600" >NAT gateway B</text>
+<text x="1252" y="610" font-size="17" fill="#52647a" font-weight="400" >EIP · outbound IPv4</text>
+<rect x="840" y="674" width="672" height="152" rx="14" fill="#eaf8f5" stroke="#a8d9ce"/>
+<text x="858" y="705" font-size="20" fill="#08786c" font-weight="700" >1 · PRIVATE WEB</text>
+<text x="1494" y="705" font-size="19" fill="#08786c" font-weight="600" text-anchor="end" font-family="Consolas, monospace">10.0.11.0/24</text>
+<rect x="856" y="724" width="640" height="80" rx="10" fill="#fff" stroke="#a8d9ce"/>
+<text x="872" y="756" font-size="24" fill="#16283d" font-weight="600" >Web server B</text>
+<text x="1478" y="754" font-size="19" fill="#08786c" font-weight="500" text-anchor="end" font-family="Consolas, monospace">10.0.11.10</text>
+<text x="872" y="784" font-size="18" fill="#52647a" font-weight="400" >Frontend + API proxy · member of web-asg</text>
+<rect x="840" y="844" width="672" height="226" rx="14" fill="#f4effb" stroke="#d1c1e8"/>
+<text x="858" y="875" font-size="20" fill="#6d49a1" font-weight="700" >2 · PRIVATE APPLICATION</text>
+<text x="1494" y="875" font-size="19" fill="#6d49a1" font-weight="600" text-anchor="end" font-family="Consolas, monospace">10.0.21.0/24</text>
+<rect x="856" y="894" width="640" height="62" rx="10" fill="#fff" stroke="#d1c1e8"/>
+<text x="872" y="920" font-size="21" fill="#16283d" font-weight="600" >Internal ALB node B</text>
+<text x="872" y="944" font-size="17" fill="#52647a" font-weight="400" >Same internal ALB across both zones</text>
+<path d="M 1176 957 V 975" fill="none" stroke="#52647a" stroke-width="2.5"  marker-end="url(#arrow)"/>
+<rect x="856" y="976" width="640" height="72" rx="10" fill="#fff" stroke="#d1c1e8"/>
+<text x="872" y="1005" font-size="23" fill="#16283d" font-weight="600" >Application server B</text>
+<text x="1478" y="1003" font-size="19" fill="#6d49a1" font-weight="500" text-anchor="end" font-family="Consolas, monospace">10.0.21.10</text>
+<text x="872" y="1031" font-size="18" fill="#52647a" font-weight="400" >Business logic + API · member of app-asg</text>
+<rect x="840" y="1088" width="672" height="160" rx="14" fill="#fff7e7" stroke="#e7cf9b"/>
+<text x="858" y="1119" font-size="20" fill="#93600b" font-weight="700" >3 · ISOLATED DATABASE</text>
+<text x="1494" y="1119" font-size="19" fill="#93600b" font-weight="600" text-anchor="end" font-family="Consolas, monospace">10.0.31.0/24</text>
+<rect x="856" y="1138" width="640" height="88" rx="10" fill="#fff" stroke="#e7cf9b"/>
+<text x="872" y="1172" font-size="24" fill="#16283d" font-weight="600" >RDS PostgreSQL · standby</text>
+<text x="872" y="1203" font-size="18" fill="#52647a" font-weight="400" >Synchronous copy · promoted on failover</text>
+<path d="M 744 1191 H 856" fill="none" stroke="#93600b" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#dbArrow)"/>
+<rect x="774" y="1159" width="52" height="23" rx="4" fill="#f4f7fb" stroke="#f4f7fb"/>
+<text x="800" y="1176" font-size="16" fill="#93600b" font-weight="700" text-anchor="middle">sync</text>
+<rect x="88" y="1272" width="1424" height="52" rx="10" fill="#fff" stroke="#e7cf9b"/>
+<text x="800" y="1305" font-size="20" fill="#93600b" font-weight="600" text-anchor="middle">ONE RDS DNS ENDPOINT  ·  Both app replicas connect to the current primary  ·  TCP 5432 + TLS</text>
+<text x="88" y="1364" font-size="19" fill="#52647a" font-weight="400" >One web Auto Scaling group + one application Auto Scaling group span both AZs. Start with one instance per tier per AZ.</text>
+<text x="88" y="1396" font-size="19" fill="#52647a" font-weight="400" >The database uses one Multi-AZ DB instance deployment. The standby does not serve application reads before promotion.</text>
+<rect x="64" y="1456" width="472" height="132" rx="14" fill="#edf5ff" stroke="#edf5ff"/>
+<text x="86" y="1490" font-size="18" fill="#2163b4" font-weight="700" letter-spacing="0.6">PUBLIC SUBNETS</text>
+<text x="86" y="1528" font-size="19" fill="#16283d" font-weight="600" >0.0.0.0/0 → Internet gateway</text>
+<text x="86" y="1561" font-size="18" fill="#52647a" font-weight="400" >One shared public route table</text>
+<rect x="560" y="1456" width="472" height="132" rx="14" fill="#f4effb" stroke="#f4effb"/>
+<text x="582" y="1490" font-size="18" fill="#6d49a1" font-weight="700" letter-spacing="0.6">PRIVATE WEB + APP</text>
+<text x="582" y="1528" font-size="19" fill="#16283d" font-weight="600" >0.0.0.0/0 → NAT in the same AZ</text>
+<text x="582" y="1561" font-size="18" fill="#52647a" font-weight="400" >Separate private route table per AZ</text>
+<rect x="1056" y="1456" width="480" height="132" rx="14" fill="#fff7e7" stroke="#fff7e7"/>
+<text x="1078" y="1490" font-size="18" fill="#93600b" font-weight="700" letter-spacing="0.6">ISOLATED DATABASE</text>
+<text x="1078" y="1528" font-size="19" fill="#16283d" font-weight="600" >10.0.0.0/16 → local only</text>
+<text x="1078" y="1561" font-size="18" fill="#52647a" font-weight="400" >No internet default route</text>
+<rect x="64" y="1610" width="1472" height="82" rx="14" fill="#16283d" stroke="#16283d"/>
+<text x="88" y="1643" font-size="18" fill="#86dfcb" font-weight="700" letter-spacing="1">IF AZ A FAILS</text>
+<text x="270" y="1643" font-size="21" fill="#fff" font-weight="600" >Healthy B web/app targets serve requests; RDS promotes B and updates the endpoint.</text>
+<text x="270" y="1672" font-size="18" fill="#ccd8e7" font-weight="400" >Allow for detection, database reconnection, and recovery time. Size surviving capacity for the required traffic.</text>
+<text x="64" y="1725" font-size="16" fill="#52647a" font-weight="400" >Plan only · Example CIDRs and private IPs · ALBs may select healthy targets in either zone · Public access is limited to the public ALB</text>
+<text x="64" y="1748" font-size="15" fill="#52647a" font-weight="400" >Based on AWS architecture, VPC, ALB, Auto Scaling, and RDS documentation. Sources and implementation steps: docs/AWS_THREE_TIER_PLAN.md</text>
+</g></svg>

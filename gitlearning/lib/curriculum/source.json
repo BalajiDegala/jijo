@@ -1,0 +1,1368 @@
+{
+  "questions": [
+    {
+      "id": "q01",
+      "number": 1,
+      "title": "What is version control? Centralized vs distributed",
+      "answer": "#### The Simple Answer\n\nVersion control tracks changes to files over time, enabling collaboration, history tracking, and rollback. It answers: who changed what, when, and why. Without version control, teams overwrite each other's work, cannot undo mistakes, and have no audit trail.\n\n#### Centralized vs Distributed\n\nCentralized (SVN, Perforce) - One central server holds the entire history. Developers check out files, make changes, commit back to the server. If the server is down, nobody can commit. If the server's disk fails and there is no backup, all history is lost.\n\nDistributed (Git, Mercurial) - Every developer has a complete copy of the repository including full history. You can commit, branch, and view history offline. The \"server\" (GitHub, GitLab) is justa shared copy for collaboration - not a single point of failure. Every clone is a full backup.\n\nWhy Git won: Distributed model (work offline, fast operations), branching is cheap (milliseconds), massive community, and GitHub/GitLab made collaboration frictionless. Git is used by 95%+ of developers worldwide.",
+      "sourceLine": 101,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": "A normal full clone contains reachable history, but shallow and partial clones deliberately omit data. Hosting settings, issues, and permissions are separate. The adoption percentage in the source is not verified.",
+      "scenarioIds": [
+        "first-commit"
+      ],
+      "commands": []
+    },
+    {
+      "id": "q02",
+      "number": 2,
+      "title": "Git architecture - working directory, staging, local, remote",
+      "answer": "#### The Three Trees\n\n**Working directory** - Your filesystem. The files you see and edit. Contains tracked files (Git knows about) and untracked files (Git ignores).\n\n**Staging area (index)** - A buffer between working directory and repository. git add moves changes from working directory to staging. Think of it as a \"draft commit\" - you curate exactly which changes go into the next commit.\n\n**Local repository (.git/)** - The complete history of all commits, branches, and tags. Stored in the.git directory. git commit moves changes from staging to the local repo.\n\n**Remote repository** - A shared copy on a server (GitHub, GitLab). git push sends local commits to the remote. git fetch downloads remote commits to local.\n\n#### The Analogy - Writing a Book\n\nWorking directory = your manuscript draft with edits. Staging area = the pages you have marked as \"ready for the next chapter.\" Local repo = your personal bookshelf of completed chapters. Remote repo = the publisher's copy that your co-authors also access.",
+      "sourceLine": 115,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": "Staging copies a file snapshot into the index; it does not move the file out of the working directory. Ignored and untracked are distinct states.",
+      "scenarioIds": [
+        "first-commit",
+        "staging",
+        "index-snapshot"
+      ],
+      "commands": [
+        "git add moves changes from working directory to staging. Think of it as a \"draft commit\" - you curate exactly which changes go into the next",
+        "git directory. git commit moves changes from staging to the local",
+        "git push sends local commits to the remote. git fetch downloads remote commits to"
+      ]
+    },
+    {
+      "id": "q03",
+      "number": 3,
+      "title": "Git init, clone, config - setup",
+      "answer": "#### The Simple Answer\n\n**git init** - Create a new Git repository in the current directory. Creates the.git/ directory. Used for starting a project from scratch.\n\n**git clone URL** - Copy an existing remote repository to your machine. Downloads the full history. Sets up the remote origin automatically.\n\n**git config** - Set user identity and preferences. git config --global user.name \"Your Name\" and git config --global user.email \"you@example.com\" identify you in commits. --global applies to all repos. Without --global, applies only to the current repo.\n\n#### Essential Config\n\n**git config --global init.defaultBranch main** - Use \"main\" instead of \"master.\" git config --global pull.rebase true - Default to rebase on pull (cleaner history). git config --global core.editor vim - Set commit message editor.",
+      "sourceLine": 131,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": null,
+      "scenarioIds": [
+        "first-commit",
+        "clone"
+      ],
+      "commands": [
+        "git init** - Create a new Git repository in the current directory. Creates the.git/ directory. Used for starting a project from",
+        "git clone URL** - Copy an existing remote repository to your machine. Downloads the full history. Sets up the remote origin",
+        "git config** - Set user identity and preferences. git config --global user.name \"Your Name\" and git config --global user.email \"you@example.com\" identify you in commits. --global applies to all repos. Without --global, applies only to the current",
+        "git config --global init.defaultBranch main** - Use \"main\" instead of \"master.\" git config --global pull.rebase true - Default to rebase on pull (cleaner history). git config --global core.editor vim - Set commit message"
+      ]
+    },
+    {
+      "id": "q04",
+      "number": 4,
+      "title": "Git add, commit, status, log - basic workflow",
+      "answer": "#### The Simple Answer\n\n**git status** - Shows: modified files (not staged), staged files (ready to commit), untracked files (new). Run frequently - it is your orientation tool.\n\n**git add file** - Stage a file for commit. git add. stages everything (use carefully). git add -A stages all changes including deletions.\n\ngit commit -m \"message\" - Save staged changes to the local repository with a descriptive message. Each commit gets a unique SHA-1 hash. Commits are permanent snapshots - you can always return to any commit.\n\n**git log** - View commit history. Shows: commit hash, author, date, message. git log --oneline for compact view. git log --graph for visual branch structure.\n\n#### Commit Message Best Practices\n\nFirst line: imperative mood, under 50 characters: \"Add user authentication.\" Body (after blank line): explain WHY, not what (the diff shows what). Reference issue/ticket numbers. Bad: \"fixed stuff.\" Good: \"Fix login timeout for users with special characters in password (#1234).\"",
+      "sourceLine": 145,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": "A commit is a snapshot, not an eternal backup. Unreachable objects may eventually be pruned. Object identifiers depend on the repository object format.",
+      "scenarioIds": [
+        "first-commit",
+        "amend",
+        "atomic-commits",
+        "add-remove"
+      ],
+      "commands": [
+        "git status** - Shows: modified files (not staged), staged files (ready to commit), untracked files (new). Run frequently - it is your orientation",
+        "git add file** - Stage a file for commit. git add. stages everything (use carefully). git add -A stages all changes including",
+        "git commit -m \"message\" - Save staged changes to the local repository with a descriptive message. Each commit gets a unique SHA-1 hash. Commits are permanent snapshots - you can always return to any",
+        "git log** - View commit history. Shows: commit hash, author, date, message. git log --oneline for compact view. git log --graph for visual branch"
+      ]
+    },
+    {
+      "id": "q05",
+      "number": 5,
+      "title": "Git diff - comparing changes",
+      "answer": "#### The Simple Answer\n\n**git diff** - Shows unstaged changes (working directory vs staging area). git diff --staged - Shows staged changes (staging vs last commit). git diff HEAD - Shows all changes since last commit (staged + unstaged). git diff branch1..branch2 - Shows differences between two branches. git diff commit1..commit2 - Shows differences between two commits.\n\nReading diffs: Lines starting with + are additions (green). Lines starting with - are removals (red). @@ markers show the location in the file. Learn to read diffs - code reviewers spend most of their time reading diffs.",
+      "sourceLine": 161,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": null,
+      "scenarioIds": [
+        "staging",
+        "restore"
+      ],
+      "commands": [
+        "git diff** - Shows unstaged changes (working directory vs staging area). git diff --staged - Shows staged changes (staging vs last commit). git diff HEAD - Shows all changes since last commit (staged + unstaged). git diff branch1..branch2 - Shows differences between two branches. git diff commit1..commit2 - Shows differences between two"
+      ]
+    },
+    {
+      "id": "q06",
+      "number": 6,
+      "title": "Interactive staging (git add -p)",
+      "answer": "#### The Simple Answer\n\ngit add -p (patch mode) lets you stage individual hunks within a file rather than the entire file. You made 3 changes in one file but only want to commit 2 of them - add -p presents each hunk and asks: stage this hunk? (y)es, (n)o, (s)plit into smaller hunks, (e)dit manually.\n\n#### Why It Matters\n\n**Professional commits are atomic** - each commit contains exactly one logical change. If you modified a function ANDfixeda typo in the same file, they should be two separate commits. git add -p enables this discipline without creating temporary files or stashing.",
+      "sourceLine": 169,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": null,
+      "scenarioIds": [
+        "staging",
+        "index-snapshot"
+      ],
+      "commands": [
+        "git add -p (patch mode) lets you stage individual hunks within a file rather than the entire file. You made 3 changes in one file but only want to commit 2 of them - add -p presents each hunk and asks: stage this hunk? (y)es, (n)o, (s)plit into smaller hunks, (e)dit",
+        "git add -p enables this discipline without creating temporary files or"
+      ]
+    },
+    {
+      "id": "q07",
+      "number": 7,
+      "title": "Branches - create, switch, list, delete",
+      "answer": "#### The Simple Answer\n\nA branch is a pointer to a commit. Creating a branch is instantaneous - Git just creates a 41-byte file containing the commit hash. This is why Git branching is \"cheap\" compared to SVN (which copies the entire directory).\n\n#### Commands\n\n**git branch feature-login** - Create a branch. git switch feature-login - Switch to it (modern, replaces git checkout). git switch -c feature-login - Create and switch in one command. git branch -d feature-login - Delete a merged branch. git branch -D feature-login - Force delete an unmerged branch. git branch -a - List all branches (local and remote).\n\n#### Naming Conventions\n\nfeature/login-page, bugfix/null-pointer, hotfix/security-patch, release/2.1.0. Use prefixes to categorize branches. Use slashes for hierarchy. Include ticket numbers: feature/JIRA-123-user-auth.",
+      "sourceLine": 179,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": "A branch is a reference, not necessarily a loose file of a fixed size. git checkout feature-a switches to an existing branch; -b creates it.",
+      "scenarioIds": [
+        "branching",
+        "deleted-branch"
+      ],
+      "commands": [
+        "git branch feature-login** - Create a branch. git switch feature-login - Switch to it (modern, replaces git checkout). git switch -c feature-login - Create and switch in one command. git branch -d feature-login - Delete a merged branch. git branch -D feature-login - Force delete an unmerged branch. git branch -a - List all branches (local and"
+      ]
+    },
+    {
+      "id": "q08",
+      "number": 8,
+      "title": "Git merge - fast-forward, 3-way, merge commits",
+      "answer": "#### Fast-Forward Merge\n\nWhen the target branch has no new commits since the branch point, Git simply moves the pointer forward. No merge commit is created. Linear history. Happens when: you branch from main, do work, and main has not changed.\n\n#### 3-Way Merge\n\nWhen both branches have diverged (both have new commits), Git creates a merge commit with two parents. The merge commit ties the two histories together. This is the default when fast-forward is not possible.\n\n#### Merge Commit vs No Merge Commit\n\n--ff-only - Only merge if fast-forward is possible. Fail otherwise. --no-ff - Always create a merge commit even if fast-forward is possible. Preserves branch history - you can see \"this feature was developed on a branch.\" Many teams require --no-ff for feature branches to main.",
+      "sourceLine": 193,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": null,
+      "scenarioIds": [
+        "merge-feature",
+        "conflict",
+        "update-feature",
+        "teammate"
+      ],
+      "commands": []
+    },
+    {
+      "id": "q09",
+      "number": 9,
+      "title": "Git rebase - linear history, interactive, squashing",
+      "answer": "#### The Simple Answer\n\nRebase moves your branch's commits on top of another branch. Instead of a merge commit, you get a linear history - as if you started your work from the latest commit on the target branch.\n\n#### How It Works\n\ngit rebase main (while on feature branch): Git takes your feature commits, temporarily removes them, updates the branch to the tip of main, then re-applies your commits one by one on top. The result: your branch includes all of main's changes with your commits at the end.\n\n#### Interactive Rebase\n\ngit rebase -i HEAD~5 - Rewrite the last 5 commits. Options per commit: pick (keep), reword (change message), squash (combine with previous), fixup (combine, discard message), drop (remove), edit (pause and amend). Used for cleaning up history before merging - combine WIP commits, fix typos in messages, reorder commits.\n\n#### Squashing\n\nCombine multiple commits into one. A branch with 15 commits (\"WIP\", \"fix typo\", \"oops\", \"actually fix\") becomes one clean commit: \"Add user authentication feature.\" Use squash or fixup in interactive rebase, or use squash merge strategy.",
+      "sourceLine": 207,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": null,
+      "scenarioIds": [
+        "rebase",
+        "clean-history"
+      ],
+      "commands": [
+        "git rebase main (while on feature branch): Git takes your feature commits, temporarily removes them, updates the branch to the tip of main, then re-applies your commits one by one on top. The result: your branch includes all of main's changes with your commits at the",
+        "git rebase -i HEAD~5 - Rewrite the last 5 commits. Options per commit: pick (keep), reword (change message), squash (combine with previous), fixup (combine, discard message), drop (remove), edit (pause and amend). Used for cleaning up history before merging - combine WIP commits, fix typos in messages, reorder"
+      ]
+    },
+    {
+      "id": "q10",
+      "number": 10,
+      "title": "Rebase vs merge - when to use, golden rule",
+      "answer": "#### When to Rebase\n\nUpdating a feature branch with the latest main: git rebase main - keeps your commits on top, clean linear history. Before merging to main: clean up your branch with interactive rebase. Personal branches that nobody else is using.\n\n#### When to Merge\n\nMerging a feature branch into main (preserves the branch history). When multiple people work on the same branch. When you need to preserve the exact history of how changes were integrated.\n\n#### The Golden Rule of Rebasing\n\nNever rebase a branch that other people are using. Rebase rewrites commit hashes. If you rebase a shared branch, everyone else's local copy has the old hashes. When they pull, they get duplicate commits and a mess. Rebase your own branches. Merge shared branches. This rule prevents the nightmare described in scenario Q73.",
+      "sourceLine": 225,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": null,
+      "scenarioIds": [
+        "update-feature",
+        "rebase",
+        "pull-rebase"
+      ],
+      "commands": [
+        "git rebase main - keeps your commits on top, clean linear history. Before merging to main: clean up your branch with interactive rebase. Personal branches that nobody else is"
+      ]
+    },
+    {
+      "id": "q11",
+      "number": 11,
+      "title": "Git remote - origin, upstream, fetch, push",
+      "answer": "#### The Simple Answer\n\n**origin** - The default name foryour primary remote (where you cloned from). git push origin main pushes to your remote. upstream - Convention for the original repository when you forked. Your fork is origin. The original is upstream. git remote -v - Show all remotes with URLs. git remote add name URL - Add a new remote.\n\n#### Fetch vs Push\n\n**git fetch origin** - Download commits from the remote but do not merge them. Your local branches are unchanged. Remote-tracking branches (origin/main) are updated. Safe - does not modify your work.\n\n**git push origin main** - Upload local commits to the remote. Others can now see your changes.",
+      "sourceLine": 239,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": null,
+      "scenarioIds": [
+        "clone",
+        "publish",
+        "fetch-only",
+        "rejected-push"
+      ],
+      "commands": [
+        "git push origin main pushes to your remote. upstream - Convention for the original repository when you forked. Your fork is origin. The original is upstream. git remote -v - Show all remotes with URLs. git remote add name URL - Add a new",
+        "git fetch origin** - Download commits from the remote but do not merge them. Your local branches are unchanged. Remote-tracking branches (origin/main) are updated. Safe - does not modify your",
+        "git push origin main** - Upload local commits to the remote. Others can now see your"
+      ]
+    },
+    {
+      "id": "q12",
+      "number": 12,
+      "title": "Git pull vs fetch - pull --rebase",
+      "answer": "#### The Simple Answer\n\n**git fetch** - Download remote changes. Does not modify your working directory or local branches. Just updates remote-tracking branches (origin/main).\n\n**git pull** - Fetch + merge. Downloads remote changes AND merges them into your current branch. Can create merge commits if your branch and the remote have diverged.\n\n**git pull --rebase** - Fetch + rebase. Downloads remote changes and rebases your local commits on top. Produces a linear history without merge commits. Recommended as the default: git config --global pull.rebase true.\n\nWhy pull --rebase is preferred: git pull (without --rebase) creates a merge commit every time you sync with the remote - \"Merge branch 'main' of github.com/...\" These pollute the history with meaningless merge commits. pull --rebase keeps history clean. See scenario Q78.",
+      "sourceLine": 251,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": "Pull fetches and then integrates according to flags and configuration. A merge-based pull can fast-forward without creating a merge commit.",
+      "scenarioIds": [
+        "fetch-only",
+        "pull-rebase",
+        "rejected-push",
+        "teammate"
+      ],
+      "commands": [
+        "git fetch** - Download remote changes. Does not modify your working directory or local branches. Just updates remote-tracking branches",
+        "git pull** - Fetch + merge. Downloads remote changes AND merges them into your current branch. Can create merge commits if your branch and the remote have",
+        "git pull --rebase** - Fetch + rebase. Downloads remote changes and rebases your local commits on top. Produces a linear history without merge commits. Recommended as the default: git config --global pull.rebase",
+        "git pull (without --rebase) creates a merge commit every time you sync with the remote - \"Merge branch 'main' of github.com/...\" These pollute the history with meaningless merge commits. pull --rebase keeps history clean. See scenario"
+      ]
+    },
+    {
+      "id": "q13",
+      "number": 13,
+      "title": "Git stash - save, apply, pop, list",
+      "answer": "#### The Simple Answer\n\nStash saves your uncommitted changes temporarily and reverts your working directory to a clean state. Useful when: you need to switch branches but have uncommitted work, you need to pull but have local changes, or you want to temporarily set aside experiments.\n\n#### Commands\n\ngit stash - Save all modified tracked files. git stash -u - Include untracked files. git stash list - Show all stashes. git stash pop - Apply the most recent stash and remove it. git stash apply - Apply without removing (keeps the stash). git stash drop stash@{0} - Delete a specific stash. git stash show -p stash@{0} - View stash contents.\n\nStash is not a substitute for commits. If you stash frequently, you are probably avoiding commits. Commit work-in-progress on a feature branch instead - it is safer (stashes can be lost) and more descriptive.",
+      "sourceLine": 263,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": null,
+      "scenarioIds": [
+        "restore"
+      ],
+      "commands": [
+        "git stash - Save all modified tracked files. git stash -u - Include untracked files. git stash list - Show all stashes. git stash pop - Apply the most recent stash and remove it. git stash apply - Apply without removing (keeps the stash). git stash drop stash@{0} - Delete a specific stash. git stash show -p stash@{0} - View stash"
+      ]
+    },
+    {
+      "id": "q14",
+      "number": 14,
+      "title": ".gitignore - patterns, already-tracked files",
+      "answer": "#### The Simple Answer\n\n.gitignore tells Git which files to ignore - they will not appear in git status or be staged by git add.. Place.gitignore in the repository root. It is versioned (committed like any other file).\n\n#### Common Patterns\n\n* log - All log files. node_modules/ - Node.js dependencies..env-Environmentvariables. _pycache__/- Python bytecode..terraform/ - Terraform working directory. *.tfstate - Terraform state (should be in remote backend, not Git).\n\n#### Already-Tracked Files\n\nIf a file is already tracked by Git, adding it to.gitignore does NOT stop tracking it. You must untrack it first: git rm --cached filename (removes from Git but keeps the file on disk). Then commit. Then.gitignore takes effect for future changes. This is the most common.gitignore confusion. See scenario Q75.\n\n#### Global.gitignore\n\ngit config --global core.excludesfile ~/.gitignore_global. Add OS-specific files:.DS_ Store (macOS), Thumbs.db (Windows), *~ (editor backups). These should not be in the project's.gitignore - they are developer-specific.",
+      "sourceLine": 275,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": null,
+      "scenarioIds": [
+        "add-remove",
+        "ignore"
+      ],
+      "commands": [
+        "git status or be staged by git add.. Place.gitignore in the repository root. It is versioned (committed like any other",
+        "git rm --cached filename (removes from Git but keeps the file on disk). Then commit. Then.gitignore takes effect for future changes. This is the most common.gitignore confusion. See scenario",
+        "git config --global core.excludesfile ~/.gitignore_global. Add OS-specific files:.DS_ Store (macOS), Thumbs.db (Windows), *~ (editor backups). These should not be in the project's.gitignore - they are"
+      ]
+    },
+    {
+      "id": "q15",
+      "number": 15,
+      "title": "Git tags - lightweight, annotated, semver",
+      "answer": "#### The Simple Answer\n\n**Tags mark specific commits as important** - typically releases. Unlike branches, tags do not move - they always point to the same commit.\n\n**Lightweight tag: git tag v1.0.0** - Just a pointer to a commit. No metadata. Annotated tag: git tag -a v1.0.0-m \"Release 1.0.0\" - Includes tagger name, date, and message. Recommended for releases. Push tags: git push origin v1.0.0 or git push origin --tags (all tags). Tags are not pushed by default.\n\n#### Semantic Versioning\n\nMAJOR.MINOR.PATCH: v2.1.3. MAJOR = breaking changes. MINOR = new features, backward compatible. PATCH = bug fixes. Pre-release: v2.0.0-beta.1. Automated with tools like semantic-release (determines version from commit messages).",
+      "sourceLine": 293,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": "Tags conventionally stay fixed, but can be explicitly replaced. Ordinary branch pushes do not automatically publish all tags.",
+      "scenarioIds": [
+        "release"
+      ],
+      "commands": [
+        "git tag v1.0.0** - Just a pointer to a commit. No metadata. Annotated tag: git tag -a v1.0.0-m \"Release 1.0.0\" - Includes tagger name, date, and message. Recommended for releases. Push tags: git push origin v1.0.0 or git push origin --tags (all tags). Tags are not pushed by"
+      ]
+    },
+    {
+      "id": "q16",
+      "number": 16,
+      "title": "Git log - formatting, filtering",
+      "answer": "#### Useful Formats\n\n**git log --oneline** - Short hash + first line of message. Compact. git log --graph --oneline --all - Visual branch structure. Essential for understanding branch topology. git log --author=\"Alice\" - Filter by author. git log -- since=\"2025-01-01\" - Filter by date. git log -- path/to/file - History of a specific file. git log -p - Show the diff for each commit. git log --stat - Show files changed per commit.",
+      "sourceLine": 305,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": null,
+      "scenarioIds": [
+        "history-head"
+      ],
+      "commands": [
+        "git log --oneline** - Short hash + first line of message. Compact. git log --graph --oneline --all - Visual branch structure. Essential for understanding branch topology. git log --author=\"Alice\" - Filter by author. git log -- since=\"2025-01-01\" - Filter by date. git log -- path/to/file - History of a specific file. git log -p - Show the diff for each commit. git log --stat - Show files changed per"
+      ]
+    },
+    {
+      "id": "q17",
+      "number": 17,
+      "title": "HEAD, detached HEAD",
+      "answer": "#### The Simple Answer\n\n**HEAD is a pointer to the current commit** - specifically, it points to the current branch, which points to a commit. When you switch branches, HEAD moves to the new branch.\n\n#### Detached HEAD\n\nWhen HEAD points directly to a commit (nota branch), you are in detached HEAD state. This happens when you: checkout a specific commit (git checkout abc1234), checkout a tag (git checkout v1.0.0), or during a rebase.\n\n#### The Danger\n\nCommits made in detached HEAD are not on any branch. If you switch to another branch, those commits become \"orphaned\" - still in the repository but not reachable from any branch. Eventually, garbage collection removes them. Recovery: git reflog shows the commits - create a branch from them: git branch recovery-branch abc1234. See scenario Q61.",
+      "sourceLine": 311,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": null,
+      "scenarioIds": [
+        "history-head",
+        "detached"
+      ],
+      "commands": [
+        "git checkout abc1234), checkout a tag (git checkout v1.0.0), or during a",
+        "git reflog shows the commits - create a branch from them: git branch recovery-branch abc1234. See scenario"
+      ]
+    },
+    {
+      "id": "q18",
+      "number": 18,
+      "title": "Git reset - soft, mixed, hard",
+      "answer": "#### The Simple Answer\n\nReset moves the current branch pointer to a different commit. Three modes control what happens to the staging area and working directory.\n\n--soft - Moves the branch pointer only. Staging area and working directory unchanged. The \"undone\" commits' changes appear as staged. Use for: combining the last 3 commits into one (reset --soft HEAD~3, then commit).\n\n--mixed (default) - Moves the branch pointer and resets the staging area. Working directory unchanged. Changes appear as unstaged. Use for: unstaging files without losing changes.\n\n--hard - Moves the branch pointer, resets staging, AND resets working directory. All changes are lost. Use for: completely discarding recent work. DANGEROUS - uncommitted changes are gone permanenily (no reflog for unstaged changes).\n\nThe safety rule: Use git stash before git reset --hard if there is any chance you need the changes. Or better: commit your work on a temporary branch before resetting.",
+      "sourceLine": 325,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": "Hard reset replaces tracked index and working-tree content. It does not generally delete unrelated untracked files. Uncommitted content may be unrecoverable; committed objects may remain in reflogs.",
+      "scenarioIds": [
+        "undo-compare",
+        "wrong-branch"
+      ],
+      "commands": [
+        "git stash before git reset --hard if there is any chance you need the changes. Or better: commit your work on a temporary branch before"
+      ]
+    },
+    {
+      "id": "q19",
+      "number": 19,
+      "title": "Git revert - safe undo",
+      "answer": "#### The Simple Answer\n\ngit revert creates anew commit that undoes the changes from a specific commit. The original commit stays in history - nothing is rewritten. Safe for shared branches because it does not change existing commit hashes.\n\n#### Revert vs Reset\n\n**Reset** - Rewrites history. Removes commits. Dangerous on shared branches - other developers' history diverges. Revert - Preserves history. Adds a new \"undo\" commit. Safe on shared branches - everyone pulls the revert commit normally.\n\nThe rule: Use revert for commits already pushed to shared branches. Use reset only for local, unpushed commits. This is the single most important undo decision in Git.",
+      "sourceLine": 339,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": null,
+      "scenarioIds": [
+        "undo-compare",
+        "revert"
+      ],
+      "commands": [
+        "git revert creates anew commit that undoes the changes from a specific commit. The original commit stays in history - nothing is rewritten. Safe for shared branches because it does not change existing commit"
+      ]
+    },
+    {
+      "id": "q20",
+      "number": 20,
+      "title": "Git cherry-pick",
+      "answer": "#### The Simple Answer\n\ngit cherry-pick abc1234 takes a specific commit from another branch and applies it to the current branch. Creates anew commit with the same changes but a different hash.\n\n#### Use Cases\n\nApply a bug fix from a feature branch to main without merging the entire feature. Backport a fix to a release branch. Pick specific commits from a branch that will not be merged entirely.\n\n#### Caveats\n\nCherry-picked commits have different hashes than the originals. If the original branch is later merged, Git may flag the same change as a conflict. Use sparingly - prefer merging entire branches when possible.",
+      "sourceLine": 351,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": null,
+      "scenarioIds": [
+        "move-commit",
+        "hotfix"
+      ],
+      "commands": [
+        "git cherry-pick abc1234 takes a specific commit from another branch and applies it to the current branch. Creates anew commit with the same changes but a different"
+      ]
+    },
+    {
+      "id": "q21",
+      "number": 21,
+      "title": "Git blame and bisect git blame",
+      "answer": "git blame file shows who last modified each line of a file. Useful for: understanding who wrote code, finding when a line was changed, and identifying the commit that introduced a specific change. git blame -L 10,20 file - blame only lines 10-20.\n\ngit bisect\n\nBinary search through commit history to find which commit introduced a bug. git bisect start, git bisect bad (current commit is broken), git bisect good v1.0.0 (this commit was working). Git checks out the middle commit - you test and mark good or bad. Repeat. Finds the exact commit in log2(n) steps - 200 commits searched in 8 steps. Can be automated: git bisect run./test_script.sh.",
+      "sourceLine": 365,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": null,
+      "scenarioIds": [
+        "bisect"
+      ],
+      "commands": [
+        "git blame file shows who last modified each line of a file. Useful for: understanding who wrote code, finding when a line was changed, and identifying the commit that introduced a specific change. git blame -L 10,20 file - blame only lines",
+        "git bisect start, git bisect bad (current commit is broken), git bisect good v1.0.0 (this commit was working). Git checks out the middle commit - you test and mark good or bad. Repeat. Finds the exact commit in log2(n) steps - 200 commits searched in 8 steps. Can be automated: git bisect"
+      ]
+    },
+    {
+      "id": "q22",
+      "number": 22,
+      "title": "Git clean and restore",
+      "answer": "git clean\n\nRemoves untracked files from the working directory. git clean -n - Dry run (show what would be removed). git clean -f - Force remove untracked files. git clean -fd - Remove untracked files and directories. git clean -fX - Remove only ignored files. Useful for cleaning build artifacts.\n\ngit restore (Git 2.23+)\n\nModern replacement for git checkout for file restoration. git restore file - Discard changes in working directory (restore from staging area). git restore --staged file - Unstage a file (opposite of git add). git restore -- source=HEAD~3 file - Restore afile from 3 commits ago. Clearer than git checkout which was overloaded (switch branches AND restore files).",
+      "sourceLine": 373,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": null,
+      "scenarioIds": [
+        "restore",
+        "add-remove",
+        "undo-compare"
+      ],
+      "commands": [
+        "git clean -n - Dry run (show what would be removed). git clean -f - Force remove untracked files. git clean -fd - Remove untracked files and directories. git clean -fX - Remove only ignored files. Useful for cleaning build",
+        "git restore (Git",
+        "git checkout for file restoration. git restore file - Discard changes in working directory (restore from staging area). git restore --staged file - Unstage a file (opposite of git add). git restore -- source=HEAD~3 file - Restore afile from 3 commits ago. Clearer than git checkout which was overloaded (switch branches AND restore"
+      ]
+    },
+    {
+      "id": "q23",
+      "number": 23,
+      "title": "SSH keys and HTTPS - authentication SSH",
+      "answer": "Generate a key pair: ssh-keygen -t ed25519. Add the public key to GitHub/GitLab. Clone with: git clone git@github.com:user/repo.git. Authenticate automatically without passwords. Recommended for developers who push/pull frequently.\n\n#### HTTPS\n\nClone with: git clone https://github.com/user/repo.git. Authenticate with username/password or personal access token. Git credential helpers cache credentials: git config --global credential.helper cache (in-memory) or store (on disk). GitHub no longer accepts passwords - use personal access tokens or SSH keys.\n\nFor CI/CD: Use personal access tokens (PATs) or deploy keys (read-only SSH keys). For GitHub Actions: the built-in GITHUB_TOKEN works for the current repository.",
+      "sourceLine": 383,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": "Prefer an OS credential manager or SSH agent. credential.helper store keeps credentials in plaintext. Never paste tokens, passwords, or private keys into this site.",
+      "scenarioIds": [
+        "clone",
+        "publish",
+        "secret"
+      ],
+      "commands": [
+        "git clone git@github.com:user/repo.git. Authenticate automatically without passwords. Recommended for developers who push/pull",
+        "git clone https://github.com/user/repo.git. Authenticate with username/password or personal access token. Git credential helpers cache credentials: git config --global credential.helper cache (in-memory) or store (on disk). GitHub no longer accepts passwords - use personal access tokens or SSH"
+      ]
+    },
+    {
+      "id": "q24",
+      "number": 24,
+      "title": "Pull requests / merge requests - code review",
+      "answer": "#### The Simple Answer\n\nA PR (GitHub/Bitbucket) or MR (GitLab) is a request to merge changes from one branch into another. It provides: a diff of all changes, a discussion thread for code review, CI/CD status checks, and approval workflow.\n\n#### The Review Process\n\nDeveloper pushes feature branch -> opens PR -> CI runs tests -> reviewers examine the diff -> reviewers approve or request changes -> developer addresses feedback -> PR is merged. The PR becomes a permanent record of why changes were made, who reviewed them, and what discussions occurred.\n\n#### Best Practices\n\nSmall PRs (under 400 lines). Descriptive title and description explaining the WHY. Link to the issue/ticket. Self - review before requesting others. Respond to all comments. At least one approval required before merge.",
+      "sourceLine": 393,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": "Review sizes and required reviewer counts are team policy examples, not Git requirements.",
+      "scenarioIds": [
+        "protected",
+        "traceability"
+      ],
+      "commands": []
+    },
+    {
+      "id": "q25",
+      "number": 25,
+      "title": "Git aliases and configuration",
+      "answer": "#### The Simple Answer\n\nAliases create shortcuts for frequently used commands. git config --global alias.co checkout - now git co works. git config --global alias.st status. git config --global alias.lg \"log --oneline --graph --all\" - visual branch log.\n\n#### Productivity Aliases\n\nalias.unstage = \"reset HEAD --\". alias.amend = \"commit --amend --no-edit\". alias.last = \"log -1 HEAD\". alias.branches = \"branch -a --sort=-committerdate\" (branches sorted by recent activity).",
+      "sourceLine": 407,
+      "category": "Junior Core Git",
+      "level": 1,
+      "correction": null,
+      "scenarioIds": [
+        "history-head"
+      ],
+      "commands": [
+        "git config --global alias.co checkout - now git co works. git config --global alias.st status. git config --global alias.lg \"log --oneline --graph --all\" - visual branch"
+      ]
+    },
+    {
+      "id": "q26",
+      "number": 26,
+      "title": "Branching strategies - Git Flow, GitHub Flow, trunk-based Git Flow",
+      "answer": "Long-lived branches: main (production), develop (integration). Feature branches from develop. Release branches from develop for release prep. Hotfix branches from main for urgent fixes. Complex but structured. Best for: software with scheduled releases and multiple supported versions.\n\n#### GitHub Flow\n\nSimple: main + feature branches. Branch from main, develop, open PR, review, merge to main, deploy. Every merge to main is deployable. Best for: continuous deployment, web applications, SaaS products.\n\n#### GitLab Flow\n\nExtension of GitHub Flow. Adds environment branches: main -> staging -> production. Or release branches: main -> release/1.0 -> release/2.0. Best for: teams needing environment-based or release-based deployment.\n\n#### Trunk-Based Development\n\nEveryone commits to main (trunk) directly or via very short-lived branches (hours, not days). Feature flags hide incomplete work. Requires: strong CI, comprehensive tests, feature flag infrastructure. Best for: high-performing teams practicing continuous deployment. See Q27.\n\nThe modern trend: Teams are moving from Git Flow (complex, slow) to trunk-based development (simple, fast). GitHub Flow is the practical middle ground for most teams.",
+      "sourceLine": 419,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": "Workflow selection depends on release and team constraints. No branching model eliminates conflicts. GitLab Flow can connect short-lived feature branches to environment or release branches.",
+      "scenarioIds": [
+        "branching",
+        "release-design"
+      ],
+      "commands": []
+    },
+    {
+      "id": "q27",
+      "number": 27,
+      "title": "Trunk-based development - feature flags",
+      "answer": "#### The Simple Answer\n\nTrunk-based development means all developers commit to a single branch (main/trunk). Branches are short - lived (less than 24 hours). Code is always in a deployable state on main. Incomplete features are hidden behind feature flags, not long-running branches.\n\n#### Feature Flags\n\nA conditional in code that enables or disables functionality: if (feature Flags.isEnabled('new-checkout'))\n\n{ newCheckout(); } else { oldCheckout(); }. The flag is controlled externally (LaunchDarkly, Unleash, config file). Deployment and release are decoupled - you deploy code with the flag off, then enable it for specific users, regions, or percentages.\n\n#### Why It Is Superior\n\nNo merge conflicts from long-running branches. Smaller, more frequent commits. Issues are caught immediately by CI. Code reviews are smaller and faster. Features can be released to 1% of users (canary) before full rollout.",
+      "sourceLine": 437,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": "Feature flags separate deployment from exposure but require ownership, tests, access controls, and removal of obsolete flags.",
+      "scenarioIds": [
+        "release-design",
+        "gitops"
+      ],
+      "commands": []
+    },
+    {
+      "id": "q28",
+      "number": 28,
+      "title": "Conventional commits - standards",
+      "answer": "#### The Simple Answer\n\nA standardized commit message format: type(scope): description. Types: feat (new feature), fix (bug fix), docs, style, refactor, test, chore, ci. Examples: feat(auth): add SSO login, fix(api): handle null response, docs(readme): update install instructions.\n\n#### Why It Matters\n\nAutomated changelog generation. Automatic semantic versioning (feat = minor bump, fix = patch bump, BREAKING CHANGE = major bump). Tools: commitlint (validates messages), semantic-release (automates versioning), standard-version (changelog generation).",
+      "sourceLine": 453,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": null,
+      "scenarioIds": [
+        "amend",
+        "atomic-commits",
+        "traceability"
+      ],
+      "commands": []
+    },
+    {
+      "id": "q29",
+      "number": 29,
+      "title": "Merge strategies - merge commit, squash, rebase merge",
+      "answer": "Merge Commit (--no-ff)\n\nCreates a merge commit with two parents. Preserves full branch history. You can see all individual commits from the feature branch. Best when: branch history is meaningful and clean.\n\n#### Squash Merge\n\nCombines all branch commits into a single commit on the target branch. Clean history - one commit per feature. Branch history is lost. Best when: the branch has messy WIP commits and you want one clean commit per feature.\n\n#### Rebase Merge\n\nReplays branch commits on top of the target branch. No merge commit. Linear history. Each commit is preserved individually. Best when: branch commits are clean and individually meaningful.\n\nTeam decision: Pick one strategy and enforce it across the team. Most teams use squash merge (simplest, cleanest) or merge commits (most complete history). Rebase merge is the least common because it requires clean branch history.",
+      "sourceLine": 463,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": null,
+      "scenarioIds": [
+        "merge-feature",
+        "release-design"
+      ],
+      "commands": []
+    },
+    {
+      "id": "q30",
+      "number": 30,
+      "title": "Git hooks - pre-commit, commit-msg, pre-push",
+      "answer": "#### Client-Side Hooks\n\n**pre-commit** - Runs before commit is created. Use for: linting, formatting, secret scanning (gitleaks). If the hook exits non-zero, the commit is aborted. commit-msg - Validates the commit message. Enforce conventional commits format. pre-push - Runs before pushing. Use for: running tests, checking branch naming conventions.\n\n#### Server-Side Hooks\n\n**pre-receive** - Runs on the server before accepting a push. Enforce branch protection, reject force pushes, validate commit signatures. post-receive - Runs after a push is accepted. Trigger CI/CD, send notifications.\n\npre-commit Framework\n\nInstall via pip install pre-commit. Define hooks in.pre-commit-config.yaml. pre-commit install installs hooks for all developers. Runs automatically on every commit. Supports hooks from the community: gitleaks (secrets), black (Python formatting), eslint (JavaScript), yamllint.",
+      "sourceLine": 479,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": null,
+      "scenarioIds": [
+        "protected",
+        "ci-history"
+      ],
+      "commands": []
+    },
+    {
+      "id": "q31",
+      "number": 31,
+      "title": "Branch protection - reviews, status checks",
+      "answer": "#### The Simple Answer\n\nBranch protection rules prevent direct pushes to critical branches (main, release). Enforced by the Git platform (GitHub, GitLab, Bitbucket).\n\n#### Common Rules\n\n**Required pull request reviews** - At least 1-2 approvals before merge. Dismiss stale approvals (require re-review after new commits). Required status checks - CI must pass before merge. Specify which checks are required. Require signed commits - Only GPG/SSH-signed commits allowed. No force pushes - Prevent history rewriting\n\n**on protected branches. Require linear history** - Force squash or rebase merge (no merge commits). Include administrators - Even admins must follow the rules.",
+      "sourceLine": 493,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": null,
+      "scenarioIds": [
+        "protected"
+      ],
+      "commands": []
+    },
+    {
+      "id": "q32",
+      "number": 32,
+      "title": "Git submodules",
+      "answer": "#### The Simple Answer\n\nSubmodules embed one Git repository inside another. The parent repo tracks a specific commit of the submodule. Used for: shared libraries, common configuration, third-party dependencies with custom patches.\n\n#### Common Problems\n\n**Submodule stuck on old commit** - The parent repo pins the submodule to a commit. Updating requires: cd submodule, git pull, cd.., git add submodule, git commit. Developers forget this - the submodule stays on the old version. See scenario Q68.\n\n**Clone does not include submodules** - git clone alone does not download submodule content. Need: git clone -- recurse-submodules or git submodule update --init --recursive after cloning.\n\nThe honest opinion: Submodules are confusing and error-prone. Consider alternatives: Git subtree (simpler), package managers (npm, pip - designed for dependency management), or monorepo (eliminate the need for cross-repo dependencies). Use submodules only when no better option exists.",
+      "sourceLine": 505,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": null,
+      "scenarioIds": [
+        "submodules"
+      ],
+      "commands": [
+        "git pull, cd.., git add submodule, git commit. Developers forget this - the submodule stays on the old version. See scenario",
+        "git clone alone does not download submodule content. Need: git clone -- recurse-submodules or git submodule update --init --recursive after"
+      ]
+    },
+    {
+      "id": "q33",
+      "number": 33,
+      "title": "Git subtree - alternative to submodules",
+      "answer": "#### The Simple Answer\n\nGit subtree merges another repository into a subdirectory of your repository. Unlike submodules, the subtree content is part of your repo - no special commands needed for cloning, no.gitmodules file, and developers do not need to know about the subtree.\n\n#### How It Works\n\ngit subtree add --prefix=libs/shared https://github.com/org/shared.git main - Adds the shared repo into libs/shared/. Updates: git subtree pull --prefix=libs/shared https://github.com/org/shared.git main. Contributing back: git subtree push.\n\n#### Subtree vs Submodule\n\nContent in parent repo No (pointer only) Yes (full copy) Clone complexity Extra commands needed Just git clone Update complexity cd + pull + add + commit subtree pull\n\nHistory Separate (own repo) Merged into parent Developer awareness Must know about submodules Transparent",
+      "sourceLine": 519,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": null,
+      "scenarioIds": [
+        "submodules"
+      ],
+      "commands": [
+        "git subtree add --prefix=libs/shared https://github.com/org/shared.git main - Adds the shared repo into libs/shared/. Updates: git subtree pull --prefix=libs/shared https://github.com/org/shared.git main. Contributing back: git subtree",
+        "git clone Update complexity cd + pull + add + commit subtree"
+      ]
+    },
+    {
+      "id": "q34",
+      "number": 34,
+      "title": "Monorepo vs polyrepo",
+      "answer": "#### Monorepo\n\nAll projects in one repository. Google, Meta, and many large companies use monorepos. Advantages: atomic cross-project changes, single version of truth, easier code sharing, unified CI/CD. Disadvantages: large repo size, slow operations without tooling, everyone sees everything, complex CI filtering.\n\n#### Polyrepo\n\nEach project/service in its own repository. Advantages: clear ownership, independent versioning, smaller repos, simple permissions. Disadvantages: cross-repo changes require multiple PRs, dependency management is complex, inconsistent tooling.\n\n#### Monorepo Tooling\n\n**Nx** - Smart build system. Only builds/tests affected projects. Turborepo - Fast, caching build system for JavaScript monorepos. Bazel - Google's build system. Language-agnostic. Powerful but complex.",
+      "sourceLine": 535,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": null,
+      "scenarioIds": [
+        "scale"
+      ],
+      "commands": []
+    },
+    {
+      "id": "q35",
+      "number": 35,
+      "title": "Git LFS - large file storage",
+      "answer": "#### The Simple Answer\n\nGit is designed for text files. Large binary files (images, videos, models, datasets) bloat the repository because Git stores every version of every file. Git LFS stores large files on a separate server and replaces them with lightweight pointers in the repository.\n\n#### Setup\n\ngit Ifs install. git Ifs track \"*.psd\" (track PSD files). This creates.gitattributes. Commit and push normally - LFS handles large file storage transparently. git Ifs ls-files lists tracked files.\n\n#### Limitations\n\nLFS requires server support (GitHub, GitLab, Bitbucket all support it). Storage and bandwidth limits apply (GitHub: 1 GB free, then $5/50GB). Clone still downloads all LFS objects by default - use git Ifs fetch --recent for partial downloads.",
+      "sourceLine": 549,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": null,
+      "scenarioIds": [
+        "scale"
+      ],
+      "commands": []
+    },
+    {
+      "id": "q36",
+      "number": 36,
+      "title": "Git rebase --onto",
+      "answer": "#### The Simple Answer\n\nrebase --onto moves a range of commits to a new base. git rebase --onto new-base old-base branch - Take commits from old-base to branch and replay them onto new-base. Use case: you branched from feature-A, but feature-A is not ready. You want to move your commits to main instead: git rebase --onto main feature-A your- branch.",
+      "sourceLine": 563,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": null,
+      "scenarioIds": [
+        "rebase"
+      ],
+      "commands": [
+        "git rebase --onto new-base old-base branch - Take commits from old-base to branch and replay them onto new-base. Use case: you branched from feature-A, but feature-A is not ready. You want to move your commits to main instead: git rebase --onto main feature-A your-"
+      ]
+    },
+    {
+      "id": "q37",
+      "number": 37,
+      "title": "Git reflog - recovering lost commits",
+      "answer": "#### The Simple Answer\n\n**Reflog records every time HEAD changes** - every commit, checkout, merge, rebase, reset, and pull. It is your safety net when things go wrong. git reflog shows a chronological list of where HEAD has been. Even after git reset --hard, the \"lost\" commits are still in the reflog for 90 days (default).\n\n#### Recovery Pattern\n\nMistake: git reset --hard HEAD~5 (accidentally removed 5 commits). Recovery: git reflog shows the commit before the reset. git reset --hard abc1234 (the commit hash from reflog) restores everything.\n\nReflog is local only. It is not pushed to remotes. It exists only on the machine where the action happened. And it expires - default 90 days for reachable, 30 days for unreachable entries. Recover quickly.",
+      "sourceLine": 569,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": "Reflog retention is configurable and local. Recovery is not guaranteed after expiration or garbage collection. Prefer creating a recovery branch before moving existing refs.",
+      "scenarioIds": [
+        "wrong-branch",
+        "deleted-branch",
+        "detached",
+        "reflog-recovery"
+      ],
+      "commands": [
+        "git reflog shows a chronological list of where HEAD has been. Even after git reset --hard, the \"lost\" commits are still in the reflog for 90 days",
+        "git reset --hard HEAD~5 (accidentally removed 5 commits). Recovery: git reflog shows the commit before the reset. git reset --hard abc1234 (the commit hash from reflog) restores"
+      ]
+    },
+    {
+      "id": "q38",
+      "number": 38,
+      "title": "Git worktree",
+      "answer": "#### The Simple Answer\n\nWorktree lets you check out multiple branches simultaneously in different directories - without cloning the repo again. git worktree add../hotfix-branch hotfix/urgent creates a new directory with the hotfix branch checked out. You can work on main in the original directory and the hotfix in the new directory simultaneously.\n\n#### Use Cases\n\nWorking on a hotfix while keeping your feature branch work intact. Running tests on one branch while developing on another. Comparing behavior between branches side by side. Reviewing a PR while working on your own code.",
+      "sourceLine": 581,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": null,
+      "scenarioIds": [
+        "release-design"
+      ],
+      "commands": [
+        "git worktree add../hotfix-branch hotfix/urgent creates a new directory with the hotfix branch checked out. You can work on main in the original directory and the hotfix in the new directory"
+      ]
+    },
+    {
+      "id": "q39",
+      "number": 39,
+      "title": "Signed commits and tags",
+      "answer": "#### The Simple Answer\n\nSigning proves that a commit was actually made by the claimed author. Without signing, anyone can commit as any name/email - git config user.email \"ceo@company.com\" works. Signing uses GPG or SSH keys to cryptographically verify the author.\n\n#### Setup\n\nGPG: git config --global commit.gpgsign true, git config --global user.signingkey YOUR_GPG_KEY_ID. SSH (Git 2.34+): git config --global gpg.format ssh, git config --global user.signingkey ~/.ssh/id_ed25519.pub.\n\n#### Verification\n\nGitHub/GitLab show a \"Verified\" badge on signed commits. Required by some compliance frameworks. Branch protection can require signed commits - unsigned commits are rejected.",
+      "sourceLine": 591,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": null,
+      "scenarioIds": [
+        "release",
+        "secret"
+      ],
+      "commands": [
+        "git config user.email \"ceo@company.com\" works. Signing uses GPG or SSH keys to cryptographically verify the",
+        "git config --global commit.gpgsign true, git config --global user.signingkey YOUR_GPG_KEY_ID. SSH (Git 2.34+): git config --global gpg.format ssh, git config --global user.signingkey"
+      ]
+    },
+    {
+      "id": "q40",
+      "number": 40,
+      "title": "Git secrets and security",
+      "answer": "#### The Simple Answer\n\nSecrets in Git repos are a top security risk. Once committed, they are in the history forever - even if deleted in a subsequent commit. Secrets in public repos are found by automated scanners within minutes.\n\n#### Prevention\n\nPre-commit scanning: gitleaks, git-secrets, trufflehog run before each commit. Block commits containing patterns matching AWS keys, passwords, private keys. GitHub secret scanning: Automatically scans repos and alerts on detected secrets. Partners (AWS, GCP, Slack) are notified and revoke compromised tokens. Repository scanning: Regular scans of the entire history, not just new commits.",
+      "sourceLine": 605,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": null,
+      "scenarioIds": [
+        "secret"
+      ],
+      "commands": []
+    },
+    {
+      "id": "q41",
+      "number": 41,
+      "title": "GitHub Actions / GitLab CI integration",
+      "answer": "#### The Simple Answer\n\nGit events (push, pull request, tag) trigger CI/CD pipelines. The pipeline definition lives in the repository (workflow files for Actions,.gitlab-ci.yml for GitLab).\n\n#### GitHub Actions Key Concepts\n\nWorkflows (.github/workflows/*.yml), jobs (run in parallel by default), steps (sequential within a job), actions (reusable components). Triggers: push, pull_ request, schedule, workflow_dispatch (manual), release.\n\n#### GitLab CI Key Concepts\n\n.gitlab-ci.yml in repo root. Stages (build, test, deploy), jobs (assigned to stages), runners (execute jobs). Pipelines trigger on push. Merge request pipelines run on MR creation/update. Environment-specific deployments with manual approval.",
+      "sourceLine": 615,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": null,
+      "scenarioIds": [
+        "ci-history",
+        "gitops"
+      ],
+      "commands": []
+    },
+    {
+      "id": "q42",
+      "number": 42,
+      "title": "Code owners",
+      "answer": "#### The Simple Answer\n\nCODEOWNERS file maps file paths to responsible teams/individuals. When a PR modifies files in a path, the corresponding owners are automatically added as required reviewers. *.js @frontend-team, /infrastructure/ @devops-team, /docs/ @technical-writers. Ensures the right people review every change.",
+      "sourceLine": 629,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": null,
+      "scenarioIds": [
+        "protected"
+      ],
+      "commands": []
+    },
+    {
+      "id": "q43",
+      "number": 43,
+      "title": "Release management - tagging, changelogs",
+      "answer": "#### The Simple Answer\n\nTagging: Tag every release: git tag -a v2.1.0-m \"Release 2.1.0\". Push: git push origin v2.1.0. The tag is the permanent record of exactly which commit was released.\n\nChangelogs: Generated from conventional commits. semantic-release automates: determine next version from commits -> generate changelog -> create Git tag -> publish release. Removes manual versioning entirely.\n\nGitHub Releases: Attach binaries, release notes, and changelogs to a Git tag. Create via the GitHub UI or API. Integrates with GitHub Actions for automated release creation.",
+      "sourceLine": 635,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": null,
+      "scenarioIds": [
+        "release",
+        "traceability",
+        "release-design"
+      ],
+      "commands": [
+        "git tag -a v2.1.0-m \"Release 2.1.0\". Push: git push origin v2.1.0. The tag is the permanent record of exactly which commit was"
+      ]
+    },
+    {
+      "id": "q44",
+      "number": 44,
+      "title": "Git in CI/CD - shallow clone, sparse checkout, performance",
+      "answer": "#### Shallow Clone\n\ngit clone --depth=1 downloads only the latest commit - no history. Dramatically faster for large repos. Used in CI where full history is not needed. Limitation: git log and git blame do not work beyond the shallow depth. Use -- depth=50 if you need recent history for changelogs.\n\n#### Sparse Checkout\n\nDownload only specific directories: git soarse-checkout set path/to/project. Combined with partial clone (-- filter=blob:none): only download file content when accessed. Essential for monorepos in CI - do not download the entire repo when you only build one project.\n\n#### CI Performance Tips\n\nCache.git directory between runs. Use shallow clones. Use Git protocol v2 (faster negotiation). Fetch only the branch being built: git fetch origin pull/123/head --depth=1.",
+      "sourceLine": 645,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": null,
+      "scenarioIds": [
+        "scale",
+        "ci-history"
+      ],
+      "commands": [
+        "git clone --depth=1 downloads only the latest commit - no history. Dramatically faster for large repos. Used in CI where full history is not needed. Limitation: git log and git blame do not work beyond the shallow depth. Use -- depth=50 if you need recent history for",
+        "git soarse-checkout set path/to/project. Combined with partial clone (-- filter=blob:none): only download file content when accessed. Essential for monorepos in CI - do not download the entire repo when you only build one",
+        "git directory between runs. Use shallow clones. Use Git protocol v2 (faster negotiation). Fetch only the branch being built: git fetch origin pull/123/head"
+      ]
+    },
+    {
+      "id": "q45",
+      "number": 45,
+      "title": "Forking workflow",
+      "answer": "#### The Simple Answer\n\nFork the original repo to your account. Clone YOUR fork. Create a feature branch. Push to your fork. Open a PR from your fork to the original repo. Maintainers review and merge.\n\n#### Keeping Your Fork Updated\n\ngit remote add upstream hittps://github.com/original/repo.git. git fetch upstream. git rebase upstream/main. git push origin main. This syncs your fork with the original without creating merge commits.",
+      "sourceLine": 659,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": null,
+      "scenarioIds": [
+        "teammate"
+      ],
+      "commands": [
+        "git remote add upstream hittps://github.com/original/repo.git. git fetch upstream. git rebase upstream/main. git push origin main. This syncs your fork with the original without creating merge"
+      ]
+    },
+    {
+      "id": "q46",
+      "number": 46,
+      "title": "GitHub vs GitLab vs Bitbucket",
+      "answer": "Comparison a Market share Largest (100M+ users) Second largest Third (Atlassian) CI/CD Actions (excellent) Built-in (excellent) Pipelines (good) Self-hosted Enterprise (SSS) Free (CE) Data Center (SS) Best for Open source, startups | DevOps platform Atlassian shops Unique features Copilot, Sponsors Full DevOps lifecycle Jira integration\n\nThe decision: GitHub for open source, community, and Al features. GitLab for self-hosted, all-in- one DevOps platform. Bitbucket for Atlassian ecosystem (Jira, Confluence). Most teams choose GitHub unless they need self-hosted (GitLab) or are deeply invested in Atlassian.",
+      "sourceLine": 669,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": null,
+      "scenarioIds": [
+        "release-design"
+      ],
+      "commands": []
+    },
+    {
+      "id": "q47",
+      "number": 47,
+      "title": "Git rerere - reuse recorded resolution",
+      "answer": "#### The Simple Answer\n\nGit rerere (reuse recorded resolution) remembers how you resolved a merge conflict and automatically applies the same resolution if the same conflict appears again. Enable: git config --global rerere.enabled true.\n\n#### When It Helps\n\n**Rebasing a long-running branch repeatedly** - the same conflicts appear each time you rebase. With rerere, you resolve once and Git applies the resolution automatically on subsequent rebases. Also useful when cherry - picking the same commits across multiple branches. See scenario Q80.",
+      "sourceLine": 675,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": null,
+      "scenarioIds": [
+        "rerere"
+      ],
+      "commands": [
+        "git config --global rerere.enabled"
+      ]
+    },
+    {
+      "id": "q48",
+      "number": 48,
+      "title": "Git patch and format-patch",
+      "answer": "#### The Simple Answer\n\n**git format-patch** - Creates patch files from commits. git format-patch -3 creates patches for the last 3 commits. Each patch is an email-formatted file containing the diff, commit message, and author info.\n\n**git am** - Applies patches. git am *.patch applies patch files as commits, preserving authorship and messages.\n\n#### Use Cases\n\nSharing changes with teams who do not have push access. Email-based code review (Linux kernel development). Applying commits across disconnected repositories. Creating a portable record of changes.",
+      "sourceLine": 685,
+      "category": "Mid-Level Workflows and Production",
+      "level": 3,
+      "correction": null,
+      "scenarioIds": [
+        "release-design"
+      ],
+      "commands": [
+        "git format-patch** - Creates patch files from commits. git format-patch -3 creates patches for the last 3 commits. Each patch is an email-formatted file containing the diff, commit message, and author",
+        "git am** - Applies patches. git am *.patch applies patch files as commits, preserving authorship and"
+      ]
+    },
+    {
+      "id": "q49",
+      "number": 49,
+      "title": "Git internals - objects, SHA-1, packfiles",
+      "answer": "#### The Simple Answer\n\nGit is a content-addressable filesystem. Everything is stored as objects identified by SHA-1 hashes. Understanding internals helps debug unusual situations and optimize performance.\n\n#### Object Types\n\n**Blob** - File content. No filename, no metadata - just the raw content. Two files with identical content share the same blob.\n\n**Tree** - Directory listing. Maps filenames to blob hashes (files) and other tree hashes (subdirectories). A tree is a snapshot of a directory at a point in time.\n\n**Commit** - Points to a tree (the project snapshot), parent commit(s), author, committer, timestamp, and message. A commit is a snapshot of the entire project plus metadata.\n\n**Tag** - Points to a commit (or any object) with a name, tagger, and message. Only annotated tags are objects - lightweight tags are just refs.\n\n#### SHA-1 Hashing\n\nEvery object is identified by the SHA-1 hash of its content. The hash guarantees: the same content always produces the same hash, and any change produces a completely different hash. This is how Git detects corruption and deduplicates content. Git is transitioning to SHA-256 for stronger cryptographic properties.\n\n#### Packfiles\n\nInitially, Git stores each object as a separate file (loose objects). Periodically (or during git gc), Git compresses related objects into packfiles using delta compression - storing only the differences between similar objects. This dramatically reduces storage for repositories with many versions of the same files.\n\n#### Exploring Internals\n\n**git cat-file -t abc1234** - Show object type (blob, tree, commit, tag). git cat-file -p abc1234 - Pretty-print object content. git rev-parse HEAD - Show the SHA-1 of HEAD. git count-objects -v - Show object storage statistics. find.git/objects -type f - See loose objects on disk.",
+      "sourceLine": 699,
+      "category": "Senior Advanced and Scale",
+      "level": 4,
+      "correction": "Git supports SHA-1 and SHA-256 repository object formats. Blobs store content, trees store entries, and commits reference a tree and parents.",
+      "scenarioIds": [
+        "scale"
+      ],
+      "commands": [
+        "git gc), Git compresses related objects into packfiles using delta compression - storing only the differences between similar objects. This dramatically reduces storage for repositories with many versions of the same",
+        "git cat-file -t abc1234** - Show object type (blob, tree, commit, tag). git cat-file -p abc1234 - Pretty-print object content. git rev-parse HEAD - Show the SHA-1 of HEAD. git count-objects -v - Show object storage statistics. find.git/objects -type f - See loose objects on"
+      ]
+    },
+    {
+      "id": "q50",
+      "number": 50,
+      "title": "Garbage collection - gc, prune, dangling objects",
+      "answer": "#### The Simple Answer\n\n**Git accumulates loose objects over time** - abandoned commits from rebases, reset, amended commits, and deleted branches. Garbage collection cleans up these unreachable objects.\n\n**git gc** - Packs loose objects into packfiles, prunes unreachable objects older than 2 weeks (default), and optimizes the repository. Runs automatically after certain operations (push, merge). git prune - Removes unreachable objects immediately (dangerous - bypasses the 2-week safety window). git fsck - Checks repository integrity. Finds dangling (unreachable) objects, corrupt objects, and other issues.\n\n#### Dangling Objects\n\nA dangling commit is one not reachable from any branch or tag. Created by: rebasing (old commits become dangling), reset --hard (abandoned commits), deleted branches with unmerged commits. They are recoverable via reflog until gc removes them (default: 30 days for unreachable, 90 days for reachable).\n\nThe safety net: Git's conservative gc defaults (2-week prune delay, 90-day reflog) protect against accidental data loss. Do not run git prune manually unless you understand the consequences. git gc is safe and should be run periodically on large repos.",
+      "sourceLine": 727,
+      "category": "Senior Advanced and Scale",
+      "level": 4,
+      "correction": null,
+      "scenarioIds": [
+        "reflog-recovery"
+      ],
+      "commands": [
+        "git gc** - Packs loose objects into packfiles, prunes unreachable objects older than 2 weeks (default), and optimizes the repository. Runs automatically after certain operations (push, merge). git prune - Removes unreachable objects immediately (dangerous - bypasses the 2-week safety window). git fsck - Checks repository integrity. Finds dangling (unreachable) objects, corrupt objects, and other",
+        "git prune manually unless you understand the consequences. git gc is safe and should be run periodically on large"
+      ]
+    },
+    {
+      "id": "q51",
+      "number": 51,
+      "title": "Monorepo at scale - sparse checkout, partial clone",
+      "answer": "#### The Challenge\n\nA monorepo with 100 projects, 500,000 commits, and 50 GB of data. Full clone takes 30+ minutes. Every git status checks the entire working directory. CI builds everything for every change.\n\n#### Sparse Checkout\n\nDownload the full.git history but only check out specific directories: git sparse -checkout init --cone, git sparse- checkout set project-a project-b. Your working directory contains only project-a/ and project-b/. Everything else exists in Git history but is not on disk. Dramatically reduces working directory size and git status speed.\n\n#### Partial Clone\n\ngit clone --filter=blob:none URL - Downloads commits and trees but NOT file content (blobs). Blobs are downloaded on demand when you checkout or access them. Combined with sparse checkout: only the blobs for your sparse-checked-out files are ever downloaded. Reduces initial clone from 50 GB to potentially under 1 GB.\n\n#### Affected Targets\n\nTools like Nx, Turborepo, and Bazel analyze which projects are affected by a change. CI only builds and tests affected projects: if you changed project-a, only build project-a and its dependents, not the other 99 projects. nx affected:test runs tests only for affected projects.\n\n#### Git Maintenance\n\ngit maintenance start enables background optimization: prefetch (download remote objects proactively), gc (periodic garbage collection), commit-graph (speed up graph traversal). Essential for developer productivity on large repos.",
+      "sourceLine": 741,
+      "category": "Senior Advanced and Scale",
+      "level": 4,
+      "correction": null,
+      "scenarioIds": [
+        "scale"
+      ],
+      "commands": [
+        "git status checks the entire working directory. CI builds everything for every",
+        "git history but only check out specific directories: git sparse -checkout init --cone, git sparse- checkout set project-a project-b. Your working directory contains only project-a/ and project-b/. Everything else exists in Git history but is not on disk. Dramatically reduces working directory size and git status",
+        "git clone --filter=blob:none URL - Downloads commits and trees but NOT file content (blobs). Blobs are downloaded on demand when you checkout or access them. Combined with sparse checkout: only the blobs for your sparse-checked-out files are ever downloaded. Reduces initial clone from 50 GB to potentially under 1",
+        "git maintenance start enables background optimization: prefetch (download remote objects proactively), gc (periodic garbage collection), commit-graph (speed up graph traversal). Essential for developer productivity on large"
+      ]
+    },
+    {
+      "id": "q52",
+      "number": 52,
+      "title": "Git server administration - bare repos, hooks, access",
+      "answer": "#### Bare Repositories\n\n**A bare repo has no working directory** - only the.git contents. Used for: shared servers, central repositories. Created with git init --bare. Push/pull to bare repos. Never commit directly to them.\n\n#### Server-Side Hooks\n\n**pre-receive** - Runs before accepting a push. Use for: enforcing branch naming conventions, requiring signed commits, blocking force pushes to protected branches, rejecting large files, validating commit messages. If the hook exits non-zero, the entire push is rejected.\n\n**post-receive** - Runs after a push is accepted. Use for: triggering CI/CD pipelines, sending notifications, updating deployment, mirroring to other repositories.\n\n#### Access Control\n\nGit itself has no built-in access control. Platforms (GitHub, GitLab, Gitolite) add: per-repository permissions (read, write, admin), per-branch permissions (who can push to main), RBAC for teams and organizations.",
+      "sourceLine": 763,
+      "category": "Senior Advanced and Scale",
+      "level": 4,
+      "correction": null,
+      "scenarioIds": [
+        "release-design"
+      ],
+      "commands": [
+        "git contents. Used for: shared servers, central repositories. Created with git init --bare. Push/pull to bare repos. Never commit directly to"
+      ]
+    },
+    {
+      "id": "q53",
+      "number": 53,
+      "title": "Platform migration - SVN to Git, GitHub to GitLab SVN to Git",
+      "answer": "**git svn clone** - Converts SVN history to Git commits. Preserves history, authors, and branches. Author mapping file converts SVN usernames to Git author format. Large SVN repos may take hours to convert. Post-migration: verify history, tag releases, set up CI/CD, update developer workflows.\n\nGitHub to GitLab (or reverse)\n\nRepository: git clone --mirror from source, git push --mirror to destination. Preserves all branches, tags, and history. Issues/PRs: Use migration tools (GitLab import, GitHub Import API). Not all metadata transfers cleanly (comments, reactions, labels may need manual adjustment). CI/CD: Rewrite pipeline definitions (.github/workflows/ to.gitlab-ci.yml or vice versa). Different syntax, different concepts.\n\n#### Key Considerations\n\nUpdate all developer remotes (git remote set-url origin new-url). Update CI/CD webhooks. Update internal documentation and links. Run both platforms in parallel for 2-4 weeks. Communicate the cutover date clearly.",
+      "sourceLine": 779,
+      "category": "Senior Advanced and Scale",
+      "level": 4,
+      "correction": null,
+      "scenarioIds": [
+        "release-design"
+      ],
+      "commands": [
+        "git svn clone** - Converts SVN history to Git commits. Preserves history, authors, and branches. Author mapping file converts SVN usernames to Git author format. Large SVN repos may take hours to convert. Post-migration: verify history, tag releases, set up CI/CD, update developer",
+        "git clone --mirror from source, git push --mirror to destination. Preserves all branches, tags, and history. Issues/PRs: Use migration tools (GitLab import, GitHub Import API). Not all metadata transfers cleanly (comments, reactions, labels may need manual adjustment). CI/CD: Rewrite pipeline definitions (.github/workflows/ to.gitlab-ci.yml or vice versa). Different syntax, different",
+        "git remote set-url origin new-url). Update CI/CD webhooks. Update internal documentation and links. Run both platforms in parallel for 2-4 weeks. Communicate the cutover date"
+      ]
+    },
+    {
+      "id": "q54",
+      "number": 54,
+      "title": "Git and compliance - audit trails, traceability",
+      "answer": "#### The Simple Answer\n\nRegulated industries require traceability: who changed what, when, why, and who approved it. Git provides this when configured properly.\n\n#### Compliance Controls\n\n**Signed commits** - Cryptographic proof of author identity. Required by: SOC 2 Type II, PCI DSS, FedRAMP. Branch protection - Enforce review requirements. At least 2 reviewers for production changes. No direct pushes. PR/MR as audit trail - Every change has: description (why), diff (what), reviewers (who approved), CI results (verified). Immutable history - No force pushes to protected branches. No history rewriting on main.\n\n#### Traceability\n\nCommit messages reference issue/ticket numbers. PRs link to change requests. Tags mark releases. git log -- grep=\"JIRA-123\" finds all commits for a ticket. The chain: Requirement -> Ticket -> PR -> Commits -> Deployment -> Release provides end-to-end traceability required by auditors.",
+      "sourceLine": 791,
+      "category": "Senior Advanced and Scale",
+      "level": 4,
+      "correction": null,
+      "scenarioIds": [
+        "traceability",
+        "gitops"
+      ],
+      "commands": [
+        "git log -- grep=\"JIRA-123\" finds all commits for a ticket. The chain: Requirement -> Ticket -> PR -> Commits -> Deployment -> Release provides end-to-end traceability required by"
+      ]
+    },
+    {
+      "id": "q55",
+      "number": 55,
+      "title": "Rewriting history - filter-repo, BFG",
+      "answer": "#### The Simple Answer\n\nSometimes you need to rewrite Git history: remove accidentally committed secrets, delete large binary files that bloated the repo, or change author information across all commits.\n\ngit filter-repo (Recommended)\n\n**The modern replacement for git filter-branch (deprecated** - too slow and error-prone). git filter-repo --invert- paths --path secrets.env - Remove a file from all history. git filter-repo --replace-text expressions.txt - Replace text across all commits. Fast, safe, and well-documented.\n\n#### BFG Repo Cleaner\n\nSimpler for common tasks. bfg --delete-files *.mp4- Remove all MP4 files from history. bfg --replace-text passwords.txt - Replace secrets with *REMOVED*. Faster than filter-repo for large repos. Does not modify the latest commit - only history.\n\n#### After Rewriting\n\nForce push all branches: git push --force --all. All developers must re-clone or reset their local repos - their history no longer matches the remote. Verify with git log and git fsck. Update any CI/CD caches.\n\nWarning: History rewriting is a team-wide disruptive event. Coordinate with all developers. Schedule during low-activity periods. Communicate clearly. Consider whether the disruption is worth it - for secrets, yes (they must be removed). For cleanup, maybe not.",
+      "sourceLine": 805,
+      "category": "Senior Advanced and Scale",
+      "level": 4,
+      "correction": null,
+      "scenarioIds": [
+        "scale"
+      ],
+      "commands": [
+        "git filter-repo",
+        "git filter-branch (deprecated** - too slow and error-prone). git filter-repo --invert- paths --path secrets.env - Remove a file from all history. git filter-repo --replace-text expressions.txt - Replace text across all commits. Fast, safe, and",
+        "git push --force --all. All developers must re-clone or reset their local repos - their history no longer matches the remote. Verify with git log and git fsck. Update any CI/CD"
+      ]
+    },
+    {
+      "id": "q56",
+      "number": 56,
+      "title": "Performance at scale - fsmonitor, maintenance",
+      "answer": "#### The Simple Answer\n\nLarge repos (millions of files, hundreds of thousands of commits) make Git operations slow. Modern Git has features to address this.\n\nfsmonitor\n\nGit normally scans the entire working directory to determine file status. fsmonitor uses the OS file system watcher (FSEvent on macO$, inotify on Linux, ReadDirectoryChangesW on Windows) to track which files changed. git status becomes instant instead of scanning every file. Enable: git config core.fsmonitor true (Git 2.37+).\n\n#### Commit Graph\n\ngit commit-graph write creates a binary file that accelerates graph traversal operations (log, merge -base, reachability checks). Dramatically speeds up git log --graph and git merge-base on repos with many commits.\n\n#### Multi-Pack Index\n\n**Indexes across multiple packfiles** - speeds up object lookup in repos with many packfiles. Enabled automatically by git gc in modern Git.\n\ngit maintenance\n\nBackground optimization: git maintenance start. Runs: prefetch (download remote objects periodically), gc (pack objects), commit-graph (update graph), loose-objects (pack loose objects). Runs automatically in the background. Essential for large repo performance.",
+      "sourceLine": 825,
+      "category": "Senior Advanced and Scale",
+      "level": 4,
+      "correction": null,
+      "scenarioIds": [
+        "scale"
+      ],
+      "commands": [
+        "git status becomes instant instead of scanning every file. Enable: git config core.fsmonitor true (Git",
+        "git commit-graph write creates a binary file that accelerates graph traversal operations (log, merge -base, reachability checks). Dramatically speeds up git log --graph and git merge-base on repos with many",
+        "git gc in modern",
+        "git maintenance start. Runs: prefetch (download remote objects periodically), gc (pack objects), commit-graph (update graph), loose-objects (pack loose objects). Runs automatically in the background. Essential for large repo"
+      ]
+    },
+    {
+      "id": "q57",
+      "number": 57,
+      "title": "GitOps - Git as source of truth",
+      "answer": "#### The Simple Answer\n\nGitOps uses Git as the single source of truth for infrastructure and application deployments. All changes go through Git (commit -> PR -> review -> merge). An operator (ArgoCD, Flux) watches the Git repository and applies changes to the target environment automatically.\n\n#### The Pattern\n\nDeveloper commits a Kubernetes manifest change to Git -> PR is reviewed and approved -> Merge to main -> ArgoCD detects the change -> ArgoCD applies the manifest to the cluster -> The cluster state matches Git. If someone modifies the cluster directly, ArgoCD detects the drift and reverts to the Git state.\n\n#### Key Principles\n\n**Declarative** - Desired state is described in Git (YAML manifests, Helm values, Kustomize overlays), not imperative commands. Versioned and auditable - Every change is a Git commit with author, timestamp, message, and reviewer. Rollback = revert the Git commit. Automatically applied - The operator continuously reconciles cluster state with Git. No manual kubectl apply. Observable - The operator reports sync status. Alerts on drift.\n\n#### ArgoCbD vs Flux\n\n**ArgoCD** - Rich UI. Multi-cluster support. Application-centric. More popular. Flux - Lighter weight. CLI-first. Better for simple setups. Native Kustomize and Helm support. Both are CNCF projects. ArgoCD is more common in enterprise environments.",
+      "sourceLine": 847,
+      "category": "Senior Advanced and Scale",
+      "level": 4,
+      "correction": null,
+      "scenarioIds": [
+        "gitops"
+      ],
+      "commands": []
+    },
+    {
+      "id": "q58",
+      "number": 58,
+      "title": "Merge conflict in production hotfix",
+      "answer": "#### Step-by-Step\n\n1. **Step 1 -** Stay calm. Merge conflicts are normal. They mean two people changed the same lines - Git needs human judgment to decide which changes to keep.\n\n2. **Step 2 -** Understand the conflict markers. <<<<<<< HEAD shows your changes. ======= separates the two versions. >>>>>>> branch-name shows the incoming changes. Edit the file to keep the correct code - this might be one side, the other, or a combination.\n\n3. **Step 3 -** For a hotfix under pressure. Focus on the conflicting files. Understand both changes. If unsure, talk to the other author. Do not blindly accept one side - a wrong resolution can introduce bugs.\n\n4. **Step 4 -** Resolve, test, merge. Edit the conflicting files. Remove conflict markers. git add the resolved files. Run tests. git commit to complete the merge. Push immediately for the hotfix.\n\n5. **Step 5 -** If the conflict is too complex, abort: git merge --abort. This restores the pre-merge state. Take time to understand the changes, then retry.",
+      "sourceLine": 867,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": null,
+      "scenarioIds": [
+        "conflict"
+      ],
+      "commands": [
+        "git add the resolved files. Run tests. git commit to complete the merge. Push immediately for the",
+        "git merge --abort. This restores the pre-merge state. Take time to understand the changes, then"
+      ]
+    },
+    {
+      "id": "q59",
+      "number": 59,
+      "title": "Accidentally committed secrets to repo",
+      "answer": "#### Step-by-Step\n\n1. **Step 1 -** Rotate the secret immediately. Assume it is compromised. Change the password, regenerate the API key, revoke the token. Do this BEFORE cleaning the Git history - attackers scan repos in real-time.\n\n2. **Step 2 -** Remove from history. git filter-repo --invert-paths --path config/secrets.yml removes the file from all history. Or BFG: bfg --delete-files secrets.yml. Force push all branches: git push --force --all.\n\n3. **Step 3 -** If on GitHub, contact GitHub support to purge cached copies. Enable GitHub secret scanning to catch future leaks.\n\n4. **Step 4 -** Notify teammates. Everyone must re-clone or reset their local repos. Old history in local repos still contains the secret.\n\n5. **Step 5 -** Prevent. Pre-commit hooks with gitleaks or git-secrets..gitignore for secret files. Use environment variables or secret managers instead of files.",
+      "sourceLine": 881,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": "Revoke or rotate the credential first. Removing a file or rewriting one clone does not revoke credentials or erase copies in forks, caches, logs, and other clones.",
+      "scenarioIds": [
+        "secret"
+      ],
+      "commands": [
+        "git filter-repo --invert-paths --path config/secrets.yml removes the file from all history. Or BFG: bfg --delete-files secrets.yml. Force push all branches: git push --force"
+      ]
+    },
+    {
+      "id": "q60",
+      "number": 60,
+      "title": "Force push overwrote teammate's commits",
+      "answer": "#### What Happened\n\nYou rebased your branch and force pushed. Your teammate had pushed commits to the same branch. Your force push overwrote their commits - they are gone from the remote.\n\n#### Step-by-Step Recovery\n\n1. **Step 1 -** The teammate's local repo still has their commits. Have them push their branch to a temporary name: git push origin HEAD:rescue/their-work.\n\n2. **Step 2 -** Check the remote reflog. Some platforms (GitLab) keep aserver-side reflog. GitHub does not - recovery depends on someone's local repo.\n\n3. **Step 3 -** Merge the rescued commits. Cherry-pick or merge the teammate's commits into the rebased branch.\n\n#### Prevention\n\nNeverforce push to a shared branch. Use --force-with-lease instead of --force - it fails if the remote has commits you have not seen, preventing overwrites. Configure branch protection to block force pushes on shared branches. Communicate before rebasing any branch others might be using.",
+      "sourceLine": 895,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": null,
+      "scenarioIds": [
+        "rejected-push"
+      ],
+      "commands": [
+        "git push origin"
+      ]
+    },
+    {
+      "id": "q61",
+      "number": 61,
+      "title": "Detached HEAD - commits lost",
+      "answer": "#### What Happened\n\nYou checked out a tag or specific commit. Made several commits. Switched to main. Now those commits seem lost - they are not on any branch.\n\n#### Recovery\n\n1. **Step 1 -** git reflog. Shows where HEAD has been. Find the commit hash of your last commit in detached HEAD.\n\n2. **Step 2 -** Create a branch. git branch recovery abc1234 (using the hash from reflog). Now your commits are on the recovery branch.\n\n3. **Step 3 -** Merge or cherry-pick the recovery branch into your target branch.\n\n#### Prevention\n\nGit warns when you enter detached HEAD state. If you intend to make commits, create a branch first: git switch -c new-branch. If you accidentally committed in detached HEAD, do not panic - reflog has your commits for 30 days.",
+      "sourceLine": 913,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": null,
+      "scenarioIds": [
+        "detached"
+      ],
+      "commands": [
+        "git reflog. Shows where HEAD has been. Find the commit hash of your last commit in detached",
+        "git branch recovery abc1234 (using the hash from reflog). Now your commits are on the recovery",
+        "git switch -c new-branch. If you accidentally committed in detached HEAD, do not panic - reflog has your commits for 30"
+      ]
+    },
+    {
+      "id": "q62",
+      "number": 62,
+      "title": "git reset --hard lost uncommitted work The Harsh Reality",
+      "answer": "git reset --hard discards uncommitted changes in the working directory and staging area. These changes were NEVER committed - they are not in the reflog. Reflog only tracks committed changes.\n\n#### Recovery Attempts\n\nStaged changes (git add was run): git fsck --lost-found may recover blobs from the staging area. Check.git/lost- found/other/ for recovered blobs. This is not guaranteed.\n\nUnstaged changes: Gone. No Git recovery possible. Check: IDE local history (VS Code, IntelliJ save previous versions), filesystem snapshots (Time Machine on macOS, LVM snapshots on Linux), backup systems.\n\n#### Prevention\n\nCommit frequently. Even \"WIP\" commits on a branch are recoverable via reflog. Uncommitted workis at risk. Use git stash as a safety step before any destructive operation. Configure your IDE to save local history automatically.",
+      "sourceLine": 931,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": "Reflog records reference movement, not every unsaved edit. Do not promise recovery of content that was never committed or otherwise stored.",
+      "scenarioIds": [
+        "reflog-recovery"
+      ],
+      "commands": [
+        "git reset --hard discards uncommitted changes in the working directory and staging area. These changes were NEVER committed - they are not in the reflog. Reflog only tracks committed",
+        "git add was run): git fsck --lost-found may recover blobs from the staging area. Check.git/lost- found/other/ for recovered blobs. This is not",
+        "git stash as a safety step before any destructive operation. Configure your IDE to save local history"
+      ]
+    },
+    {
+      "id": "q63",
+      "number": 63,
+      "title": "Merge produced broken build - unnoticed 3 days",
+      "answer": "#### What Happened\n\nA merge to main passed CI (tests passed) but introduced a subtle bug - a race condition that only appears under load. Production has been running broken code for 3 days.\n\n#### Step-by-Step\n\n1. **Step 1 -** Revert the merge immediately. git revert -m 1 merge_commit_hash. This undoes the merge without rewriting history. Deploy the revert.\n\n2. **Step 2 -** Identify the issue. Review the merge diff. Run integration tests. Load test the merged code.\n\n3. **Step 3 -** Fix and re-merge. Fix the bug on the feature branch. Create a new PR. Add tests that catch the specific issue. Re-merge.\n\n#### Prevention\n\nAutomated tests must cover critical paths. Add integration tests and load tests to CI. Post- deployment monitoring should catch regressions (error rate, latency). Canary deployments limit blast radius - if the first 5% of traffic shows issues, the full deployment is halted.",
+      "sourceLine": 945,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": null,
+      "scenarioIds": [
+        "revert"
+      ],
+      "commands": [
+        "git revert -m 1 merge_commit_hash. This undoes the merge without rewriting history. Deploy the"
+      ]
+    },
+    {
+      "id": "q64",
+      "number": 64,
+      "title": "Repo is 10GB - clone takes 30 minutes",
+      "answer": "#### Step-by-Step\n\n1. **Step 1 -** Diagnose what is consuming space. git rev-list --objects --all | git cat-file --batch- check='%(objecttype) %(objectname) %(objectsize) %(rest)' | sort -k3-n-r | head -20 shows the largest objects. Usually: large binary files (videos, datasets, build artifacts) accidentally committed.\n\n2. **Step 2 -** Remove large files from history. BFG: bfg --strip-blobs-bigger-than 10M. Or filter-repo: git filter-repo -- strip-blobs-bigger-than 10M. Force push. All developers re-clone.\n\n3. **Step 3 -** Prevent future bloat. Set up Git LFS for binary files. Add binary patterns to.gitignore. Pre-receive hook rejecting files over 5 MB. git config --global core. bigFileThreshold 1m warns developers about large files.\n\n4. **Step 4 -** For CI/CD, use shallow clone: git clone --depth=1.",
+      "sourceLine": 963,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": "core.bigFileThreshold influences object handling; it does not warn contributors or prevent large files. LFS does not retroactively remove old binary objects.",
+      "scenarioIds": [
+        "scale"
+      ],
+      "commands": [
+        "git rev-list --objects --all | git cat-file --batch- check='%(objecttype) %(objectname) %(objectsize) %(rest)' | sort -k3-n-r | head -20 shows the largest objects. Usually: large binary files (videos, datasets, build artifacts) accidentally",
+        "git filter-repo -- strip-blobs-bigger-than 10M. Force push. All developers",
+        "git config --global core. bigFileThreshold 1m warns developers about large",
+        "git clone"
+      ]
+    },
+    {
+      "id": "q65",
+      "number": 65,
+      "title": "Rebase conflict hell - 50 conflicts",
+      "answer": "#### What Happened\n\nA feature branch has been open for 3 months. Main has diverged significantly. git rebase main produces 50+ conflicts across dozens of files, one commit at a time.\n\n#### Step-by-Step\n\n1. **Step 1 -** Abort if overwhelmed. git rebase --abort returns to the pre-rebase state. Nothing is lost.\n\n2. **Step 2 -** Consider merge instead. git merge main produces ONE conflict resolution (all conflicts at once) instead of commit-by-commit. Easier when there are many small commits with overlapping conflicts. The merge commit is less \"clean\" than a rebase but much faster to resolve.\n\n3. **Step 3 -** If rebase is required, enable rerere first: git config rerere.enabled true. Resolve conflicts once - rerere remembers the resolution for subsequent conflicts with the same content.\n\n4. **Step 4 -** Interactive rebase to squash first. Squash your 50 commits into 5 logical ones. Then rebase - 5 potential conflict points instead of 50.\n\n#### Prevention\n\nRebase onto main frequently (daily or at least weekly). Short-lived branches (days, not months). Trunk-based development with feature flags eliminates long-running branches entirely. See scenario Q79.",
+      "sourceLine": 975,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": null,
+      "scenarioIds": [
+        "rerere"
+      ],
+      "commands": [
+        "git rebase main produces 50+ conflicts across dozens of files, one commit at a",
+        "git rebase --abort returns to the pre-rebase state. Nothing is",
+        "git merge main produces ONE conflict resolution (all conflicts at once) instead of commit-by-commit. Easier when there are many small commits with overlapping conflicts. The merge commit is less \"clean\" than a rebase but much faster to",
+        "git config rerere.enabled true. Resolve conflicts once - rerere remembers the resolution for subsequent conflicts with the same"
+      ]
+    },
+    {
+      "id": "q66",
+      "number": 66,
+      "title": "Wrong commit on main - revert vs reset",
+      "answer": "#### The Decision\n\nIf the commit is already pushed and others have pulled it: Use git revert. Creates anew undo commit. Safe. Everyone pulls the revert normally. History is preserved.\n\nIf the commit is local only (not pushed): Use git reset --soft HEAD~1. The commit is removed. Changes are back in staging. No history rewriting on the remote.\n\nNever git reset --hard on a pushed shared branch. It rewrites history that others have. Their next pull breaks. Use revert for any pushed commit on a shared branch. This is non-negotiable.",
+      "sourceLine": 995,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": null,
+      "scenarioIds": [
+        "revert"
+      ],
+      "commands": [
+        "git revert. Creates anew undo commit. Safe. Everyone pulls the revert normally. History is",
+        "git reset --soft HEAD~1. The commit is removed. Changes are back in staging. No history rewriting on the",
+        "git reset --hard on a pushed shared branch. It rewrites history that others have. Their next pull breaks. Use revert for any pushed commit on a shared branch. This is"
+      ]
+    },
+    {
+      "id": "q67",
+      "number": 67,
+      "title": "Git bisect finds bug 200 commits ago",
+      "answer": "#### Step-by-Step\n\n1. **Step 1 -** Start bisect. git bisect start. git bisect bad HEAD (current is broken). git bisect good v1.5.0 (this version was working). Git checks out the middle commit.\n\n2. **Step 2 -** Test and mark. Run your test. git bisect good or git bisect bad. Git narrows the range and checks out the next middle commit. Repeat. 200 commits -> found in ~8 steps (log2(200) = 8).\n\n3. **Step 3 -** Automate. git bisect run./test.sh - Git runs the test script automatically at each step. Zero manual intervention. The script exits 0 for good, non-zero for bad.\n\n4. **Step 4 -** Found the commit. Git identifies the exact commit that introduced the bug. Read the diff. Understand the change. Fix the bug with a new commit (do not modify the old one).\n\n5. **Step 5 -** Clean up. git bisect reset returns to the original branch.",
+      "sourceLine": 1005,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": "For bisect run: exit 0 is good; 1–127 is bad except 125, which skips; other exit codes abort. A deterministic test is essential.",
+      "scenarioIds": [
+        "bisect"
+      ],
+      "commands": [
+        "git bisect start. git bisect bad HEAD (current is broken). git bisect good v1.5.0 (this version was working). Git checks out the middle",
+        "git bisect good or git bisect bad. Git narrows the range and checks out the next middle commit. Repeat. 200 commits -> found in ~8 steps (log2(200) =",
+        "git bisect run./test.sh - Git runs the test script automatically at each step. Zero manual intervention. The script exits 0 for good, non-zero for",
+        "git bisect reset returns to the original"
+      ]
+    },
+    {
+      "id": "q68",
+      "number": 68,
+      "title": "Submodule stuck on wrong commit",
+      "answer": "#### What Happened\n\nA submodule points to an old commit. The parent repo was not updated after the submodule was updated. Deployments use the old version of the library.\n\n#### Fix\n\ncd into the submodule directory. git fetch origin. git checkout main (or the desired tag/commit). cd back to the parent repo. git add submodule-dir. git commit -m \"Update submodule to latest version\". git push.\n\n#### Prevention\n\nCI should verify submodule versions match expectations. Add a pre-commit hook that warns when submodule pointers are outdated. Consider replacing submodules with a package manager (npm, pip) or Git subtree. Document the submodule update process prominently.",
+      "sourceLine": 1019,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": "Fetching and checking out an existing main branch does not necessarily update it. Check out the exact tested dependency commit, then commit the new gitlink in the parent.",
+      "scenarioIds": [
+        "submodules"
+      ],
+      "commands": [
+        "git fetch origin. git checkout main (or the desired tag/commit). cd back to the parent repo. git add submodule-dir. git commit -m \"Update submodule to latest version\". git"
+      ]
+    },
+    {
+      "id": "q69",
+      "number": 69,
+      "title": "CI fails only on main - works on feature branches",
+      "answer": "#### Common Causes\n\nMerge conflict resolution introduced a bug. The merge was resolved incorrectly - both sides' code is present but incompatible. Environment differences. Main deploys to staging with different config. Feature branches runina lighter CI environment. Cached dependencies. Feature branch CI uses cached dependencies. Main CI has a stale or different cache. Timing/flaky tests. Tests pass individually but fail when run after other tests (shared state, database pollution).\n\n#### Debugging\n\n**Check the merge commit diff** - is the conflict resolution correct? Compare CI configs for main vs feature branches. Clear CI cache and re-run. Run the exact same test suite locally from the main branch.",
+      "sourceLine": 1033,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": null,
+      "scenarioIds": [
+        "ci-history"
+      ],
+      "commands": []
+    },
+    {
+      "id": "q70",
+      "number": 70,
+      "title": "Committed to wrong branch",
+      "answer": "#### Step-by-Step\n\n1. **Step 1 -** If the commits are not pushed yet. Note the commit hashes. Switch to the correct branch: git switch correct-branch. Cherry-pick the commits: git cherry-pick abc1234 def5678. Switch back to the wrong branch: git switch wrong-branch. Reset: git reset --hard HEAD~2 (remove the 2 commits).\n\n2. **Step 2 -** If committed to main and already pushed. git revert on main to undo the commits. Cherry-pick to the correct branch. Push both branches.\n\n3. **Step 3 -** Shortcut if not pushed. git switch correct-branch, git merge wrong-branch (if you want all commits). Then git switch wrong-branch, git reset --hard origin/wrong-branch (restore the branch to remote state).",
+      "sourceLine": 1043,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": "Create a named backup reference before resetting a branch. Preserve uncommitted work separately before any hard reset.",
+      "scenarioIds": [
+        "move-commit",
+        "wrong-branch"
+      ],
+      "commands": [
+        "git switch correct-branch. Cherry-pick the commits: git cherry-pick abc1234 def5678. Switch back to the wrong branch: git switch wrong-branch. Reset: git reset --hard HEAD~2 (remove the 2",
+        "git revert on main to undo the commits. Cherry-pick to the correct branch. Push both",
+        "git switch correct-branch, git merge wrong-branch (if you want all commits). Then git switch wrong-branch, git reset --hard origin/wrong-branch (restore the branch to remote"
+      ]
+    },
+    {
+      "id": "q71",
+      "number": 71,
+      "title": "Deleted branch with unmerged work",
+      "answer": "#### Recovery\n\n1. **Step 1 -** git reflog shows the branch tip before deletion. Find the last commit hash of the deleted branch. Step 2 - Recreate the branch. git branch recovered-branch abc1234 (hash from reflog). All commits are restored.\n\n3. **Step 3 -** If reflog does not show it (deleted on another machine or too long ago): git fsck --lost-found shows dangling commits. Search through them for your work.\n\nPrevention: git branch -d (lowercase d) refuses to delete unmerged branches. git branch -D (uppercase D) force deletes. Use -d by default - it protects you. Use -D only when you are certain.",
+      "sourceLine": 1053,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": null,
+      "scenarioIds": [
+        "deleted-branch"
+      ],
+      "commands": [
+        "git reflog shows the branch tip before deletion. Find the last commit hash of the deleted branch. Step 2 - Recreate the branch. git branch recovered-branch abc1234 (hash from reflog). All commits are",
+        "git fsck --lost-found shows dangling commits. Search through them for your",
+        "git branch -d (lowercase d) refuses to delete unmerged branches. git branch -D (uppercase D) force deletes. Use -d by default - it protects you. Use -D only when you are"
+      ]
+    },
+    {
+      "id": "q72",
+      "number": 72,
+      "title": "200 tiny commits - clean before merge",
+      "answer": "#### Step-by-Step\n\n1. **Step 1 -** Interactive rebase. git rebase -i main (or HEAD~200). Mark the first commit as pick. Mark the rest as squash or fixup. Save and exit. Write a clean, comprehensive commit message.\n\n2. **Step 2 -** If too many to handle interactively, use squash merge instead: the PR merge strategy squashes all commits into one automatically. No manual rebase needed.\n\n3. **Step 3 -** For partial squashing (keep 5 logical commits from 200): group related commits together with rebase -i. Squash each group. Reorder if needed.\n\nPrevention: Commit frequently (good) but squash before PR review (better). Use fixup commits: git commit --fixup=abc1234 marks a commit as a fix for an earlier one. git rebase -i--autosquash automatically orders and squashes fixup commits.",
+      "sourceLine": 1063,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": null,
+      "scenarioIds": [
+        "clean-history"
+      ],
+      "commands": [
+        "git rebase -i main (or HEAD~200). Mark the first commit as pick. Mark the rest as squash or fixup. Save and exit. Write a clean, comprehensive commit",
+        "git commit --fixup=abc1234 marks a commit as a fix for an earlier one. git rebase -i--autosquash automatically orders and squashes fixup"
+      ]
+    },
+    {
+      "id": "q73",
+      "number": 73,
+      "title": "Two devs rebased same branch - duplicate commits",
+      "answer": "#### What Happened\n\nDev A and Dev B both work on shared-feature branch. Dev A rebases onto main and force pushes. Dev B pulls, but their local history has the old commit hashes. Dev B pushes - now the branch has duplicate commits (same changes, different hashes).\n\n#### Fix\n\n1. **Step 1 -** Decide on one version. Agree which developer's rebase is correct. Step 2 - Reset to the correct version. The other developer: git fetch origin, git reset --hard origin/shared-feature. Step 3 - If commits are interleaved, interactive rebase to remove duplicates.\n\n#### Prevention\n\nThis is why the golden rule exists: never rebase shared branches. If rebasing is needed on a shared branch, coordinate: only one person rebases, force pushes, and notifies the team. Everyone else resets to the new remote. Or better: use merge instead of rebase on shared branches.",
+      "sourceLine": 1075,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": "Coordinate a canonical history and save unpublished work before rebuilding a clone or branch. Do not reset a teammate’s branch blindly.",
+      "scenarioIds": [
+        "release-design"
+      ],
+      "commands": [
+        "git fetch origin, git reset --hard origin/shared-feature. Step 3 - If commits are interleaved, interactive rebase to remove"
+      ]
+    },
+    {
+      "id": "q74",
+      "number": 74,
+      "title": "Hotfix needed but main has unreleased features",
+      "answer": "#### Step-by-Step\n\n1. **Step 1 -** Create a hotfix branch from the last release tag, not from main. git switch -c hotfix/critical-bug v2.1.0. This ensures the hotfix only contains production code + the fix.\n\n2. **Step 2 -** Make the fix, test, merge to production. Deploy from the hotfix branch (or tag it and deploy the tag).\n\n3. **Step 3 -** Merge the hotfix back to main so the fix is included in future releases: git switch main, git merge hotfix/critical-bug.\n\n#### Prevention\n\nAlways tag releases. Keep release branches if you support multiple versions. This workflow is core to Git Flow and is the standard for hotfix management.",
+      "sourceLine": 1089,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": null,
+      "scenarioIds": [
+        "hotfix"
+      ],
+      "commands": [
+        "git switch -c hotfix/critical-bug v2.1.0. This ensures the hotfix only contains production code + the",
+        "git switch main, git merge"
+      ]
+    },
+    {
+      "id": "q75",
+      "number": 75,
+      "title": ".gitignore not working - file already tracked",
+      "answer": "#### Why It Happens\n\n.gitignore only prevents untracked files from being tracked. If a file is ALREADY tracked (was committed before being added to.gitignore),.gitignore has no effect - Git continues tracking it.\n\n#### Fix\n\n**git rm --cached filename** - Remove the file from Git's index (stops tracking) without deleting it from the filesystem. git commit -m \"Stop tracking filename\". Now.gitignore takes effect for future changes.\n\n#### For Multiple Files\n\n**git rm -r --cached.** - Remove everything from the index. git add. - Re-add everything (respecting.gitignore). git commit -m \"Apply.gitignore retrospectively\". This is the nuclear option - works when you have many files to untrack.",
+      "sourceLine": 1103,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": "Ignore rules only affect untracked files. Remove an already tracked file from the index with git rm --cached, then commit; its working copy remains.",
+      "scenarioIds": [
+        "ignore"
+      ],
+      "commands": [
+        "git rm --cached filename** - Remove the file from Git's index (stops tracking) without deleting it from the filesystem. git commit -m \"Stop tracking filename\". Now.gitignore takes effect for future",
+        "git rm -r --cached.** - Remove everything from the index. git add. - Re-add everything (respecting.gitignore). git commit -m \"Apply.gitignore retrospectively\". This is the nuclear option - works when you have many files to"
+      ]
+    },
+    {
+      "id": "q76",
+      "number": 76,
+      "title": "Reverted merge commit, can't re-merge",
+      "answer": "#### What Happened\n\nA feature branch was merged to main. A bug was found. The merge was reverted: git revert -m 1 merge_commit. Later, the bug was fixed on the feature branch. You try to merge the feature branch again - but Git says \"Already up to date.\" The changes are not applied.\n\n#### Why\n\nGit's merge is based on commit ancestry, not file content. The feature branch's commits are already in main's history (viathe original merge). The revert undid the changes but did not remove the commits from the history. Git thinks the merge is already done.\n\n#### Fix\n\n**Option 1** - Revert the revert. git revert revert_commit_hash. This re-applies the original changes. Then merge the feature branch with the bug fix. Two revert commits in history is ugly but correct.\n\n**Option 2** - Rebase the feature branch. git rebase main on the feature branch creates new commits (new hashes). These are \"new\" commits from Git's perspective and can be merged normally.\n\nThis is one of the most confusing Git scenarios. Interviewers love it because it tests deep understanding of how Git merge works - based on commit graph, not content comparison.",
+      "sourceLine": 1117,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": "Reverting a merge undoes its changes without erasing its ancestry. New commits may merge, but the originally reverted changes remain absent. A plain rebase is not a guaranteed repair. Consider reverting the revert or deliberately reconstructing the change.",
+      "scenarioIds": [
+        "revert"
+      ],
+      "commands": [
+        "git revert -m 1 merge_commit. Later, the bug was fixed on the feature branch. You try to merge the feature branch again - but Git says \"Already up to date.\" The changes are not",
+        "git revert revert_commit_hash. This re-applies the original changes. Then merge the feature branch with the bug fix. Two revert commits in history is ugly but",
+        "git rebase main on the feature branch creates new commits (new hashes). These are \"new\" commits from Git's perspective and can be merged"
+      ]
+    },
+    {
+      "id": "q77",
+      "number": 77,
+      "title": "Large binary committed - repo bloated",
+      "answer": "#### What Happened\n\nA developer committed a 2 GB video file. Even after deleting it in a subsequent commit, the repo is still 2 GB because Git stores every version of every file in history.\n\n#### Fix\n\n1. **Step 1 -** Remove from history. BFG: bfg --strip-blobs-bigger-than 50M. Or filter-repo: git filter-repo --strip-blobs- bigger-than 50M. Step 2 - Force push. git push --force --all. Step 3 - All developers re-clone. Old clones still contain the large file. Step 4- Run git gc --aggressive on the server to reclaim space.\n\n#### Prevention\n\nPre-receive hook rejecting files over 5 MB. Set up Git LFS for binary files. Add binary patterns to.gitignore. Use.gitattributes to track large files with LFS: *.mp4 filter=Ifs diff=lIfs merge=lfs.",
+      "sourceLine": 1135,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": "History rewriting changes commit IDs and needs coordination. Hosted garbage collection and cached copies are outside your clone’s control. Preserve a backup and verify object removal.",
+      "scenarioIds": [
+        "scale"
+      ],
+      "commands": [
+        "git filter-repo --strip-blobs- bigger-than 50M. Step 2 - Force push. git push --force --all. Step 3 - All developers re-clone. Old clones still contain the large file. Step 4- Run git gc --aggressive on the server to reclaim"
+      ]
+    },
+    {
+      "id": "q78",
+      "number": 78,
+      "title": "Git pull creates unexpected merge commits",
+      "answer": "#### What Happened\n\nThe developer's git log shows: \"Merge branch 'main' of github.com/org/repo into main\" - a merge commit that nobody intentionally created. History is polluted with meaningless merge commits.\n\n#### Why\n\ngit pull (default) = fetch + merge. If the remote has commits the local does not (and vice versa), a merge commit is created to reconcile them. This happens naturally when multiple people push to the same branch.\n\n#### Fix\n\nConfigure rebase as default: git config --global pull.rebase true. Now git pull = fetch + rebase. Local commits are replayed on top of remote commits. No merge commit. Linear history.\n\nOr use explicitly: git pull --rebase origin main.\n\nFor the existing merge commits: Interactive rebase can remove them, but this rewrites history. For shared branches, accept the existing merge commits and prevent future ones with the config change.",
+      "sourceLine": 1149,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": "Unexpected merge commits require divergent histories and a merge integration strategy; not every pull creates a merge commit.",
+      "scenarioIds": [
+        "pull-rebase"
+      ],
+      "commands": [
+        "git log shows: \"Merge branch 'main' of github.com/org/repo into main\" - a merge commit that nobody intentionally created. History is polluted with meaningless merge",
+        "git pull (default) = fetch + merge. If the remote has commits the local does not (and vice versa), a merge commit is created to reconcile them. This happens naturally when multiple people push to the same",
+        "git config --global pull.rebase true. Now git pull = fetch + rebase. Local commits are replayed on top of remote commits. No merge commit. Linear",
+        "git pull --rebase origin"
+      ]
+    },
+    {
+      "id": "q79",
+      "number": 79,
+      "title": "Feature branch 3 months old, 500 behind main",
+      "answer": "#### Step-by-Step\n\n1. **Step 1 -** Assess the branch. How many commits? How many files changed? Are the changes concentrated in a few files or spread across the codebase?\n\n2. **Step 2 -** Try merging main into the branch first. git merge main. If conflicts are manageable (under 20 files), resolve them. This is the safest option - no history rewriting.\n\n3. **Step 3 -** If conflicts are overwhelming, consider incremental rebasing. Instead of rebasing 500 commits at once, rebase onto an intermediate point (100 commits back from main), resolve conflicts, then rebase further. Git rerere helps - resolve each conflict once, rerere applies the resolution on subsequent encounters.\n\n4. **Step 4 -** If the branch is too far gone, create a new branch from current main and manually reapply your changes. Use git diff main..feature-branch -> changes.patch to get a patch of all changes. Apply selectively.\n\n#### Prevention\n\nRebase onto main at least weekly. Ideal: daily. Maximum: bi-weekly. Beyond that, divergence makes integration exponentially harder. Trunk-based development eliminates this problem entirely - branches live for hours, not months.",
+      "sourceLine": 1167,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": "A raw diff from current main to an old branch can reverse newer main changes. Identify the intended changes from the common base, reconstruct carefully, and test. Numeric conflict thresholds in the source are heuristics.",
+      "scenarioIds": [
+        "update-feature"
+      ],
+      "commands": [
+        "git merge main. If conflicts are manageable (under 20 files), resolve them. This is the safest option - no history",
+        "git diff main..feature-branch -> changes.patch to get a patch of all changes. Apply"
+      ]
+    },
+    {
+      "id": "q80",
+      "number": 80,
+      "title": "Same conflict appearing repeatedly",
+      "answer": "#### What Happened\n\nYou rebase your feature branch onto main weekly. Each time, the same conflict appears in the same file. You resolve it, but next week it is back.\n\n#### Why\n\nEach rebase replays your commits one by one. If commit #3 in your branch conflicts with something in main, every rebase reproduces that conflict - even though you resolved it before. Rebase creates new commits (new hashes), so Git does not know the conflict was already resolved.\n\n#### Fix\n\nEnable git rerere. git config --global rerere.enabled true. Resolve the conflict once. Git records the resolution. On subsequent rebases, Git automatically applies the same resolution. No manual intervention.\n\nOr squash before rebasing. If your 20 commits are squashed into 3, there are only 3 potential conflict points instead of 20. Fewer commits = fewer conflict opportunities.\n\nrerere is one of Git's most underused features. It is designed exactly for this scenario - recurring conflicts in repeated rebase workflows. Enable it globally and forget about resolving the same conflict twice.",
+      "sourceLine": 1183,
+      "category": "Tricky Scenarios",
+      "level": 5,
+      "correction": "Rerere reuses matching recorded resolutions. Review and test the result; not every repeated-looking conflict has the same preimage.",
+      "scenarioIds": [
+        "rerere"
+      ],
+      "commands": [
+        "git rerere. git config --global rerere.enabled true. Resolve the conflict once. Git records the resolution. On subsequent rebases, Git automatically applies the same resolution. No manual"
+      ]
+    }
+  ],
+  "notes": "1. Git basics — repository, commit, branch, HEAD, working directory, staging area\r\n2. Daily commands — git clone, status, add, commit, log, diff\r\n3. Branches — create, switch, merge, delete\r\n4. Remote Git — push, pull, fetch, origin\r\n5. Merge conflicts — how they happen and how to fix them\r\n6. Undo mistakes — restore, reset, revert, reflog\r\n7. Stash — temporarily save unfinished work\r\n8. Rebase — simple explanation and when to use it\r\n9. Git workflows — feature branches, pull requests, GitHub Flow, trunk-based development\r\n10. DevOps/interview scenarios — Jenkins + Git, CI/CD triggers, common Git interview questions\r\n\r\nGit is a version control system.\r\nIt tracks changes in your files over time.\r\nGit keeps the history properly.\r\nGit normally works through three important areas:\r\n\r\n\r\n    git init          --> initializes a new Git repository in the current directory\r\n      ↓\r\nWorking Directory     --> your current changes     --> Untracked files\r\n      ↓\r\n    git status        --> shows which files are modified, staged, or untracked\r\n      ↓\r\n    git add           --> moves selected files or all files \r\n      ↓\r\n    git rm --cached   --> removes the selected file \r\n      ↓\r\n    git restore --staged  --> restore the selected file\r\n      ↓\r\n    git diff          --> line-by-line changes Working Directory → Staging Area\r\n      ↓\r\nStaging Area          --> These are the changes I want to include in my next commit.\r\n      ↓\r\n    git diff --staged --> diff between Staging Area → Last Commit\r\n    git diff --cached\r\n      ↓\r\n    git commit        --> creates a permanent snapshot of those staged changes\r\n      ↓\r\nlocal Repository\r\n      ↓ \r\n    git push\r\n      ↓ \r\nRemote Repository\r\n\r\ngit log --oneline\r\ngit log will give all commit information --> commit hash , author and also date when it got done\r\n\r\n\r\nGit\r\n= Version control tool\r\n= Runs on your computer\r\n= Tracks file changes\r\n\r\nGitHub\r\n= Website/platform\r\n= Stores Git repositories online\r\n= Helps teams collaborate\r\n\r\ngit status shows which files are modified, staged, or untracked. \r\ngit diff shows the actual line-by-line changes.\r\n\r\nThat .git directory contains information about:\r\n-- commits\r\n-- branches\r\n-- history\r\n-- configuration\r\n-- references\r\n-- metadata\r\n\r\n\r\n\r\n--------------------------------------------------------------------------------\r\n--------------------------------------------------------------------------------\r\n\r\ngit clone is used when the repository already exists remotely.\r\nDownloads the repository\r\nCreates the .git folder\r\nConnects the remote repository as origin\r\ngit clone https://github.com/BalajiDegala/gitproject.git\r\n\r\ngit remote -v\r\nSo origin is just the default name Git gives to the remote repository.\r\n\r\ngit clone creates a local copy of an existing remote Git repository and configures that remote as origin.\r\n\r\nWhat is HEAD in Git?\r\nHEAD is a pointer that tells Git:\r\n“Which branch or commit am I currently on?”\r\n\r\ngit branch to see what is current branch\r\ngit branch feature-a to create new branch\r\ngit checkout feature-a to create new branch\r\ngit checkout -b feature-a --> to create new branch and checkout to that branch\r\n\r\n\r\nA --- B --- C --- D\r\n                  ↑\r\n                 HEAD\r\n\r\nHEAD     -> D\r\nHEAD~1   -> C \r\nHEAD~2   -> B\r\nHEAD~3   -> A\r\ngit show HEAD\r\ngit show HEAD~1 or git show HEAD^\r\ngit diff HEAD~1 HEAD\r\n\r\n\r\nHEAD     = current commit\r\nHEAD~1   = previous commit\r\nHEAD~2   = two commits back\r\nHEAD^    = parent commit\r\nHEAD^1   = first parent\r\nHEAD^2   = second parent of a merge commit\r\n\r\n----------------------------------------------------------------------------------------\r\n----------------------------------------------------------------------------------------\r\n\r\ngit log main..origin/main\r\ngit merge origin/main\r\ngit diff main origin/main\r\n\r\nmain        = my local branch\r\norigin/main = my local view of remote main\r\norigin      = name of the remote repository\r\n\r\norigin is the default name Git assigns to the remote repository when we clone a project. It is only a remote alias, and it can be renamed or replaced.\r\ngit remote rename origin github\r\ngit push github main\r\n\r\ngit push origin feature-login\r\n= push the branch\r\n\r\ngit push -u origin feature-login\r\n= push the branch + remember the remote tracking branch\r\n\r\n-u --set-upstream\r\n\r\ngit branch -d and git branch -D both delete a local branch, but one is safe and one is forceful.\r\n\r\nfor ex: feature-login has commits not merged into main\r\ngit branch -d feature-login\r\nmay fail with a warning.\r\nIf you are absolutely sure you want to delete it anyway:\r\n\r\ngit branch -D feature-login\r\n-D means force delete.\r\n\r\nTo delete a remote branch:\r\ngit push origin --delete feature-login\r\n\r\n----------------------------------------------------------------------------------------\r\n\r\ngit merge \r\n\r\nA---B---C   main\r\n     \\\r\n      D---E feature --> you are here \r\n\r\ngit merge main \r\nGit combines both histories and usually creates a merge commit: M\r\n\r\nA---B---C\r\n     \\   \\\r\n      D---E---M\r\n\r\nMerge keeps the original history exactly as it happened.\r\n\r\nIf you are on feature and run:\r\ngit rebase main\r\n\r\nA---B---C---D'---E'\r\nThat happens because rebase creates new commits with new commit hashes.\r\n\r\n\r\n| Merge                          | Rebase |\r\n|---                             |---|\r\n| Combines branch histories      | Moves/replays commits |\r\n| Usually creates a merge commit | Usually no merge commit |\r\n| Preserves original history     | Rewrites commit history |\r\n| History may look branched      | History looks linear |\r\n| Safe for shared branches       | Be careful with shared branches |\r\n\r\nWe should avoid rebasing a shared branch because rebase rewrites commit history and changes commit hashes. \r\nIf other developers already pulled the old commits, it can create conflicts and inconsistent history.\r\n\r\n----------------------------------------------------------------------------------------\r\n----------------------------------------------------------------------------------------\r\n\r\ngit reset and git revert both help undo changes, but they work very differently.\r\n\r\nA --- B --- C\r\n            ↑\r\n          HEAD\r\n\r\nIf commit C is bad, you have two choices.\r\n\r\ngit reset moves the branch pointer backward.\r\nImportant: reset rewrites history, so it is mainly safer for local/unshared commits.\r\ngit reset --soft HEAD~1\r\n--soft  = keep changes staged\r\ngit reset --mixed HEAD~1\r\n--mixed = keep changes, unstage them\r\ngit reset --hard HEAD~1\r\n--hard  = remove changes completely\r\n\r\ngit revert does not delete old history.\r\nInstead, it creates a new commit that reverses an earlier commit.\r\ngit revert C\r\nA --- B --- C --- D\r\n                  ↑\r\n                HEAD\r\nThat is why revert is usually safer for commits already pushed to a shared branch.\r\n\r\n| `git reset`                 | `git revert` |\r\n|---                          |---|\r\n| Moves HEAD backward         | Creates a new undo commit |\r\n| Can rewrite history         | Preserves history |\r\n| Best for local commits      | Best for shared/pushed commits |\r\n| `--hard` can delete changes | Does not remove old commits |\r\n\r\n----------------------------------------------------------------------------------------\r\n----------------------------------------------------------------------------------------\r\n\r\n\r\ngit fetch and git pull both get updates from a remote repository, but they behave differently.\r\n\r\nA---B---C   origin/main\r\nA---B       main\r\ngit fetch\r\nlocal main:     A---B\r\norigin/main:    A---B---C\r\ngit merge origin/main\r\n\r\ngit pull --> \r\ngit fetch\r\n+\r\ngit merge\r\nDownload the latest main changes from remote and merge them into my current branch.\r\n\r\n| `git fetch`                     | `git pull` |\r\n|---                              |---|\r\n| Downloads changes only          | Downloads and integrates changes |\r\n| Safer for inspection            | More automatic |\r\n| Does not modify current branch  | Can modify current branch |\r\n| You decide when to merge/rebase | Integration happens immediately |\r\n\r\ngit pull\r\ngit pull --rebase\r\n\r\ngit pull --rebase fetches remote changes and rebases your local commits on top instead of creating a merge commit.\r\n\r\n----------------------------------------------------------------------------------------\r\n----------------------------------------------------------------------------------------\r\n\r\ngit stash temporarily stores your uncommitted changes so you can switch branches or work on something else.\r\n\r\ncommit = save permanently in history\r\nstash  = keep temporarily aside\r\n\r\ngit stash\r\ngit stash list\r\ngit stash pop -- restores the stash and removes it from the stash list.\r\ngit stash apply -- restores it but keeps the stash entry.\r\ngit stash drop\r\n\r\n----------------------------------------------------------------------------------------\r\n----------------------------------------------------------------------------------------\r\n\r\nmain:     A---B---C\r\n\r\nfeature:      D---E---F\r\n\r\n\r\nSuppose you only want commit E from feature, not the whole branch.\r\n\r\ngit checkout main\r\ngit cherry-pick <commit-id-of-E>\r\n\r\nA---B---C---E'\r\nGit creates a new commit with the same changes as E, but usually with a new commit hash.\r\nA bug fix was made in a feature branch, but you also need that same fix immediately in main or a release branch.\r\n\r\ngit cherry-pick is used to apply a specific commit from one branch onto another branch without merging the entire branch.\r\n\r\n----------------------------------------------------------------------------------------\r\n----------------------------------------------------------------------------------------\r\n\r\nNext question: What is the difference between git checkout and git switch?\r\n\r\ngit checkout feature\r\ngit checkout -b feature\r\ngit checkout -- file.txt\r\n\r\ngit switch feature\r\ngit switch -c feature\r\ngit restore file.txt\r\n\r\ngit checkout = older, does many things\r\ngit switch   = newer, mainly for switching/creating branches\r\n\r\n----------------------------------------------------------------------------------------\r\n----------------------------------------------------------------------------------------\r\n\r\n| `git clone`                         | `git fetch` |\r\n|---                                  |---|\r\n| Used initially                      | Used after repo already exists |\r\n| Creates a local repository          | Updates an existing repository |\r\n| Downloads full repository/history   | Downloads new remote changes |\r\n| Usually done once | Done many times |\r\n\r\n\r\n----------------------------------------------------------------------------------------\r\n\r\ngit status\r\nmodified: app.java\r\nnew file: test.txt\r\nchanges staged for commit\r\nchanges not staged\r\nuntracked files\r\n\r\ngit log\r\na12bc34 Fixed login bug\r\nb45de67 Added user validation\r\nc98fa21 Initial commit\r\n\r\ngit reflog\r\na12bc34 HEAD@{0}: commit: Fixed login bug\r\nb45de67 HEAD@{1}: checkout: moving from feature to main\r\nd78ef90 HEAD@{2}: reset: moving to HEAD~1\r\n\r\n\r\n| Command      | Purpose |\r\n|---           |---|\r\n| `git status` | Shows current working/staging state |\r\n| `git log`    | Shows commit history |\r\n| `git reflog` | Shows movement/history of HEAD and references |\r\n\r\n\r\n----------------------------------------------------------------------------------------\r\n\r\nIf I accidentally remove a commit with git reset --hard, I can use git reflog to find the old commit hash and then restore it using git reset --hard <commit-id> or create a recovery branch from that commit.\r\n\r\nA --- B --- C\r\n            ↑\r\n          HEAD\r\n\r\n\r\ngit reset --hard HEAD~1\r\n\r\n\r\nA --- B\r\n      ↑\r\n    HEAD\r\n\r\nCommit C is no longer visible in normal git log, but Git often still knows about it.\r\ngit reflog\r\n\r\nb123abc HEAD@{0}: reset: moving to HEAD~1\r\nc456def HEAD@{1}: commit: Added login validation\r\n\r\n\r\nto restore it \r\ngit reset --hard c456def\r\n\r\nor\r\n\r\ngit branch recovery-branch c456def\r\ngit switch recovery-branch\r\n\r\n----------------------------------------------------------------------------------------\r\n\r\n\r\nHEAD\r\n |\r\n v\r\nmain\r\n |\r\n v\r\n C\r\n\r\ngit checkout <commit-id>\r\nor\r\ngit switch --detach <commit-id>\r\n\r\nHEAD\r\n |\r\n v\r\n C\r\n\r\nmain ---> D\r\n\r\nA detached HEAD state occurs when HEAD points directly to a commit instead of a branch. It is useful for inspecting or testing an older commit, but if I make new commits there, I should create a branch to keep them safely.\r\n\r\n----------------------------------------------------------------------------------------\r\n\r\nA Git branch moves, but a Git tag usually stays fixed on a specific commit.\r\n\r\nA --- B --- C\r\n            ↑\r\n           main\r\n\r\ngit tag v1.0\r\n\r\nA --- B --- C\r\n            ↑\r\n           main, v1.0\r\n\r\nA --- B --- C --- D\r\n            ↑     ↑\r\n          v1.0   main\r\n\r\n\r\nA branch is used for ongoing development.\r\n\r\ngit switch -c feature-login\r\n\r\nA --- B --- C --- D\r\n                  ↑\r\n            feature-login\r\n\r\n\r\nA tag is usually used to mark an important point in history, such as a release:\r\n\r\n| Branch                                | Tag |\r\n|---                                    |---|\r\n| Moves when new commits are added      | Usually stays fixed |\r\n| Used for development                  | Used for releases/milestones |\r\n| You normally commit while on a branch | You don't normally develop on a tag |\r\n\r\n\r\nA branch is a movable pointer that advances as new commits are created. A tag is usually a fixed reference to a specific commit and is commonly used to mark releases such as v1.0 or v2.0.\r\n\r\n\r\n----------------------------------------------------------------------------------------\r\n----------------------------------------------------------------------------------------\r\n\r\nA merge conflict happens when Git cannot automatically combine changes, usually because the same part of a file was changed differently. I resolve the file manually, stage it, and then continue the merge or rebase.\r\n\r\n----------------------------------------------------------------------------------------\r\n\r\n\r\n.gitignore tells Git which files or folders it should not track.\r\nnode_modules/\r\n*.log\r\n.env\r\ntarget/\r\n.idea/\r\n\r\nbuild files\r\nlogs\r\nIDE settings\r\ntemporary files\r\nsecrets\r\ndependencies\r\n\r\n----------------------------------------------------------------------------------------\r\n\r\n\r\ngit remote -v\r\n\r\nadd one:\r\ngit remote add origin https://github.com/user/project.git\r\n\r\nChange the URL:\r\ngit remote set-url origin https://github.com/user/new-project.git\r\n\r\nremove origin\r\ngit remote remove origin\r\n\r\n----------------------------------------------------------------------------------------\r\n\r\n--amend lets you modify your most recent commit.\r\n\r\ngit commit -m \"update login\"\r\ngit add missing-file.txt\r\n\r\ngit commit --amend\r\ngit commit --amend -m \"Fix login validation\"\r\n\r\n----------------------------------------------------------------------------------------\r\n\r\nTypical workflow:\r\n\r\ngit clone <repo-url>\r\ncd project\r\n\r\ngit switch -c feature-login\r\n\r\n# make changes\r\n\r\ngit status\r\n\r\ngit add .\r\n\r\ngit commit -m \"Add login validation\"\r\n\r\ngit fetch origin\r\n\r\ngit rebase origin/main\r\n\r\nor sometimes:\r\n\r\ngit merge origin/main\r\n\r\nthen \r\n\r\ngit push -u origin feature-login\r\n\r\n\r\n\r\n\r\nclone\r\n  ↓\r\ncreate branch\r\n  ↓\r\nmake changes\r\n  ↓\r\ngit add\r\n  ↓\r\ngit commit\r\n  ↓\r\nsync with main\r\n  ↓\r\ngit push\r\n  ↓\r\ncreate PR\r\n  ↓\r\nreview\r\n  ↓\r\nmerge\r\n\r\n\r\nMy normal workflow is to clone the repository, create a feature branch, make changes, stage and commit them, sync with the latest main branch using fetch and rebase or merge, push the feature branch, and create a pull request for review."
+}

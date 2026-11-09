@@ -1,0 +1,35 @@
+{
+  "name": "paradise-interview-prep",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "content:build": "node scripts/build-content.mjs",
+    "predev": "npm run content:build",
+    "build": "npm run content:build && tsc -b && vite build && node scripts/build-sw.mjs",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "playwright test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "@fontsource/kalam": "^5.3.0",
+    "lucide-react": "^0.468.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.51.0",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "prettier": "^3.9.7",
+    "typescript": "~5.7.2",
+    "vite": "^6.1.0"
+  }
+}

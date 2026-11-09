@@ -1,0 +1,11 @@
+.local
+.next
+node_modules
+out
+.npm-cache
+.openai
+.git
+test-results
+playwright-report
+*.tsbuildinfo
+write-check.txt

@@ -1,0 +1,28 @@
+/* Keep nested editors and logs from expanding their parent grid. */
+.code-editor,.editor-body,.terminal-scroll,.build-inspector-scroll,.inspector-scroll{min-height:0}
+.compose-editor-panel,.compose-diagram,.compose-service-inspector{min-height:0}
+.compose-grid>.inspector{min-height:0}
+.react-flow__controls{flex-direction:row!important}
+.canvas-panel .react-flow__node-resource:focus-visible{outline:2px solid #b0eaca;outline-offset:4px}
+.terminal-entry pre{font-size:10px}
+.terminal-command{font-size:10px}
+.inspector-field{font-size:10px}
+.inspector-section h4{font-size:9px}
+.event-row{font-size:9px}
+.table-footer,.terminal-footer{user-select:none}
+.editor-body textarea{font-size:11px}
+.plan-label.container{min-height:68px}
+.compose-page .compose-grid{min-height:370px}
+.scenario-active{min-height:0}
+.terminal-input{flex-shrink:0;padding:5px 13px;border-top:1px solid var(--border);background:#111418}
+.terminal-scroll{scroll-behavior:auto}
+.terminal-context,.terminal-footer,.terminal-starters{flex-shrink:0}
+.terminal-starters{margin-bottom:10px}
+.canvas-panel.expanded{position:fixed;inset:20px;z-index:100;height:auto!important;border-color:#536b5c;box-shadow:0 0 0 30px #090c10d9}
+.compose-graph-body>.canvas-panel>.panel-title{display:flex}
+.canvas-panel.expanded .canvas-body{min-height:0}
+.canvas-title-meta>.icon-button{margin-left:0}
+@media(max-width:600px){.canvas-panel.expanded{inset:8px}.canvas-title-meta{font-size:0}.canvas-title-meta>.status-dot{display:none}.canvas-panel .panel-title{padding:0 10px}}
+.resource-table tbody tr:focus-visible{outline:2px solid #86d5a4;outline-offset:-2px}
+@media(max-width:1280px){.terminal-entry pre,.terminal-command{font-size:9px}.inspector-field{font-size:9px}.event-row{font-size:8px}.editor-body textarea{font-size:10px}.compose-editor-panel,.compose-diagram{min-height:400px}}
+@media(max-width:600px){.terminal-entry pre,.terminal-command{font-size:10px}.editor-body textarea{font-size:9px}.inspector-field{font-size:10px}.event-row{font-size:8px}.compose-editor-panel{min-height:430px}.compose-diagram{min-height:410px}}

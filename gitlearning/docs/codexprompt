@@ -1,0 +1,1066 @@
+# GitQuest Lab: Build a Full-Screen, Interactive Git Learning Platform
+
+## 1. Your role and mission
+
+Act as a senior product designer, frontend architect, Git expert, and experienced React engineer.
+
+Transform my existing GitQuest Lab project into a premium, scenario-driven Git learning platform where users learn Git by seeing it, experimenting with commands, understanding repository changes, and practising on their own computers.
+
+This is an existing project that needs a substantial improvement in its user experience and functionality. Inspect the current code before making changes. Preserve working functionality where appropriate, but do not let the existing UI limit the redesign.
+
+The product must support:
+
+- Beginner-friendly Git fundamentals.
+- Interactive command execution inside a browser-based Git simulator.
+- Visual explanations of Git repository states and commit history.
+- Local and remote repository workflows.
+- Real-world troubleshooting scenarios.
+- All 80 questions in the supplied Git interview preparation guide.
+- Real-machine exercises for Windows, macOS, and Linux.
+- Learning progress and revision.
+- Production deployment on Vercel.
+
+The core learning loop is:
+
+**Learn → Visualize → Execute → Inspect → Practise → Verify.**
+
+Do not build a static documentation website or a dashboard full of decorative cards. Build a working Git learning environment.
+
+---
+
+# 2. First inspect the project and plan the curriculum
+
+Before changing the main interface, inspect:
+
+- The existing repository and folder structure.
+- The current GitQuest Lab implementation.
+- Framework, dependencies, styling system, and routing.
+- Existing simulator and terminal functionality.
+- Existing progress tracking and persistence.
+- The supplied reference screenshot.
+- These curriculum files:
+  - `git-docs.md`
+  - `Git_Version_Control_Interview_Preparation_Guide.md`
+- The existing specification in `codexprompt`, if available in the project.
+
+Use the supplied files as the primary source of curriculum content. Do not silently remove topics, omit interview questions, or invent material while claiming it came from the documentation. Flag ambiguous source material for review.
+
+## Required first deliverable
+
+Create `docs/implementation-plan.md` before rebuilding the main UI.
+
+It must contain:
+
+1. Product goals and user journeys.
+2. Proposed application architecture.
+3. Screen layout and responsive behavior.
+4. Complete curriculum inventory.
+5. Scenario inventory and prerequisites.
+6. A coverage matrix mapping source topics to lessons, scenarios, and interview questions.
+7. Local and remote repository simulation design.
+8. Command execution and state management architecture.
+9. Real-machine practice design.
+10. Testing strategy and acceptance criteria.
+11. A phased implementation roadmap.
+
+Also create a scenario inventory, such as `docs/scenario-matrix.md`, that maps every required topic to at least one lesson, demonstration, exercise, or scenario.
+
+After creating the plan, continue implementing the product in phases. Do not stop after producing planning documents, wireframes, or a static mockup.
+
+If the supplied curriculum files are unavailable in the working environment, identify that limitation and avoid claiming complete content coverage until the files can be inspected.
+
+---
+
+# 3. Primary design objective: Full-screen learning workspace
+
+## Current problem
+
+The existing Playground displays a working directory, staging area, local repository, commit history, and terminal, but the content extends below the visible viewport.
+
+Users must scroll to inspect all the important components. That breaks the connection between the command they execute and the Git state changes they need to understand.
+
+Fix this at the application layout level.
+
+Do not solve it by shrinking everything until the text is unreadable.
+
+## Design direction
+
+Build a compact, premium, developer-focused IDE interface.
+
+Use:
+
+- Dark charcoal and deep navy surfaces.
+- Purple as the primary interaction accent.
+- Teal or cyan for successful operations and active states.
+- Subtle borders and restrained shadows.
+- Consistent spacing and clear typography.
+- Monospaced fonts for commands, commit hashes, and terminal output.
+- Purposeful animations for Git state changes.
+- Responsive resizing and collapsible panels.
+- Clear visual distinction between files, staging state, commits, and remote synchronization.
+
+Avoid:
+
+- Oversized hero sections inside the Playground.
+- Large carousels or sliders.
+- Large decorative cards.
+- Excessive vertical padding.
+- Excessive gradients and glowing effects.
+- Unnecessary floating elements.
+- Continuous decorative animations.
+- A permanent, oversized sidebar.
+- Nested page scrolling that hides essential controls.
+- Placeholder buttons without real actions.
+
+The workspace should feel like a professional developer tool rather than a generic admin dashboard.
+
+---
+
+# 4. Navigation: Minimal and collapsible
+
+Navigation is secondary to the learning workspace. Do not give it excessive screen space.
+
+Create a slim, persistent left-side navigation rail.
+
+### Collapsed state
+
+- Narrow icon-only rail.
+- Small GitQuest Lab logo or mark.
+- Clear active-item indicator.
+- Tooltips showing navigation labels on hover or keyboard focus.
+- A visible control for expanding the rail.
+- No large promotional cards, progress widgets, or unnecessary text.
+
+### Expanded state
+
+Expand the rail temporarily or persistently when the user selects the navigation control.
+
+Show a small number of clear destinations:
+
+- Learn
+- Playground
+- Scenarios
+- Branch Visualizer
+- Interview Practice
+- Progress
+
+Use a small number of Lucide icons, consistent labels, and restrained active-state styling.
+
+Allow the user to collapse the rail again. Persist the preference when appropriate.
+
+Do not add navigation items merely to fill the sidebar. Related features should live within the relevant learning or practice area.
+
+The default state should favor the collapsed rail so that most of the viewport is available for learning.
+
+On mobile, replace the rail with a compact drawer or equivalent accessible navigation pattern.
+
+---
+
+# 5. Exact desktop Playground layout
+
+Design and validate against a typical desktop viewport of 1920 × 1080, while supporting smaller laptop displays.
+
+Use a viewport-constrained application shell based on `100dvh`, CSS Grid or Flexbox, and correct `min-height: 0` and overflow handling.
+
+The global application shell must not grow unnecessarily when terminal output, history, or documentation becomes longer.
+
+## Proposed layout
+
+```text
+┌──┬─────────────────────────────────────────────────────────────────────────┐
+│  │ GitQuest Lab   Playground / Current Scenario       Search  Progress    │
+│  ├─────────────────────────────────────────────────────────────────────────┤
+│  │ Scenario title · Objective · Current step          Help · Reset · Next  │
+│N ├────────────────────┬──────────────┬──────────────┬──────────────────────┤
+│A │ Working Directory │ Staging Area │ Local Repo   │ Remote Repository    │
+│V │                    │              │              │                      │
+│  ├─────────────────────────────────┬───────────────────────────────────────┤
+│  │                                 │                                       │
+│  │ Interactive Commit Graph        │ Interactive Terminal                 │
+│  │                                 │                                       │
+│  │ Branches · HEAD · Tags          │ Commands · Output · Explanations      │
+│  │ Commit Inspection               │ Command History · Autocomplete        │
+│  │                                 │                                       │
+│  └─────────────────────────────────┴───────────────────────────────────────┘
+└──┴─────────────────────────────────────────────────────────────────────────┘
+```
+
+The arrangement is a design target, not a rigid wireframe. Refine the proportions based on available space and actual usability.
+
+## Non-negotiable layout requirements
+
+On a supported desktop viewport:
+
+- Keep the working directory, staging area, local repository, and remote repository visible in a single horizontal row.
+- Keep the commit graph and terminal visible together below that row.
+- Show the current scenario objective in a compact header.
+- Fit the core workspace into the available viewport without global vertical scrolling.
+- Use internal scrolling for overflowing content within individual panels.
+- Keep the terminal usable, not reduced to a single line.
+- Keep commits and branch labels readable.
+- Allow panels to resize or collapse when useful.
+- Ensure no essential controls are clipped.
+- Avoid making users scroll down to inspect the four Git areas or execute commands.
+
+Use CSS Grid to allocate space between the state panels, commit graph, and terminal. Use responsive breakpoints to adapt the layout intentionally.
+
+For smaller screens, switch to a compact, accessible panel-selection layout rather than compressing every desktop component into an unusable arrangement.
+
+## Lesson instructions
+
+Keep lesson instructions close to the current task without letting them dominate the screen.
+
+Provide a compact objective strip with an expandable explanation or step-inspector panel. It should show the current task, what the learner needs to do, and the next expected result.
+
+The documentation view may have its own content scrolling. The main Playground must remain a stable, viewport-sized workspace.
+
+---
+
+# 6. Create a complete Git learning curriculum
+
+Use both supplied Markdown guides as the source of truth.
+
+Preserve all relevant Git concepts, command examples, explanations, diagrams, scenario intent, and interview questions. Improve their presentation and learning sequence while maintaining traceability to the supplied material.
+
+## Level 1: Git foundations
+
+Cover:
+
+- Version control.
+- Centralized versus distributed version control.
+- Git versus GitHub.
+- Repository initialization and cloning.
+- Working directory, staging area, local repository, and remote repository.
+- `git init`, `git clone`, and `git config`.
+- `git status`, `git add`, `git commit`, and `git log`.
+- `git diff` and interactive staging.
+- Branch creation, switching, listing, and deletion.
+- HEAD and commit references.
+- Tags.
+- `.gitignore`.
+- Basic undo operations.
+
+## Level 2: Everyday Git workflows
+
+Cover:
+
+- Feature branches.
+- Merge and rebase.
+- Fast-forward and three-way merges.
+- Merge conflicts and their resolution.
+- Remote repositories.
+- `git fetch`, `git pull`, and `git push`.
+- `origin`, `upstream`, local branches, and remote-tracking branches.
+- Pull requests and code reviews.
+- Stash.
+- Restore, reset, revert, and reflog.
+- Cherry-pick.
+- Amend commits.
+- SSH and HTTPS authentication.
+- Branch naming and commit message practices.
+- Safe versus destructive operations.
+
+## Level 3: Team collaboration and production Git
+
+Cover:
+
+- Git Flow, GitHub Flow, GitLab Flow, and trunk-based development.
+- Feature flags.
+- Merge strategies.
+- Conventional commits.
+- Git hooks.
+- Branch protection.
+- Code owners.
+- Forking workflows.
+- GitHub, GitLab, and Bitbucket.
+- Submodules and subtrees.
+- Monorepos and polyrepos.
+- Git LFS.
+- Worktrees.
+- Rebase onto.
+- Rerere and repeated conflict resolution.
+- Patches and format-patch.
+- Signed commits and tags.
+- Git security and secret scanning.
+- GitHub Actions and GitLab CI.
+- Release management, versioning, and changelogs.
+- Git operations within CI/CD pipelines.
+
+## Level 4: Advanced Git and repository scale
+
+Cover:
+
+- Git objects, blobs, trees, commits, and tags.
+- Object hashes and packfiles.
+- Garbage collection and dangling objects.
+- Bare repositories.
+- Git server administration and hooks.
+- Access control.
+- Repository migrations.
+- Audit trails and compliance.
+- History rewriting with git-filter-repo and BFG.
+- Large repository performance.
+- Shallow clones.
+- Sparse checkout.
+- Partial clones.
+- Filesystem monitoring.
+- Commit graphs and repository maintenance.
+- Monorepo performance and affected-target builds.
+- GitOps and Git as the source of truth.
+
+## Level 5: Production troubleshooting
+
+Cover all 23 tricky scenarios corresponding to Q58–Q80 in the supplied interview guide:
+
+- Merge conflict in a production hotfix.
+- Accidentally committed secrets.
+- Force push overwriting another developer's work.
+- Lost commits and detached HEAD.
+- Accidental data loss after `git reset --hard`.
+- Broken builds after a merge.
+- Large repositories with slow clones.
+- Rebase conflict overload.
+- Wrong commits on main.
+- Regression investigation with `git bisect`.
+- Incorrect submodule revisions.
+- CI failures specific to main.
+- Committing to the wrong branch.
+- Deleting branches with unmerged work.
+- Cleaning excessive commits.
+- Duplicate commits after shared-branch rebasing.
+- Hotfixes while main contains unreleased features.
+- `.gitignore` not ignoring previously tracked files.
+- Reverting merge commits.
+- Removing large binaries from history.
+- Unexpected merge commits after pulling.
+- Extremely outdated feature branches.
+- Repeated conflicts during rebasing.
+
+Each scenario should teach the cause, diagnosis, remediation, verification, safety precautions, and relevant alternatives.
+
+Do not turn advanced content into superficial text cards simply to claim that it is covered.
+
+---
+
+# 7. Build a structured scenario engine
+
+Plan the scenarios before building them.
+
+The following 40 scenarios are the required initial practical set. Expand the inventory to cover additional source topics, including the specific Q58–Q80 troubleshooting scenarios.
+
+## Beginner scenarios
+
+1. Create your first repository.
+2. Stage one file while leaving another unstaged.
+3. Correct a mistaken commit message.
+4. Modify, inspect, and restore a file safely.
+5. Understand the working directory and staging area.
+6. Commit multiple logical changes separately.
+7. Explore commit history and HEAD.
+8. Add and remove files.
+9. Configure `.gitignore`.
+10. Compare `git restore`, `git reset`, and `git revert`.
+
+## Branching scenarios
+
+11. Build a login feature on a new branch.
+12. Merge a feature branch into main.
+13. Resolve a conflict between two developers.
+14. Update a feature branch after main changes.
+15. Compare merge and rebase visually.
+16. Move a commit to another branch.
+17. Recover a commit made on the wrong branch.
+18. Recover work after deleting a branch.
+19. Squash development commits.
+20. Inspect detached HEAD and recover a new commit.
+
+## Remote and team scenarios
+
+21. Clone a remote repository.
+22. Push a local commit to a remote.
+23. Fetch remote updates without integrating them.
+24. Compare pull and pull-with-rebase.
+25. Recover from a rejected push.
+26. Apply a hotfix using cherry-pick.
+27. Integrate changes from another developer.
+28. Create and inspect a release tag.
+29. Simulate a protected-branch workflow.
+30. Trace a change from issue to pull request to release.
+
+## Advanced and production scenarios
+
+31. Recover commits using reflog.
+32. Revert a bad production commit safely.
+33. Diagnose a regression using bisect.
+34. Reuse conflict resolutions with rerere.
+35. Manage submodules and pinned revisions.
+36. Investigate oversized repositories and slow cloning.
+37. Respond to a committed secret.
+38. Design a release workflow.
+39. Diagnose a CI failure related to Git history.
+40. Understand a GitOps deployment and rollback.
+
+These scenarios are the initial practical set, not the complete curriculum. Every remaining required topic must remain represented in the learning system.
+
+## Scenario definition
+
+Keep each scenario in a structured content file separate from UI components.
+
+Each definition should include:
+
+- ID, title, and category.
+- Difficulty and estimated duration.
+- Prerequisites.
+- Real-world context.
+- Learning objectives.
+- Starting repository state.
+- Sample files and contents.
+- Ordered steps.
+- Commands to execute.
+- Expected state after every step.
+- Related visualizations.
+- Explanation of why each command works.
+- Common mistakes and safe recovery.
+- Verification checklist.
+- Completion criteria.
+- Optional challenge.
+- Reset and cleanup instructions.
+- Related lesson IDs.
+- Related interview question IDs.
+
+Scenario definitions should be reusable across the documentation view, Playground, and interview practice.
+
+Implement scenario loading through a common engine rather than scattering scenario-specific logic across React components.
+
+---
+
+# 8. Implement an actual browser-based Git simulator
+
+The terminal must execute supported operations against a coherent simulated Git repository.
+
+Do not create a terminal-shaped text input with hardcoded responses. Do not pretend every arbitrary command succeeded.
+
+## Simulator state
+
+Model:
+
+- Working tree files and their contents.
+- Staged file snapshots.
+- Local repository commits.
+- Commit parents and metadata.
+- Local branches and references.
+- HEAD and detached HEAD.
+- Tags.
+- Remote repositories.
+- Remote branches and remote-tracking references.
+- Conflicting files and conflict-resolution state.
+- Scenario starting points.
+- Operation history and relevant command output.
+
+Keep the simulator engine independent of presentation components.
+
+Use deterministic state transitions, clear invariants, and automated tests.
+
+## Required initial command support
+
+Implement the commands needed by the initial curriculum and scenarios.
+
+At minimum, cover supported versions of:
+
+- `git init`
+- `git status`
+- `git add`
+- `git restore`
+- `git commit`
+- `git log`
+- `git diff`
+- `git diff --staged`
+- `git branch`
+- `git switch`
+- `git merge`
+- `git rebase`
+- `git stash`
+- `git tag`
+- `git reset`
+- `git revert`
+- `git cherry-pick`
+- `git reflog`
+- `git show`
+- `git diff` between references
+- `git remote`
+- `git clone`
+- `git fetch`
+- `git pull`
+- `git push`
+- `git pull --rebase`
+
+Prioritize these foundational operations before adding advanced commands.
+
+Each operation must follow Git semantics within the explicitly supported simulator scope.
+
+For unsupported command options or operations, explain what is unsupported rather than returning fabricated results.
+
+## Required command feedback
+
+After every command, display:
+
+1. Realistic terminal output.
+2. Changed repository state where applicable.
+3. Updated branch and HEAD information.
+4. Updated staged or unstaged file status.
+5. Relevant commit graph changes.
+6. A concise explanation of what occurred.
+7. A way to inspect the affected files or commits.
+
+Add command history, keyboard navigation, command autocomplete for supported operations, helpful errors, and clear-terminal functionality.
+
+The simulator must support resetting a scenario without leaving stale or inconsistent state behind.
+
+---
+
+# 9. Make local and remote repositories first-class features
+
+The remote repository is mandatory. Do not treat it as a decorative cloud icon or a text-only explanation.
+
+The workspace must distinguish four repository areas:
+
+1. Working directory.
+2. Staging area.
+3. Local repository.
+4. Remote repository.
+
+## Remote repository model
+
+Maintain distinct local and remote states.
+
+Model:
+
+- `main` as a local branch.
+- `origin/main` as a remote-tracking reference.
+- The remote repository's actual branch references.
+- Commits present locally but not remotely.
+- Commits present remotely but not locally.
+- Upstream tracking configuration.
+- Diverging commit histories.
+- Push rejection and non-fast-forward conditions.
+- Another developer's changes when a collaboration scenario requires them.
+
+Do not assume that `main` and `origin/main` always point to the same commit.
+
+## Required remote scenarios
+
+### Cloning
+
+When a learner runs `git clone`:
+
+- Initialize the simulated local repository from the remote state.
+- Preserve the supplied commit history.
+- Configure the remote as `origin`.
+- Create the expected local branch and tracking relationships.
+- Display the resulting local and remote states.
+
+### Pushing
+
+When a learner runs `git push`:
+
+- Validate the intended remote and branch.
+- Check whether the operation can be accepted.
+- Transfer the appropriate commits in the simulation.
+- Update the remote branch only after a successful push.
+- Update remote-tracking references according to the simulated operation.
+- Display appropriate output and graph changes.
+
+A local commit must not automatically appear in the remote repository.
+
+### Fetching
+
+When a learner runs `git fetch`:
+
+- Update the remote-tracking references from the remote state.
+- Keep the current local branch and working tree unchanged unless the supported operation explicitly requires otherwise.
+- Show the newly available remote commits in the graph.
+- Explain that fetching does not automatically integrate them into the current branch.
+
+### Pulling
+
+When a learner runs `git pull`:
+
+- Simulate fetching followed by the configured integration strategy.
+- Support merge-based pull where appropriate.
+- Support `git pull --rebase`.
+- Display conflicts when supported integration encounters them.
+- Show why local and remote histories become integrated.
+
+### Rejected pushes
+
+Simulate a common production situation:
+
+Another developer has pushed a commit that the learner does not have locally.
+
+When the learner attempts to push a non-fast-forward update:
+
+- Reject the push when Git semantics require rejection.
+- Explain why the push failed.
+- Show the relevant local and remote commit graph.
+- Guide the learner through fetching and inspecting the remote changes.
+- Let them integrate the changes using merge or rebase as appropriate.
+- Let them verify the result and push successfully.
+
+### Two-developer workflow
+
+Create a collaboration mode that simulates two contributors sharing the same remote repository.
+
+Allow the second contributor to make and push a change independently. The primary learner should then fetch, inspect, integrate, resolve supported conflicts, and push their own work.
+
+### Remote visual feedback
+
+Use clear indicators to distinguish:
+
+- Local-only commits.
+- Remote-only commits.
+- Synchronized commits.
+- Diverging branches.
+- Successful pushes.
+- Available remote updates.
+- Rejected pushes.
+- Conflicts.
+
+Keep these states connected to the actual simulator data.
+
+## Real GitHub operations
+
+Clearly distinguish the simulated remote from the real GitHub service.
+
+The initial browser simulation should not claim that anything has been uploaded to GitHub.
+
+Real-machine practice must demonstrate how to perform actual remote operations from the user's local Git environment. Real GitHub API integration is a separate feature that requires explicit implementation, appropriate authentication, and secure handling of credentials.
+
+Never request personal access tokens or secrets through the simulated terminal.
+
+---
+
+# 10. Interactive commit graph
+
+Build a readable, interactive Git history visualization using React Flow or a custom SVG solution, depending on the existing codebase.
+
+Show:
+
+- Commit nodes.
+- Parent-child relationships.
+- Branch names.
+- The current HEAD.
+- Merge commits.
+- Tags.
+- Local and remote branch references.
+- Commit hashes and messages.
+- Selected-commit details.
+- Added, modified, and deleted files where applicable.
+
+Allow the learner to inspect a commit by selecting it.
+
+The inspection panel should show:
+
+- Commit metadata.
+- Parent commits.
+- Branch and tag references.
+- Changed files.
+- Relevant diff.
+- Whether the commit belongs to the local repository, remote history, or both.
+
+Provide practical zoom, pan, and fit-to-view controls.
+
+Keep the graph compact enough to fit the main workspace. Long histories can scroll inside the graph container rather than increasing global page height.
+
+---
+
+# 11. Meaningful Git animations
+
+Animations should explain changes, not merely decorate the page.
+
+Examples:
+
+### `git add`
+
+Highlight the selected file, animate its transition into the staged state, and explain the distinction between the working tree and index.
+
+### `git commit`
+
+Create a commit node, connect it to its parent, move the appropriate branch reference, update HEAD, and clear the staged changes.
+
+### `git switch`
+
+Change the active branch indicator and update the working tree to the target branch's snapshot.
+
+### `git merge`
+
+Animate the relationship between the branch histories. When a merge commit is required, create a node with the correct parents.
+
+### `git rebase`
+
+Show commits being replayed onto a new base and clearly communicate that rewritten commits receive new hashes.
+
+### `git reset`
+
+Show which reference moves and what happens to the staging area and working directory for the selected reset mode.
+
+### `git revert`
+
+Create a new commit that reverses the intended change while preserving existing history.
+
+### `git push` and `git fetch`
+
+Animate commit synchronization between the local repository and remote repository, without implying an actual network transfer in the browser simulator.
+
+Use the existing animation library if suitable, or Framer Motion where justified. Support reduced-motion preferences. Avoid animation delays that make command execution feel slow.
+
+---
+
+# 12. Practice on the learner's actual computer
+
+Users must be able to repeat each relevant lesson on their own machines.
+
+A Vercel-hosted browser application cannot ordinarily execute arbitrary shell commands on visitors' computers. Do not pretend otherwise.
+
+Create a dedicated **Real-Machine Practice** mode distinct from the Browser Simulation.
+
+## Required behavior
+
+For each relevant lesson or scenario, provide:
+
+- Operating system selection: Windows, macOS, or Linux.
+- Suitable shell instructions, including PowerShell, Git Bash, or a terminal where appropriate.
+- Prerequisites and Git installation guidance.
+- A safe, isolated practice directory.
+- Step-by-step instructions.
+- Copy buttons for individual commands.
+- A Copy All option for suitable command sequences.
+- Explanations of each command.
+- Expected terminal output or observable results.
+- Verification commands.
+- Troubleshooting guidance.
+- A completion checklist.
+- A cleanup procedure.
+
+Commands must be accurate for the selected operating system and shell. Clearly mark shell-specific differences.
+
+Use an isolated example repository wherever destructive operations are taught.
+
+Before showing dangerous commands, explain their impact and the recommended recovery precautions.
+
+Never require users to paste passwords, tokens, SSH private keys, or confidential repository content into the site.
+
+## Verification
+
+Initially, users execute commands locally and verify the results themselves.
+
+Distinguish between:
+
+- Commands executed by the browser simulator.
+- Commands copied for execution on the user's computer.
+- Completion reported by the learner.
+- Results actually verified by an implemented mechanism.
+
+Do not claim that local commands succeeded merely because the learner copied them or clicked a checkbox.
+
+Keep the architecture open to a future optional local companion application, but do not build an insecure local shell server or background command-execution agent in the initial release.
+
+---
+
+# 13. Transform documentation into interactive lessons
+
+Use the supplied Git guides as the curriculum content.
+
+Each lesson should contain:
+
+1. Concept and definition.
+2. Why the concept matters.
+3. Explanation of how it works.
+4. A practical analogy or visualization where helpful.
+5. Commands and explanations.
+6. An interactive demonstration.
+7. A real-machine exercise.
+8. Common mistakes.
+9. A short knowledge check.
+10. A related interview question.
+11. A practical scenario.
+12. Verification and completion criteria.
+
+Make complex concepts visual.
+
+In particular, provide before-and-after explanations for:
+
+- Working tree versus staging area.
+- Merge versus rebase.
+- Reset versus revert.
+- Local branches versus remote-tracking branches.
+- Fetch versus pull.
+- Detached HEAD.
+- Reflog-based recovery.
+- Merge conflicts.
+- Commit graph divergence.
+- Git history rewriting.
+
+Do not reproduce every lesson as one long wall of text.
+
+Implement search across concepts, commands, lessons, and scenarios. Allow users to jump from a lesson directly into its related Playground scenario.
+
+Keep the source material traceable to the resulting lessons and preserve all 80 interview questions.
+
+---
+
+# 14. Interview preparation
+
+Use `Git_Version_Control_Interview_Preparation_Guide.md` as the source for the initial interview bank.
+
+Preserve all 80 questions and their original numbering.
+
+Organize them using the source guide's categories:
+
+- Junior Core Git: Q1–Q25.
+- Mid-Level Workflows and Production: Q26–Q48.
+- Senior Advanced and Scale: Q49–Q57.
+- Tricky Scenarios: Q58–Q80.
+
+Provide:
+
+- Level filters.
+- Topic-based practice.
+- Scenario-based questions.
+- Reveal-answer controls.
+- Concise explanations.
+- Relevant commands.
+- Links to related lessons.
+- Links to corresponding simulations.
+- Optional self-assessment.
+- A revision list for questions the learner wants to revisit.
+
+Do not silently replace the source questions with a different bank.
+
+---
+
+# 15. Progress tracking
+
+Provide useful learning progress without cluttering the Playground.
+
+Track:
+
+- Completed lessons.
+- Completed scenarios.
+- Current learning level.
+- Knowledge-check results.
+- Topics needing revision.
+- Recent learning activity.
+- Achievements tied to meaningful milestones.
+- Practice time only where it can be measured reliably.
+
+Persist progress locally for the initial version, using a clean abstraction that can support authenticated accounts and server-side storage later.
+
+Let users restart scenarios without losing their overall learning progress.
+
+Distinguish self-reported real-machine completion from results that have actually been verified.
+
+The main Playground must not become a progress dashboard. Keep progress summaries in the dedicated Progress destination and use only compact indicators elsewhere.
+
+---
+
+# 16. Technical architecture
+
+Inspect the current framework and reuse suitable existing dependencies.
+
+Preferred technology choices, where compatible:
+
+- Next.js and React.
+- TypeScript if the project already uses it; otherwise, maintain the existing language unless migration is justified.
+- Tailwind CSS or the existing styling system.
+- Framer Motion or an existing animation library.
+- React Flow or custom SVG for commit visualization.
+- Lucide icons.
+- Local storage for initial progress persistence.
+- Vercel for deployment.
+
+Organize the application into logical modules:
+
+- Application shell and compact navigation.
+- Learning curriculum and lesson content.
+- Scenario definitions and loading.
+- Git simulator state engine.
+- Command parser and command handlers.
+- Commit graph.
+- Repository state panels.
+- Terminal interface.
+- Remote repository and collaboration simulation.
+- Real-machine practice instructions.
+- Interview practice.
+- Progress tracking.
+- Shared UI components.
+- Automated tests.
+
+Keep simulator logic independent of React presentation components.
+
+Use structured scenario data rather than giant nested conditionals or a single enormous component.
+
+Do not introduce unnecessary dependencies or rewrite working functionality without a documented reason.
+
+---
+
+# 17. Security, correctness, and user trust
+
+The product teaches Git, so inaccurate behavior directly undermines its purpose.
+
+Follow these rules:
+
+- Model Git operations accurately within the explicitly supported command scope.
+- Do not present simulated commands as real shell execution.
+- Do not present simulated remote synchronization as a real GitHub push.
+- Warn about destructive operations.
+- Keep all practice commands inside an isolated example repository where feasible.
+- Do not accept or expose credentials or secret keys.
+- Do not run arbitrary shell commands on the server.
+- Do not run arbitrary commands on a user's local machine through the browser.
+- Do not fabricate terminal output, Git references, or commit history.
+- Do not claim unsupported functionality is complete.
+- Provide understandable error messages.
+- Make resetting the simulator safe and predictable.
+
+Document the supported command scope and any limitations.
+
+---
+
+# 18. Testing and production readiness
+
+Do not declare success merely because the homepage renders.
+
+## Simulator tests
+
+Test:
+
+- Repository initialization.
+- File creation and editing.
+- Staging and unstaging.
+- Commit snapshots and parent relationships.
+- Branch creation and switching.
+- Merge behavior.
+- Supported conflicts and their resolution.
+- Rebase behavior.
+- Reset modes and revert.
+- Reflog-based recovery simulation.
+- HEAD and branch-reference consistency.
+- Local and remote repository separation.
+- Push and fetch.
+- Pull and pull-with-rebase.
+- Non-fast-forward rejected pushes.
+- Remote divergence.
+- Two-developer scenarios.
+- Scenario reset and progress persistence.
+
+Include tests for important edge cases and state invariants.
+
+## UI tests
+
+At a typical desktop viewport:
+
+- The four repository-state panels fit together horizontally.
+- The commit graph and terminal are visible together.
+- The complete workspace fits the viewport without global vertical scrolling.
+- The navigation rail collapses and expands correctly.
+- Long output scrolls within its own pane.
+- Long commit histories do not expand the whole page.
+- Keyboard navigation and focus states work.
+- Reduced-motion preferences are honored.
+- Responsive layouts remain usable.
+- Text and controls remain readable.
+- There are no overlapping panels or hidden essential controls.
+
+## Curriculum tests
+
+- Every topic from both source documents is mapped in the curriculum matrix.
+- All 80 interview questions remain available.
+- All 23 source troubleshooting scenarios Q58–Q80 remain traceable.
+- Each scenario has objectives, ordered steps, expected results, and verification.
+- Internal links among lessons, scenarios, and interview questions work.
+- Missing or ambiguous source material is explicitly recorded instead of silently invented.
+
+## Deployment checks
+
+- Run the available automated tests.
+- Run the production build.
+- Check for browser-console errors.
+- Check broken routes and missing assets.
+- Verify compatibility with Vercel.
+- Verify browser-only features do not depend on a local development server.
+- Confirm that local and simulated remote behavior works without external credentials.
+- Document remaining limitations accurately.
+
+---
+
+# 19. Implementation sequence
+
+Implement the product in the following order.
+
+### Phase A: Repository inspection and planning
+
+Inspect the project and supplied curriculum. Produce the implementation plan and coverage matrix.
+
+### Phase B: Full-screen UI foundation
+
+Implement the compact left navigation, viewport-constrained application shell, scenario objective strip, four repository-state panels, commit graph, and terminal.
+
+First acceptance milestone: the complete core Playground fits the desktop viewport without global scrolling.
+
+### Phase C: Core Git simulation
+
+Implement files, working tree, staging, commits, branches, HEAD, history, and the command parser.
+
+Validate state transitions before expanding command support.
+
+### Phase D: Remote repository simulation
+
+Implement `origin`, remote-tracking references, clone, push, fetch, pull, divergence, rejected pushes, and two-developer workflows.
+
+Verify that local and remote states remain consistent and distinct.
+
+### Phase E: Scenario engine
+
+Implement structured scenario definitions, guided steps, expected results, verification, reset behavior, and completion tracking.
+
+### Phase F: Full curriculum and interview practice
+
+Map both documents to the lesson system, preserve all 80 questions, and implement all required troubleshooting scenarios.
+
+### Phase G: Real-machine practice
+
+Add operating-system-specific instructions, safe example repositories, command copying, verification steps, and honest completion tracking.
+
+### Phase H: Quality and deployment
+
+Run tests, improve responsiveness and accessibility, verify the Vercel production build, and document any remaining limitations.
+
+Maintain an implementation checklist and update it after each meaningful phase.
+
+Do not stop after Phase A or deliver only the first few static screens. Build and validate the actual product incrementally.
+
+---
+
+# 20. Final acceptance criteria
+
+GitQuest Lab is complete when:
+
+1. A beginner can learn Git fundamentals through guided visual lessons.
+2. The main Playground uses a full-screen, responsive layout.
+3. The left navigation is small, collapsible, and secondary to the workspace.
+4. The working directory, staging area, local repository, and remote repository are visible together on desktop.
+5. The commit graph and terminal are visible together without requiring global page scrolling.
+6. Supported commands update the simulator's repository state accurately.
+7. Local and remote histories are independent until an operation connects them.
+8. Learners can practise push, fetch, pull, divergence, rejected pushes, and collaboration scenarios.
+9. Git animations show meaningful cause and effect.
+10. All topics in both supplied curriculum guides are traceable to the learning system.
+11. All 80 interview questions remain accessible.
+12. All required production troubleshooting scenarios are represented.
+13. Users can practise corresponding commands on their own Windows, macOS, or Linux machines.
+14. Browser simulation and real-machine execution are clearly distinguished.
+15. Progress tracking and scenario reset work reliably.
+16. The application passes relevant tests and builds for Vercel deployment.
+17. No essential feature is represented by a nonfunctional button or fabricated success message.
+
+**Begin by inspecting the current repository, reviewing the curriculum files, and creating the implementation plan and scenario coverage matrix. Then implement the full-screen workspace first, followed by the Git simulator and remote repository behavior. Prioritize a compact, coherent, technically accurate learning experience over adding decorative UI or superficial feature counts.**

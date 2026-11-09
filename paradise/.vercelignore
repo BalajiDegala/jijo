@@ -1,0 +1,15 @@
+docs/**/*.pdf
+docs/PROTOTYPE.md
+docs/CONTENT-REVIEW.md
+mvp/
+.tools/
+.git/
+node_modules/
+dist/
+tests/
+test-results/
+playwright-report/
+playwright.config.ts
+*.log
+*.tsbuildinfo
+.env*

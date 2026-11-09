@@ -1,0 +1,9 @@
+node_modules
+dist
+.tools
+test-results
+playwright-report
+public/content/*.json
+docs/mdfiles/
+package-lock.json
+mvp/main

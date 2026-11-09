@@ -1,0 +1,16 @@
+node_modules
+dist
+.local
+.git
+.agents
+.codex
+.aws
+.env*
+test-results
+playwright-report
+e2e
+docs
+codexx
+mvp
+*.tsbuildinfo
+src/**/*.test.ts

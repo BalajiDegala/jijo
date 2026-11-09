@@ -1,0 +1,43 @@
+{
+  "name": "terraforge",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node node_modules/next/dist/bin/next dev --hostname 127.0.0.1",
+    "build": "node node_modules/next/dist/bin/next build",
+    "start": "next start",
+    "test": "node node_modules/tsx/dist/cli.mjs --test tests/*.test.ts",
+    "typecheck": "node node_modules/typescript/bin/tsc --noEmit",
+    "postinstall": "node scripts/copy-assets.mjs",
+    "test:e2e": "node tests/browser.mjs"
+  },
+  "dependencies": {
+    "next": "15.5.19",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "@xyflow/react": "12.12.0",
+    "@dagrejs/dagre": "1.1.5",
+    "monaco-editor": "0.52.2",
+    "zustand": "5.0.16",
+    "lucide-react": "0.468.0",
+    "framer-motion": "12.43.0",
+    "jszip": "3.10.1",
+    "@radix-ui/react-dialog": "1.1.2",
+    "@radix-ui/react-tooltip": "1.1.4",
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
+    "tailwind-merge": "2.6.1",
+    "@cdktf/hcl2json": "0.21.0",
+    "use-sync-external-store": "1.7.0"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/node": "22.20.5",
+    "tailwindcss": "4.1.18",
+    "@tailwindcss/postcss": "4.1.18",
+    "tsx": "4.21.0",
+    "@playwright/test": "1.64.1"
+  }
+}

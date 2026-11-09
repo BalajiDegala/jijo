@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#17634d" />
+    <script>
+      try {
+        const savedTheme = localStorage.getItem('brocode-theme-v1')
+        if (['light', 'dark', 'pink', 'handwritten'].includes(savedTheme))
+          document.documentElement.dataset.theme = savedTheme
+      } catch {}
+    </script>
+    <meta
+      name="description"
+      content="Explore Kubernetes, CI/CD, Ansible, AWS, Git, Linux, and Terraform, one topic at a time."
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="brocode" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <title>brocode · DevOps guides</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

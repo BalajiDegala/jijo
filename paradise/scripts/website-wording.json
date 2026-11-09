@@ -1,0 +1,85 @@
+[
+  ["The interview-winning detail:", "The key detail:"],
+  ["For interviews:", "In practice:"],
+  ["Why this matters for interviews:", "Why this matters in practice:"],
+  ["advanced questions", "advanced topics"],
+  ["The interview question behind this:", "In practice:"],
+  ["Interview question:", "Practice scenario:"],
+  ["The interview question:", "Practice scenario:"],
+  ["matter in interviews:", "matter in practice:"],
+  ["matters in interviews:", "matters in practice:"],
+  [
+    "This pipeline pattern appears in almost every Linux interview.",
+    "This pipeline pattern is common in Linux administration."
+  ],
+  [
+    "This scenario appears in almost every Linux interview.",
+    "This scenario is common in Linux administration."
+  ],
+  [
+    "The systematic approach matters in interviews.",
+    "The systematic approach matters in troubleshooting."
+  ],
+  ["The diagnostic sequence that impresses interviewers:", "A useful diagnostic sequence:"],
+  [
+    "Interviewers love it because it tests deep understanding of",
+    "It requires a clear understanding of"
+  ],
+  ["The interview test:", "The practical test:"],
+  ["What interviewers look for:", "Key production practices:"],
+  ["The interview trap:", "The common pitfall:"],
+  ["The debugging chain that impresses interviewers:", "A systematic debugging sequence:"],
+  [
+    "This distinction is asked in every AWS interview and many candidates get it wrong.",
+    "This distinction matters when managing EC2 instance storage."
+  ],
+  ["Follow-up Questions an Interviewer Will Ask", "Further Details"],
+  ["Follow-up Questions", "Further Details"],
+  ["Pro tip that interviewers love to hear:", "Production tip:"],
+  [
+    "Senior interviewers sometimes ask about this distinction, especially when discussing custom provider development.",
+    "This distinction matters when developing custom providers."
+  ],
+  [
+    "This is a very common pattern and interviewers at companies with mature AWS setups will specifically ask about it.",
+    "This is a common pattern in mature AWS setups."
+  ],
+  [
+    "In interviews, when lifecycle comes up always mention",
+    "When configuring lifecycle rules, consider"
+  ],
+  [
+    "Knowing the old taint command still shows interviewers you have used Terraform long enough to know the history.",
+    "Knowing the old taint command helps when maintaining older Terraform workflows."
+  ],
+  ["Here is something interviewers love to ask:", "A common bootstrapping challenge:"],
+  [
+    "Candidates who mention this cleanup step in interviews show real-world import experience.",
+    "This cleanup step is part of a reliable import workflow."
+  ],
+  [
+    "null_resource is one of those questions that separates candidates who have actually used Terraform in anger from those who have just read the documentation.",
+    "Real examples help explain when null_resource is useful."
+  ],
+  [
+    "This is a question about your maturity around production operations. The best answers mention both technical locking and process/cultural controls.",
+    "Safe production operations require both technical locking and process/cultural controls."
+  ],
+  [
+    "This is now Terraform's built-in testing framework and interviewers increasingly ask about it specifically.",
+    "This is now Terraform's built-in testing framework."
+  ],
+  ["The OpenTofu Question", "The OpenTofu Choice"],
+  [
+    "The real answer interviewers want is the architectural one - split your state files.",
+    "The architectural solution is to split your state files."
+  ],
+  ["Why This Question Exists", "Why This Topic Matters"],
+  [
+    "This question now appears in nearly every senior DevOps interview.",
+    "This change is relevant to DevOps architecture decisions."
+  ],
+  ["The Interview Answer", "The Practical Takeaway"],
+  ["it raises questions about", "it creates uncertainty about"],
+  ["The Interview Angle", "The Practical Perspective"]
+]

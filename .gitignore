@@ -1,0 +1,40 @@
+# Dependencies and package-manager caches
+node_modules/
+.npm-cache/
+.npm/
+.pnpm-store/
+
+# Builds and generated reports
+dist/
+out/
+.next/
+coverage/
+test-results/
+playwright-report/
+blob-report/
+*.tsbuildinfo
+*.log
+
+# Local tools, deployment state, and credentials
+.local/
+.tools/
+.vercel/
+.openai/
+.env
+.env.*
+!.env.example
+!.env.sample
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+
+# Local archives and operating-system files
+*.tar.gz
+# Original reference PDFs are retained locally; the app uses docs/mdfiles/.
+/paradise/docs/*.pdf
+.DS_Store
+Thumbs.db
+Desktop.ini

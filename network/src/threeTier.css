@@ -1,0 +1,172 @@
+.three-tier-shortcut {
+  margin: 0 1.5rem 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.graph-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.8rem 1rem;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #2b3d50;
+  background: #111f2e;
+}
+.graph-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: #c4d5e4;
+  font-size: 0.85rem;
+  min-width: 0;
+}
+.graph-controls select {
+  max-width: 16rem;
+  width: 100%;
+}
+.graph-controls .graph-checkbox {
+  flex-direction: row;
+  align-items: center;
+  align-self: center;
+}
+.graph-focus {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.three-tier-canvas {
+  height: max(650px, 76vh);
+}
+.three-tier-canvas .resource-node:not(.container-node) {
+  position: relative;
+  width: 240px;
+  min-height: 145px;
+  padding: 14px;
+}
+.three-tier-canvas .resource-node > strong {
+  font-size: 23px;
+  padding-left: 40px;
+  min-height: 32px;
+  white-space: normal;
+  line-height: 1.3;
+}
+.three-tier-canvas .node-address {
+  font-size: 21px;
+}
+.three-tier-canvas .node-kind {
+  display: block;
+  margin-top: 6px;
+  padding-top: 5px;
+  font-size: 17px;
+  color: #b0c7de;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.three-tier-canvas .container-label {
+  flex-wrap: wrap;
+  align-items: flex-start;
+  padding: 14px 18px;
+  font-size: 25px;
+  gap: 7px 12px;
+}
+.three-tier-canvas .container-label strong {
+  font-size: 24px;
+}
+.three-tier-canvas .container-label > span {
+  font-size: 18px;
+  color: #a2c0d7;
+  opacity: 1;
+}
+.three-tier-canvas .subnet-exposure {
+  display: none;
+}
+.three-tier-canvas .subnet .container-label > span {
+  flex-basis: 100%;
+  margin-left: 0;
+}
+.three-tier-canvas .node-top {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  margin: 0;
+}
+.three-tier-canvas .node-top .node-status {
+  position: absolute;
+  left: 204px;
+  top: -6px;
+}
+.three-tier-canvas .resource-symbol.alb {
+  background: #203c50;
+  color: #9bd9ef;
+  border-color: #5287a4;
+}
+.three-tier-canvas .resource-symbol.rds,
+.three-tier-canvas .resource-symbol.dbEndpoint {
+  background: #463c28;
+  color: #ecd090;
+  border-color: #9a7f45;
+}
+.three-tier-canvas .resource-symbol.asg {
+  background: #3a2c51;
+  color: #d7c0f5;
+  border-color: #7c62a5;
+}
+.three-tier-canvas .react-flow__edge.selected path {
+  stroke: #fff;
+}
+.three-tier-note {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid #2b3d50;
+  color: #bccedf;
+  font-size: 0.9rem;
+}
+.three-tier-note details {
+  margin-top: 0.6rem;
+}
+.three-tier-note summary {
+  cursor: pointer;
+  color: #a3dfcb;
+}
+.three-tier-note details p {
+  margin-top: 0.65rem;
+}
+.three-tier-visual.is-expanded .network-layout {
+  flex: 1;
+  min-height: 0;
+}
+.three-tier-visual.is-expanded .network-main {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.three-tier-visual.is-expanded .canvas-wrap {
+  flex: 1;
+  min-height: 320px;
+  height: auto;
+}
+.three-tier-visual.is-expanded .network-activity {
+  max-height: 10rem;
+  overflow: auto;
+}
+.three-tier-visual.is-expanded .graph-controls {
+  flex-shrink: 0;
+  padding: 0.5rem 0.8rem;
+}
+@media (max-width: 700px) {
+  .graph-controls {
+    align-items: stretch;
+  }
+  .graph-controls > label {
+    flex: 1 1 12rem;
+  }
+  .graph-controls select {
+    max-width: none;
+  }
+  .three-tier-canvas {
+    height: 650px;
+  }
+  .three-tier-note {
+    padding: 0.8rem;
+  }
+}

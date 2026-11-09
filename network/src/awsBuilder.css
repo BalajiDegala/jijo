@@ -1,0 +1,374 @@
+.aws-builder-entry,
+.aws-learning-toolbar {
+  margin: 0 24px 18px;
+  border: 1px solid #293d50;
+  border-radius: 10px;
+  background: #111d2a;
+  padding: 16px;
+}
+.aws-builder-entry {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+.aws-builder-entry p,
+.aws-learning-toolbar p,
+.aws-learning-panel p {
+  color: #b4c5d8;
+  line-height: 1.55;
+  margin: 8px 0;
+}
+.aws-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.aws-section-heading h2 {
+  font-size: 1.05rem;
+  max-width: 60ch;
+}
+.aws-section-heading h3,
+.aws-current-step h3 {
+  font-size: 1rem;
+}
+.aws-section-heading small,
+.aws-learning-toolbar small,
+.aws-learning-panel small {
+  color: #92abc2;
+}
+.aws-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0;
+}
+.aws-actions button,
+.aws-section-heading button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.aws-resource-picker {
+  margin-left: auto;
+  max-width: 100%;
+}
+.aws-learning-toolbar label,
+.aws-test-controls label,
+.aws-add-dialog label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  color: #c5d5e5;
+  font-size: 0.85rem;
+  min-width: 0;
+}
+.aws-learning-toolbar select,
+.aws-learning-panel select,
+.aws-learning-panel input,
+.aws-add-dialog input,
+.aws-add-dialog select {
+  background: #0d1725;
+  color: #dce7f4;
+  border: 1px solid #38516a;
+  border-radius: 5px;
+  min-height: 36px;
+  padding: 7px 9px;
+  max-width: 100%;
+  width: 100%;
+}
+.aws-learning-toolbar progress {
+  width: 100%;
+  height: 5px;
+  accent-color: #68aef4;
+}
+.aws-step-list {
+  display: flex;
+  gap: 5px;
+  overflow-x: auto;
+  padding: 12px 0;
+}
+.aws-step-list button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-shrink: 0;
+  border: 1px solid #34485c;
+  border-radius: 6px;
+  padding: 7px 10px;
+  color: #a8bfd5;
+}
+.aws-step-list button span {
+  display: none;
+}
+.aws-step-list button.active {
+  background: #203d5b;
+  color: #dcf0ff;
+  border-color: #689ccc;
+}
+.aws-step-list button.active span {
+  display: inline;
+}
+.aws-current-step {
+  padding-top: 12px;
+}
+.aws-current-step details,
+.aws-implementation-guide details {
+  margin-top: 12px;
+  border-top: 1px solid #304154;
+  padding-top: 10px;
+}
+.aws-current-step summary,
+.aws-implementation-guide summary {
+  cursor: pointer;
+  color: #b4d8f7;
+}
+.aws-current-step ol,
+.aws-implementation-guide ol,
+.aws-implementation-guide ul {
+  padding-left: 22px;
+  margin: 10px 0;
+  color: #bbcce0;
+}
+.aws-current-step li,
+.aws-implementation-guide li {
+  margin-bottom: 7px;
+  overflow-wrap: anywhere;
+}
+.aws-current-step a,
+.aws-implementation-guide a,
+.aws-inspector a {
+  color: #8bc9ff;
+  text-decoration: underline;
+}
+.aws-learning-panel {
+  padding: 18px;
+  border-top: 1px solid #304154;
+}
+.aws-test-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 15px 0;
+}
+.aws-model-badge {
+  font-size: 0.75rem;
+  color: #94bddb;
+}
+.aws-logical-path {
+  background: #0d1c2b;
+  padding: 14px;
+  border: 1px dashed #4c789d;
+  border-radius: 8px;
+  margin: 14px 0;
+}
+.aws-logical-path ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  padding: 10px 0;
+}
+.aws-logical-path li {
+  color: #cee9ff;
+}
+.aws-logical-path li + li::before {
+  content: "→";
+  padding-right: 8px;
+  color: #7bb2d8;
+}
+.aws-validation ul {
+  list-style: none;
+  padding: 0;
+}
+.aws-validation li {
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #344a62;
+  border-left: 3px solid #d3ab68;
+  border-radius: 6px;
+}
+.aws-validation li[data-status="pass"] {
+  border-left-color: #70b79d;
+}
+.aws-validation li[data-status="fail"] {
+  border-left-color: #dc929b;
+}
+.aws-validation strong {
+  color: #e1eaf5;
+}
+.aws-pass {
+  color: #9cdec1 !important;
+}
+.aws-error {
+  color: #f0b2b8 !important;
+}
+.aws-implementation-guide {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid #3c5066;
+}
+.aws-add-backdrop {
+  position: fixed;
+  inset: 0;
+  background: #040b15ba;
+  z-index: 10050;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+.aws-add-dialog {
+  width: min(500px, 100%);
+  max-height: 90dvh;
+  overflow: auto;
+  background: #132133;
+  color: #d5e3f0;
+  border: 1px solid #45627d;
+  padding: 22px;
+  border-radius: 12px;
+  box-shadow: 0 18px 70px #0009;
+}
+.aws-add-dialog p {
+  color: #aebfd2;
+  line-height: 1.5;
+  margin: 12px 0;
+}
+.aws-add-dialog form {
+  display: grid;
+  gap: 14px;
+}
+.aws-add-dialog small {
+  color: #93aac0;
+}
+.aws-inspector fieldset {
+  min-width: 0;
+}
+.aws-inspector .inspector-section h3 {
+  font-size: 0.95rem;
+  margin: 10px 0;
+}
+.aws-inspector .inspector-section > a {
+  display: block;
+  margin-top: 12px;
+}
+.aws-inspector .editor-card {
+  margin-top: 10px;
+}
+.aws-group-list {
+  padding: 10px;
+  border: 1px solid #304356;
+  border-radius: 6px;
+  margin: 12px 0;
+}
+.aws-group-list label {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0;
+  font-size: 0.85rem;
+}
+.aws-group-list input {
+  width: auto;
+}
+.aws-canvas-options {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 18px;
+  font-size: 0.8rem;
+  color: #a8bdd1;
+}
+.aws-canvas-options label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.aws-builder-canvas {
+  height: max(550px, 65vh);
+}
+.aws-lab-heading {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+.aws-lab-heading h1 {
+  font-size: 1.25rem;
+}
+.aws-lab-heading .section-eyebrow,
+.aws-lab-heading p {
+  display: none;
+}
+.aws-builder-canvas .resource-node:not(.container-node) {
+  width: 210px;
+}
+.aws-builder-canvas .resource-node > strong {
+  font-size: 18px;
+}
+.aws-builder-canvas .container-label {
+  font-size: 18px;
+}
+.aws-builder-canvas .container-label > span {
+  font-size: 14px;
+}
+.aws-builder-canvas .resource-node:is(.sg, .nacl, .routeTable) {
+  position: relative;
+  min-height: 90px;
+  padding: 12px;
+}
+.aws-builder-canvas :is(.sg, .nacl, .routeTable) > strong {
+  padding-left: 42px;
+}
+.aws-builder-canvas :is(.sg, .nacl, .routeTable) .node-top {
+  position: absolute;
+  left: 10px;
+  top: 12px;
+  margin: 0;
+}
+.aws-builder-canvas
+  :is(.sg, .nacl, .routeTable)
+  :is(.node-address, .node-kind, .node-status) {
+  display: none;
+}
+.aws-builder-canvas .container-node.awsCloud {
+  border-color: #687d93;
+  background: #0d192522;
+}
+@media (max-width: 720px) {
+  .aws-builder-entry,
+  .aws-learning-toolbar {
+    margin: 0 12px 12px;
+    padding: 12px;
+  }
+  .aws-builder-entry {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .aws-resource-picker {
+    margin-left: 0;
+    width: 100%;
+  }
+  .aws-learning-panel {
+    padding: 12px;
+  }
+  .aws-test-controls {
+    grid-template-columns: 1fr;
+  }
+  .aws-builder-canvas {
+    height: 520px;
+  }
+  .aws-step-list button.active span {
+    max-width: 150px;
+    white-space: normal;
+    text-align: left;
+  }
+  .aws-actions button {
+    white-space: normal;
+    text-align: left;
+  }
+}

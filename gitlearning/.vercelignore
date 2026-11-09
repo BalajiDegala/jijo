@@ -1,0 +1,6 @@
+docs
+tests
+.local
+test-results
+playwright-report
+README.md

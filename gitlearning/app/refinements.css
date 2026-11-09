@@ -1,0 +1,58 @@
+/* Contrast and interaction refinements, shared across viewport sizes. */
+[hidden] {
+  display: none !important;
+}
+.demo-window .graph-scroll svg {
+  max-height: none;
+  min-height: 0;
+  height: auto;
+}
+.compact .graph-lane {
+  font-size: 12px;
+}
+.compact .graph-hash {
+  font-size: 10px;
+}
+.primary {
+  background: linear-gradient(110deg, #7852d8, #6e46cc);
+  border-color: #a78be380;
+}
+.primary:hover {
+  background: linear-gradient(110deg, #835cde, #7852d8);
+}
+.scenario-number {
+  color: #838198;
+}
+.mobile-nav-close {
+  display: none;
+}
+.editor-note {
+  font-size: 10px !important;
+  color: #b7a6ca !important;
+  margin-top: 15px !important;
+}
+.hero h1 > span:not(.hero-cursor) {
+  background: linear-gradient(90deg, #bc9cff, #9274df);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-copy,
+.hero-demo {
+  min-width: 0;
+}
+@media (max-width: 590px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .hero h1 {
+    font-size: clamp(46px, 15.5vw, 66px);
+    line-height: 1.1;
+    letter-spacing: -3.5px;
+  }
+  .hero h1 br {
+    display: block;
+  }
+  .hero h1 > span:not(.hero-cursor):before {
+    content: none;
+  }
+}

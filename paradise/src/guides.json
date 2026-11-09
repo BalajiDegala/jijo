@@ -1,0 +1,51 @@
+{
+  "kubernetes": {
+    "title": "Kubernetes",
+    "label": "Kubernetes",
+    "source": "Kubernetes_Interview_Preparation_Guide.md",
+    "output": "feed.json",
+    "topics": 110
+  },
+  "cicd": {
+    "title": "CI/CD Pipelines",
+    "label": "CI/CD",
+    "source": "CICD_Pipelines_Interview_Preparation_Guide.md",
+    "output": "cicd.json",
+    "topics": 110
+  },
+  "ansible": {
+    "title": "Ansible & Configuration Management",
+    "label": "Ansible",
+    "source": "Ansible_Configuration_Management_Interview_Preparation_Guide.md",
+    "output": "ansible.json",
+    "topics": 75
+  },
+  "aws": {
+    "title": "AWS Cloud",
+    "label": "AWS Cloud",
+    "source": "AWS_Cloud_Interview_Preparation_Guide.md",
+    "output": "aws.json",
+    "topics": 130
+  },
+  "git": {
+    "title": "Git & Version Control",
+    "label": "Git",
+    "source": "Git_Version_Control_Interview_Preparation_Guide.md",
+    "output": "git.json",
+    "topics": 80
+  },
+  "linux": {
+    "title": "Linux & Shell Scripting",
+    "label": "Linux & Shell",
+    "source": "Linux_Shell_Scripting_Interview_Preparation_Guide.md",
+    "output": "linux.json",
+    "topics": 112
+  },
+  "terraform": {
+    "title": "Terraform & Infrastructure as Code",
+    "label": "Terraform",
+    "source": "Terraform_IaC_Interview_Preparation_Guide.md",
+    "output": "terraform.json",
+    "topics": 102
+  }
+}

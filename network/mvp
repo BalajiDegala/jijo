@@ -1,0 +1,844 @@
+# NETVERSE — FINAL MVP DEVELOPMENT PROMPT
+
+## 1. Project Overview
+
+**Project Name:** NetVerse
+
+**Tagline:** Build Networks. Break Networks. Understand Networks.
+
+### Your Role
+
+Act as a senior full-stack engineer, AWS networking architect, Linux networking engineer, interactive simulation developer, and expert UI/UX designer.
+
+Build an interactive website that teaches networking through **visual experimentation rather than theoretical explanations**.
+
+The website must allow users to create networks, connect machines, configure networking components, send animated packets, observe connectivity, and understand why communication succeeds or fails.
+
+The finished MVP must function as a real interactive networking learning environment, not a static diagram editor.
+
+### Core Learning Principle
+
+Every networking concept should follow this interaction:
+
+**Build → Configure → Send Packet → Observe → Break → Fix → Understand**
+
+The product must be friendly to complete beginners while remaining technically useful for DevOps and cloud engineering learners.
+
+---
+
+# 2. Technology Stack
+
+Use:
+
+- React + TypeScript
+- Vite
+- Tailwind CSS
+- React Flow / XYFlow
+- Zustand for state management
+- Framer Motion / Motion for animations
+- Lucide icons
+- SVG for packet animation
+- Vitest for testing
+- LocalStorage or IndexedDB for project persistence
+
+The MVP must run locally without cloud accounts, paid APIs, external infrastructure, or a backend.
+
+Architecture must be modular, allowing later expansion into Kubernetes, Azure, advanced Linux networking, and other cloud systems.
+
+---
+
+# 3. Main Website Layout
+
+Create a polished, dark-themed networking simulation dashboard.
+
+### Left Sidebar — Learning & Components
+
+Provide navigation for:
+
+1. Networking Fundamentals
+2. IP & CIDR Playground
+3. Local Network Builder
+4. AWS VPC Builder
+5. Routing Laboratory
+6. Security Group & NACL Laboratory
+7. NAT Gateway Laboratory
+8. Network Troubleshooting Challenges
+
+Include a searchable library of draggable networking components.
+
+### Center — Interactive Network Canvas
+
+The center of the screen should display a large interactive network diagram.
+
+Users must be able to:
+
+- Drag and drop resources.
+- Connect networking devices.
+- Create and resize VPC/subnet containers.
+- Configure resources.
+- Move, zoom, and pan.
+- View live packet animations.
+- Select source and destination.
+- Test connectivity.
+- Follow each packet hop.
+- Show or hide network details.
+
+Make network diagrams visually structured and easy to understand.
+
+### Right Sidebar — Configuration Inspector
+
+Selecting a component must display editable properties relevant to that resource.
+
+Examples:
+
+For a server:
+- IP address
+- Subnet mask
+- Default gateway
+- MAC address
+- Assigned subnet
+- Security group
+
+For a route table:
+- Destination CIDR
+- Route target
+- Subnet association
+
+For a security group:
+- Inbound rules
+- Outbound rules
+- Protocol
+- Port range
+- Source/destination
+
+Changes must immediately update the simulation model.
+
+### Bottom Panel — Network Console
+
+Show a simulated terminal and traffic inspector.
+
+Supported MVP commands:
+
+- ping
+- traceroute
+- ip addr
+- ip route
+- curl
+- nslookup
+
+Commands must operate against the simulated network, not return hardcoded success messages.
+
+Display traffic logs, packet decisions, and detailed failure reasons.
+
+---
+
+# 4. Feature 1: Interactive CIDR & IP Address Playground
+
+This is the first feature to implement.
+
+Create a highly interactive CIDR calculator.
+
+The user can enter an IP address and CIDR prefix or adjust the prefix using a slider.
+
+Support `/0` through `/32` for general IPv4 calculations, and validate AWS subnet prefix limits separately.
+
+### Display in real time
+
+- Network address
+- Subnet mask
+- Broadcast address
+- Total IP addresses
+- Usable IP addresses
+- First usable IP
+- Last usable IP
+- Binary representation
+- Network bits
+- Host bits
+
+Example:
+
+IP: 192.168.1.0/24
+
+Total addresses: 256
+
+Traditional usable hosts: 254
+
+AWS usable addresses: 251
+
+Provide two modes:
+
+**Traditional networking:** Apply conventional host-address rules, including correct special handling of `/31` and `/32`.
+
+**AWS networking:** Show AWS-specific reserved addresses and validate AWS subnet prefix requirements.
+
+### Interactive visualization
+
+Display subnet IP addresses as small selectable blocks.
+
+Use colors to distinguish:
+
+- Available IPs
+- Reserved IPs
+- Allocated IPs
+
+When the user changes `/24` to `/26`, visually split the `/24` into four `/26` subnets.
+
+Let users click a subnet to inspect its address range.
+
+Include a subnet overlap validator.
+
+Allow a user to specify required host counts and calculate a suitable subnet size.
+
+### Acceptance requirement
+
+The calculator must use actual CIDR arithmetic and correctly handle network boundaries.
+
+---
+
+# 5. Feature 2: Local Network Builder
+
+Create a drag-and-drop network topology simulator.
+
+### Supported components
+
+- Computer
+- Linux Server
+- Layer 2 Switch
+- Router
+- Firewall
+- Internet Node
+
+Each device must have meaningful editable networking properties.
+
+### Scenario A — Same Subnet Communication
+
+Create:
+
+PC1: 192.168.1.10/24
+
+PC2: 192.168.1.20/24
+
+Connect both machines to a switch.
+
+When users click **Ping**, animate the ARP process and then ICMP communication.
+
+Show the packet path and explain why both machines can communicate.
+
+### Scenario B — Different Subnet Communication
+
+Create:
+
+PC1: 192.168.1.10/24
+
+PC2: 192.168.2.10/24
+
+Connect them to the switch.
+
+Show that the machines cannot communicate correctly without appropriate Layer 3 routing.
+
+Allow adding a router with interfaces in both networks.
+
+Configure default gateways and enable packet forwarding.
+
+Show the complete packet journey through the router.
+
+### Scenario C — Broken Gateway
+
+Let users remove or misconfigure a gateway.
+
+The packet should fail with an understandable explanation.
+
+### Required Networking Behavior
+
+Implement:
+
+- IP/subnet membership calculations
+- ARP resolution
+- Layer 2 switching
+- MAC address learning
+- Default gateways
+- Connected routes
+- Static routes
+- Longest-prefix route matching
+- Basic ICMP request/reply simulation
+
+Do not animate packets across invalid routes.
+
+---
+
+# 6. Feature 3: AWS VPC Builder
+
+This is the main cloud networking component of the MVP.
+
+Create an interactive AWS-style visual network builder.
+
+### Supported AWS resources
+
+- Region
+- Availability Zone
+- VPC
+- Public Subnet
+- Private Subnet
+- EC2 Instance
+- Route Table
+- Internet Gateway
+- NAT Gateway
+- Elastic IP
+- Security Group
+- Network ACL
+
+Create draggable or context-menu controls to add resources.
+
+### Guided Build Scenario
+
+**Step 1 — Create VPC**
+
+Allow the learner to create:
+
+VPC CIDR: 10.0.0.0/16
+
+Display its address space.
+
+**Step 2 — Create Availability Zones**
+
+Example:
+- AZ-A
+- AZ-B
+
+Show availability zones as visual groupings within a region.
+
+**Step 3 — Create Subnets**
+
+Create:
+
+Public Subnet: 10.0.1.0/24
+
+Private Subnet: 10.0.2.0/24
+
+Validate that subnet CIDRs do not overlap and belong to the parent VPC.
+
+**Step 4 — Launch Instances**
+
+Create EC2 instances inside subnets.
+
+Display their IP addresses and network interfaces.
+
+**Step 5 — Configure Internet Gateway**
+
+Allow attaching an Internet Gateway to the VPC.
+
+**Step 6 — Configure Public Route Table**
+
+Add:
+
+Destination: 0.0.0.0/0
+
+Target: Internet Gateway
+
+Associate the public subnet with this route table.
+
+**Step 7 — Test Public Internet Connectivity**
+
+Allow assigning a public IPv4 address to the EC2 instance.
+
+Simulate outbound traffic and return traffic.
+
+Evaluate relevant route and security rules.
+
+**Step 8 — Configure NAT Gateway**
+
+Create a NAT gateway inside a public subnet.
+
+Assign an Elastic IP.
+
+**Step 9 — Configure Private Route Table**
+
+Add:
+
+Destination: 0.0.0.0/0
+
+Target: NAT Gateway
+
+Associate it with the private subnet.
+
+**Step 10 — Test Private Internet Connectivity**
+
+Send simulated outbound traffic from the private EC2 instance.
+
+Animate the path:
+
+Private EC2 → Route Table Decision → NAT Gateway → Internet Gateway → Internet
+
+Show NAT source-address translation and return traffic.
+
+Explain why internet-originated unsolicited connections cannot directly reach the private instance through NAT.
+
+### Correctness Requirements
+
+Do not determine public/private subnet status based on its name.
+
+Use effective route table configuration.
+
+Model public IPv4 requirements for internet gateway connectivity.
+
+Apply local VPC routing to communication between subnets.
+
+Represent Availability Zones as placement boundaries, not forwarding devices.
+
+---
+
+# 7. Feature 4: Route Table Visualizer
+
+Allow users to create and edit route table entries.
+
+Each entry must include:
+
+- Destination CIDR
+- Target
+- Route status
+
+Supported targets:
+
+- Local
+- Internet Gateway
+- NAT Gateway
+- Router interface for local simulations
+
+Users must be able to associate AWS route tables with subnets.
+
+### Visual Learning Experience
+
+When a packet is sent:
+
+1. Inspect destination IP.
+2. Examine applicable routes.
+3. Highlight matching routes.
+4. Choose the longest matching prefix.
+5. Show the chosen next hop.
+6. Continue forwarding or explain the failure.
+
+### Troubleshooting Tests
+
+Let users:
+- Delete a default route.
+- Change a route target.
+- Associate a subnet with the wrong route table.
+- Make a gateway unavailable.
+
+Connectivity must update accurately.
+
+---
+
+# 8. Feature 5: Security Groups and NACLs
+
+Build a visual security laboratory.
+
+### Security Groups
+
+Support:
+- Inbound rules
+- Outbound rules
+- TCP/UDP/ICMP
+- Port ranges
+- IPv4 CIDR rules
+- Stateful connection tracking
+
+### Network ACLs
+
+Support:
+- Inbound rules
+- Outbound rules
+- Rule numbers
+- Allow/Deny actions
+- First-match evaluation
+- Stateless behavior
+
+### Example Challenge
+
+Create a public EC2 instance with a web server on port 80.
+
+First, block inbound HTTP access.
+
+User sends an HTTP request.
+
+Animate the packet reaching the security evaluation point and being rejected.
+
+Next, let the user allow port 80.
+
+Repeat the test.
+
+The packet should now reach the instance if all other networking requirements are satisfied.
+
+Provide a clear explanation of the matched rule.
+
+### Advanced MVP Experiment
+
+Demonstrate how stateless NACL rules can prevent return traffic even when inbound traffic is allowed.
+
+Show ephemeral port behavior.
+
+---
+
+# 9. Feature 6: NAT Gateway Laboratory
+
+Build a dedicated visual NAT Gateway simulator.
+
+Use this topology:
+
+Private EC2 → NAT Gateway → Internet Gateway → Internet
+
+### Show Visually
+
+- Private source IP
+- NAT-translated source IP
+- Source port translation
+- Destination IP
+- Outbound path
+- Return path
+- NAT translation table
+
+### Experiments
+
+Users should be able to:
+
+1. Remove the NAT gateway.
+2. Delete the private subnet default route.
+3. Remove the Internet Gateway.
+4. Block outbound traffic with security rules.
+5. Move the NAT gateway into an invalid configuration.
+
+The simulator must show connectivity changes and clear failure reasons.
+
+Model the public NAT gateway separately from any unsupported private NAT gateway behavior.
+
+---
+
+# 10. Feature 7: Animated Packet Journey
+
+Create a central packet simulation engine shared across local networking and AWS VPC modules.
+
+### User Interaction
+
+Click **Send Packet**.
+
+Select:
+- Source device
+- Destination device or internet target
+- Protocol
+- Destination port
+
+### Playback Controls
+
+- Play
+- Pause
+- Next hop
+- Previous hop
+- Replay
+- Animation speed
+
+### Packet Inspector
+
+For every hop, display:
+
+- Source IP
+- Destination IP
+- Source port
+- Destination port
+- Protocol
+- Route decision
+- Security evaluation
+- NAT transformation
+- Packet state
+
+Use clear visual states:
+
+Green: Delivered
+
+Red: Dropped
+
+Amber: Processing
+
+Blue: In transit
+
+Each packet must have a trace generated by the simulation engine.
+
+The animation layer must consume this trace.
+
+Never invent packet success solely for the sake of displaying an animation.
+
+For protocols requiring connections or responses, validate the appropriate reverse path.
+
+---
+
+# 11. Feature 8: Guided Troubleshooting Challenges
+
+Create five fully interactive challenges.
+
+### Challenge 1
+Two PCs cannot communicate because they belong to different subnets and no router is configured.
+
+### Challenge 2
+A server has the wrong default gateway.
+
+### Challenge 3
+A public EC2 instance cannot access the internet due to missing routing.
+
+### Challenge 4
+A private EC2 instance cannot access the internet because the NAT route is missing.
+
+### Challenge 5
+A website cannot be accessed because an inbound security group rule is missing.
+
+Each challenge must have:
+
+- Prebuilt topology
+- Clearly defined objective
+- Broken configuration
+- Diagnostic controls
+- Optional hints
+- User-editable fixes
+- Automated solution verification
+- Short explanation after successful completion
+
+Do not count a challenge as completed until connectivity is verified by the simulation engine.
+
+---
+
+# 12. Simulation Architecture
+
+Build a proper internal networking model.
+
+Suggested modules:
+
+- `ipMathEngine`
+- `subnetEngine`
+- `deviceEngine`
+- `arpEngine`
+- `routingEngine`
+- `securityEngine`
+- `natEngine`
+- `packetEngine`
+- `topologyEngine`
+- `challengeEngine`
+
+The routing, security, NAT, and packet engines must remain separate from React UI components.
+
+Use strongly typed TypeScript interfaces.
+
+All networking changes must update one shared topology state.
+
+Create an event-based packet trace containing:
+- Event type
+- Device/resource
+- Packet properties
+- Matched route or rule
+- Decision
+- Explanation
+
+Use this event trace to drive both animation and the packet inspector.
+
+State clearly where the simulation simplifies real networking.
+
+---
+
+# 13. Visual Design
+
+Make the website feel like a premium networking engineering laboratory.
+
+### Design Direction
+
+- Dark navy backgrounds
+- Subtle grid canvas
+- Modern glass-like panels
+- Clear network-resource icons
+- Blue network links
+- Green success states
+- Red failure states
+- Animated glowing packets
+- Smooth drag-and-drop interactions
+- Expandable nested subnet containers
+- Professional technical dashboards
+
+Avoid clutter and excessive decoration.
+
+Animations should teach packet behavior rather than merely look attractive.
+
+The interface must be usable on desktop screens and remain readable on smaller displays.
+
+---
+
+# 14. Persistence and Utilities
+
+Support:
+
+- Save project locally
+- Load saved project
+- Reset project
+- Import/export network topology JSON
+- Undo/redo relevant editing actions
+- Zoom to fit
+- Delete resources
+- Duplicate resources
+- Display validation errors
+- Create a project from a guided template
+
+Do not require authentication in the MVP.
+
+---
+
+# 15. MVP Exclusions
+
+Do NOT implement these in version 1:
+
+- Real AWS provisioning
+- Real packet transmission
+- Cloud account connections
+- Kubernetes simulator
+- Docker network simulator
+- Azure and Google Cloud simulation
+- Full BGP/OSPF emulation
+- Real VPN tunnels
+- Multiplayer functionality
+- AI chatbot integration
+- Paid subscriptions
+- Advanced traffic analytics
+
+Keep the application architecture extensible, but prioritize the networking simulation experience.
+
+---
+
+# 16. Required Automated Tests
+
+Create unit and integration tests for:
+
+1. CIDR calculations
+2. Subnet boundaries
+3. Subnet overlap detection
+4. Same-subnet connectivity
+5. Inter-subnet routing
+6. Missing default gateway
+7. Longest-prefix routing
+8. Public subnet internet routing
+9. NAT-based outbound connectivity
+10. NAT unsolicited inbound rejection
+11. Security group allow/deny decisions
+12. NACL ordered-rule evaluation
+13. NACL return traffic blocking
+14. Saving/loading configurations
+15. Challenge completion validation
+
+Use deterministic fixtures so results are reproducible.
+
+---
+
+# 17. Development Plan
+
+Implement the MVP in four milestones.
+
+## Milestone 1 — Visual Networking Basics
+
+Deliver:
+- Main dashboard
+- Drag-and-drop canvas
+- CIDR slider and calculator
+- PC/switch/router builder
+- Same-subnet and different-subnet communication
+- Basic packet animation
+- Save/load
+
+Do not proceed until these features work.
+
+## Milestone 2 — AWS Networking
+
+Deliver:
+- VPC creation
+- AZ/subnet creation
+- EC2 instances
+- Route tables
+- Internet Gateway
+- Public/private route behavior
+- NAT Gateway and Elastic IP
+- Internet connectivity simulation
+
+## Milestone 3 — Security & Packet Inspection
+
+Deliver:
+- Inbound/outbound security group rules
+- NACL rules
+- Connection tracking
+- NAT translation inspector
+- Packet journey animation
+- Basic simulated terminal
+
+## Milestone 4 — Learning Experience
+
+Deliver:
+- Five guided troubleshooting challenges
+- Guided network build templates
+- Contextual explanations
+- Polished UX
+- Automated tests
+- Documentation
+
+---
+
+# 18. Final MVP Acceptance Scenario
+
+The final MVP must allow a beginner to complete the following activity without external instruction.
+
+1. Open NetVerse.
+2. Create VPC `10.0.0.0/16`.
+3. Add Availability Zones A and B.
+4. Add public subnet `10.0.1.0/24`.
+5. Add private subnet `10.0.2.0/24`.
+6. Place EC2 instances in both subnets.
+7. Understand their private IP allocations.
+8. Send traffic between instances and observe local VPC routing.
+9. Create an internet gateway.
+10. Configure a public route table.
+11. Assign a public IPv4 address to the public EC2.
+12. Test outbound internet access.
+13. Create a NAT gateway with an Elastic IP.
+14. Configure the private default route.
+15. Test private EC2 outbound internet connectivity.
+16. Modify security group rules to block traffic.
+17. Observe which packet is dropped and why.
+18. Fix the rules.
+19. Replay successful packet communication.
+20. Save the completed network topology.
+
+The interface must visually demonstrate the effect of each action.
+
+**This is the definition of a completed NetVerse MVP.**
+
+---
+
+# 19. Instructions to the Coding Agent
+
+Build actual runnable source code.
+
+Do not simply provide architecture suggestions, mockups, or pseudocode.
+
+Start by:
+1. Creating the project and folder structure.
+2. Installing dependencies.
+3. Designing typed network models.
+4. Implementing the IP/CIDR calculation engine.
+5. Building the dashboard and interactive canvas.
+6. Implementing the first functional networking experiment.
+7. Writing tests.
+8. Expanding through the remaining milestones.
+
+After each milestone:
+- Ensure the application builds.
+- Run tests.
+- Fix failures.
+- Confirm that simulations use real model decisions.
+- Document what is complete.
+- State any known limitations.
+
+Do not use decorative placeholder buttons or fake success animations.
+
+Prefer a smaller number of completely functional features over many incomplete features.
+
+**Final objective:** Deliver a beginner-friendly, interactive networking laboratory that makes subnetting, routing, AWS VPCs, security groups, NACLs, internet gateways, NAT gateways, and private/public networking understandable through hands-on visual interaction.
