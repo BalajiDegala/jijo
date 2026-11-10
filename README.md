@@ -2,7 +2,20 @@
 
 **Learn it. Visualize it. Build it. Break it. Fix it. Deploy it.**
 
-JIJO is a planned interactive software engineering and deployment learning platform. This repository preserves the five existing projects that will inform its development. They currently run as separate applications; the unified JIJO experience has not been implemented.
+JIJO’s first learning journey follows an HTTP request from a browser into a Flask container. Predict the response, inspect a rule-driven simulation, repair the mapping, explain the result, and solve a second case with a different port and service. The root application imports DockerLab’s engine directly.
+
+## Run the learning studio
+
+Use Node 22 and npm from the repository root.
+
+```sh
+npm ci
+npm run dev
+```
+
+Open [the local studio](http://127.0.0.1:4178). Guest progress is saved in IndexedDB. **Project files** lets you download or restore a JSON backup. Completing the independent repair unlocks a ZIP with Python source, requirements, a Dockerfile, Compose configuration, and a local verification checklist.
+
+## Existing projects
 
 | Directory | Existing project | Purpose |
 | --- | --- | --- |
@@ -14,7 +27,17 @@ JIJO is a planned interactive software engineering and deployment learning platf
 
 ## Development
 
-Each directory has its own package manifest, dependencies, configuration, tests, and README. Follow the relevant project README for setup and verification. There is no root application or shared package workspace yet.
+The root app has its own lockfile. Installing legacy apps is optional for JIJO development. Each legacy directory has its own setup and tests.
+
+```sh
+npm test
+npm run build
+npm run check:export
+npx playwright install chromium
+npm run e2e
+```
+
+The export check uses the Docker Compose CLI and Python 3 to normalize the configuration and compile the sample. Browser tests serve the production build on port 4179. To use an installed Chromium, set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH`.
 
 The repository intentionally excludes dependency folders, build output, local environment files, credentials, and machine-specific hosting metadata. Existing source files and bundled runtime assets are preserved.
 
@@ -22,6 +45,6 @@ The large original reference PDFs in `paradise/docs/` remain local and are not i
 
 ## Current status
 
-The existing projects have been audited. A Docker-focused learning journey is the proposed first JIJO increment; implementation awaits approval. Simulations do not provision cloud infrastructure or execute learner code on a server.
+The implemented scope, source audit, architecture decisions, release procedure, and limitations are in the [studio engineering notes](docs/studio.md). The [contributor guide](AGENTS.md) lists repository conventions and verification commands.
 
 Production deployment is a separate, explicitly authorized step. Individual projects retain their existing deployment configuration; this repository does not introduce automatic deployments.
