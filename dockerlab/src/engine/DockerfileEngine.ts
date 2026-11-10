@@ -2,9 +2,28 @@ import { DockerEngine } from './DockerEngine';
 import { tokenize } from './CommandParser';
 import { reference,timestamp } from './catalog';
 import type { ImageResource,Layer } from './types';
-export interface BuildStep { index:number; total:number; instruction:string; layer?:Layer; message:string; complete:boolean; image?:ImageResource }
+export interface BuildStep { index:number; total:number; instruction:string; layer?:Layer; message:string; complete:boolean; image?:ImageResource; workdir?:string }
 function hash(text:string){let n=2166136261;for(let i=0;i<text.length;i++)n=Math.imul(n^text.charCodeAt(i),16777619);return(n>>>0).toString(16)}
 function normalize(path:string){const result:string[]=[];for(const part of path.split('/')){if(part==='..')result.pop();else if(part&&part!=='.')result.push(part)}return '/'+result.join('/')}
+function checkNpmInstall(image: ImageResource) {
+  if (!image.baseImage?.startsWith('node:')) throw new Error('RUN npm ci needs a Node base image.');
+  const read = (name: string) => {
+    const source = image.files[normalize(image.workdir + '/' + name)];
+    if (!source) throw new Error('RUN npm ci needs ' + name + ' in WORKDIR. COPY it before installation.');
+    try { return JSON.parse(source); }
+    catch { throw new Error('RUN npm ci could not parse ' + name + '.'); }
+  };
+  const manifest = read('package.json');
+  const lock = read('package-lock.json');
+  const locked = lock?.packages?.[''];
+  if (!locked) throw new Error('RUN npm ci needs a version 2 or 3 lockfile with a root package.');
+  for (const field of ['dependencies', 'devDependencies', 'optionalDependencies']) {
+    const expected = manifest[field] ?? {};
+    const actual = locked[field] ?? {};
+    if (Object.keys(expected).length !== Object.keys(actual).length || Object.keys(expected).some(name => actual[name] !== expected[name]))
+      throw new Error('RUN npm ci found different dependencies in package.json and package-lock.json.');
+  }
+}
 export class DockerfileEngine {
   constructor(public engine:DockerEngine){}
   *steps(source:string,files:Record<string,string>,tag:string):Generator<BuildStep,ImageResource,unknown>{
@@ -33,6 +52,10 @@ export class DockerfileEngine {
       if(instruction==='RUN'){
         for(const cmd of value.split('&&').map(x=>x.trim())){
           if(/^pip(?:3)? install\s/.test(cmd)){const tokens=tokenize(cmd),requirements=tokens.indexOf('-r');if(requirements>=0){const path=normalize(`${draft!.workdir}/${tokens[requirements+1]??''}`);if(!(path in draft!.files))throw new Error(`RUN failed: could not open requirements file ${path}. COPY it before installing.`);if(/nonexistent|missing-package|invalid-package/.test(draft!.files[path]))throw new Error('RUN failed: no matching distribution found in requirements.txt.');}else if(tokens.length<3||/nonexistent|missing-package|invalid-package/.test(cmd))throw new Error(`RUN failed: no matching distribution found: ${cmd}`);size+=18;detail+='Installed virtual Python dependencies. ';}
+          else if(/^npm ci(?: --omit=dev)?(?: --ignore-scripts)?$/.test(cmd)){
+            checkNpmInstall(draft!);
+            detail+='Checked the virtual Node manifest and lockfile. ';
+          }
           else if(/^apt-get update$/.test(cmd)){size+=.5;detail+='Updated virtual package index. ';}
           else if(/^apt-get install (?:-y )?[a-z0-9 .+\-]+$/.test(cmd)&&!/(?:nonexistent|invalid|missing)/.test(cmd)){size+=8;detail+='Installed virtual system packages. ';}
           else if(/^apk add (?:--no-cache )?[a-z0-9 .+\-]+$/.test(cmd)&&!/(?:nonexistent|invalid|missing)/.test(cmd)){size+=4;detail+='Installed virtual Alpine packages. ';}
@@ -44,7 +67,7 @@ export class DockerfileEngine {
       if(instruction==='CMD'||instruction==='ENTRYPOINT'){let command:string[];if(value.startsWith('[')){try{command=JSON.parse(value)}catch{throw new Error(`${instruction}: invalid JSON array`)}if(!Array.isArray(command)||command.some(v=>typeof v!=='string'))throw new Error(`${instruction} requires a JSON string array.`);}else command=tokenize(value);if(instruction==='CMD')draft!.command=command;else draft!.entrypoint=command;detail=`${instruction==='CMD'?'Default command':'Entrypoint'}: ${command.join(' ')}`;}
       if(instruction==='USER'){if(!/^[a-zA-Z0-9_-]+(?::[a-zA-Z0-9_-]+)?$/.test(value))throw new Error(`Invalid USER: ${value}`);draft!.user=value;detail=`Runtime user: ${value}`;}
       const cacheKey=hash(previous+'\n'+line+'\n'+context);const cached=this.engine.state.buildCache.includes(cacheKey);previous=cacheKey;if(!cached)this.engine.state.buildCache.push(cacheKey);const layer:Layer={id:`layer-${cacheKey}`,instruction:line,size,cached,detail};layers.push(layer);
-      const message=`[${i+1}/${lines.length}] ${line}\n${cached?'CACHED':detail}`;this.engine.event('build',cached?'cache':'step',message);this.engine.notify();yield {index:i+1,total:lines.length,instruction:line,layer,message,complete:false};
+      const message=`[${i+1}/${lines.length}] ${line}\n${cached?'CACHED':detail}`;this.engine.event('build',cached?'cache':'step',message);this.engine.notify();yield {index:i+1,total:lines.length,instruction:line,layer,message,complete:false,workdir:draft?.workdir};
     }
     if(!draft)throw new Error('Dockerfile must contain FROM.');const [repository,imageTag]=reference(tag).split(':');draft.repository=repository;draft.tag=imageTag;draft.layers=layers;draft.size=layers.reduce((n,l)=>n+l.size,0);
     this.engine.state.images=this.engine.state.images.filter(i=>`${i.repository}:${i.tag}`!==`${repository}:${imageTag}`);this.engine.state.images.push(draft);this.engine.event('build','complete',`Successfully built ${repository}:${imageTag} · ${draft.size.toFixed(1)} MB`,draft.id);this.engine.notify();yield {index:lines.length,total:lines.length,instruction:'Exporting image',message:`Successfully built ${repository}:${imageTag}\n${draft.id}`,complete:true,image:draft};return draft;

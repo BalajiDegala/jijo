@@ -15,6 +15,13 @@ npm run dev
 
 Open [the local studio](http://127.0.0.1:4178). Guest progress is saved in IndexedDB. **Project files** lets you download or restore a JSON backup. Completing the independent repair unlocks a ZIP with Python source, requirements, a Dockerfile, Compose configuration, and a local verification checklist.
 
+## Docker playgrounds
+
+Two playgrounds are available from the studio navigation.
+
+- **Resource playground** (`#graph`) supports application, Nginx, PostgreSQL, Redis, network and volume nodes. Drag the handles or use the inspector to connect resources. Resolve validation errors to download the generated Compose file or a ZIP with each application's build context.
+- **Dockerfile playground** (`#dockerfile`) includes Flask, FastAPI, Express and Fastify starters and repair exercises. Edit a Dockerfile, predict the result, run the simulated build, then add the checked recipe to the graph. Use **Edit service Dockerfile** in the inspector to update an existing service.
+
 ## Existing projects
 
 | Directory | Existing project | Purpose |

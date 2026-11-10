@@ -38,6 +38,12 @@ flowchart LR
 
 ## Verification
 
+The two playgrounds share a separate versioned IndexedDB record for the graph, framework drafts and node positions. Service-to-service edges specify startup dependencies, service-to-network edges attach endpoints, and service-to-volume edges specify mount paths. The inspector provides the same connection operations as the canvas. A dependency representing communication must share a network with its target.
+
+The graph compiler checks names, published-port conflicts, mount paths, network membership and dependency cycles. It passes the generated YAML and its explicit set of build directories to DockerLab’s Compose parser. The ZIP contains the exact Dockerfile snapshot attached to each application. PostgreSQL uses a required environment variable for its password. These samples illustrate configuration; application-level database clients and readiness checks require additional code.
+
+The Dockerfile editor checks a single-stage subset against its supplied context. The Node lessons compare the manifest and lockfile before modeling npm ci. The Python lessons check the requirements file. The result includes step feedback, entry-point file and command checks, and the exercise's expected EXPOSE metadata. The Compose CLI export check also resolves the full four-framework fixture and compiles or syntax-checks its entry points.
+
 Use the root README commands. Unit checks cover missing, wrong and UDP bindings, stopped containers, alternative command sequences, gated progression, unsupported commands, malformed backups and ZIP contents. The production-build browser suite covers end-to-end repair, mobile navigation, download, import, storage loss and competing tabs. Run DockerLab’s own npm test from dockerlab/ to check its original callers.
 
 The standalone export check runs docker compose config and Python bytecode compilation on generated files in a temporary directory. The browser models supported Dockerfile and Compose instructions. Installing Flask, building a real image, HTTP testing against a real container and production release verification are separate operations.

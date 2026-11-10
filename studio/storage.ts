@@ -1,8 +1,8 @@
 import type { Project } from './lab/journey';
 
 const store = 'projects';
-const key = 'container-path';
-export interface Stored { revision: number; project: Project }
+const journeyKey = 'container-path';
+export interface Stored<T = Project> { revision: number; project: T }
 export class Conflict extends Error {}
 
 export function openDatabase(): Promise<IDBDatabase> {
@@ -15,7 +15,7 @@ export function openDatabase(): Promise<IDBDatabase> {
   });
 }
 
-export function load(db: IDBDatabase): Promise<Stored | undefined> {
+export function load<T = Project>(db: IDBDatabase, key = journeyKey): Promise<Stored<T> | undefined> {
   return new Promise((resolve, reject) => {
     const request = db.transaction(store).objectStore(store).get(key);
     request.onsuccess = () => resolve(request.result);
@@ -23,7 +23,7 @@ export function load(db: IDBDatabase): Promise<Stored | undefined> {
   });
 }
 
-export function save(db: IDBDatabase, expected: number, project: Project): Promise<number> {
+export function save<T = Project>(db: IDBDatabase, expected: number, project: T, key = journeyKey): Promise<number> {
   return new Promise((resolve, reject) => {
     const tx = db.transaction(store, 'readwrite');
     const table = tx.objectStore(store);

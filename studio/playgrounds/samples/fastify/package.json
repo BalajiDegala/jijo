@@ -1,0 +1,9 @@
+{
+  "name": "jijo-fastify",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "fastify": "5.12.8"
+  }
+}

@@ -1,0 +1,72 @@
+.pg { --pg-green: #284f39; display: grid; gap: 15px; min-width: 0 }
+.pg h2 { font-size: 21px }
+.pg-status, .pg-board-head, .pg-board-head strong, .pg-mode, .pg-status small, .pg-build-result h2, .pg-validation h2 { display: flex; align-items: center; gap: 8px }
+.pg-status { justify-content: space-between; border-top: 1px solid var(--line); padding-top: 13px; font-size: 12px; color: #495b4e }
+.pg-status small { font-size: 11px }
+.pg-palette { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 13px 14px; background: #fffefa; border: 1px solid var(--line); border-radius: 9px }
+.pg-palette > strong { font: 600 16px var(--display) }
+.pg-palette > div { display: flex; flex-wrap: wrap; gap: 7px }
+.pg-add { display: flex; align-items: center; gap: 6px; padding: 8px 9px; border: 1px solid #cdd6c8; background: #f7f9f2; color: #344b36; border-radius: 5px; font-size: 12px; font-weight: 550 }
+.pg-add:hover { background: #e7f0df }
+.pg-add.network { color: #634978 }.pg-add.volume { color: #71562a }.pg-add.postgres { color: #385b72 }
+.pg-layout { display: grid; grid-template-columns: minmax(0,1fr) 255px; gap: 16px; align-items: start }
+.pg-board { min-width: 0; overflow: hidden; border-radius: 10px; border: 1px solid #3a5646; background: #19372d; color: #eaf2e4 }
+.pg-board-head { justify-content: space-between; padding: 11px 14px; border-bottom: 1px solid #456050; min-height: 49px }
+.pg-board-head strong { font: 600 16px var(--display) }
+.pg-board-head small { font: 11px var(--mono); color: #c3d3c4 }
+.pg-mode button, .pg-file-tabs button { display: inline-flex; align-items: center; gap: 6px; border: 1px solid transparent; background: transparent; color: #ccdbca; border-radius: 5px; font-size: 12px; padding: 6px 9px }
+.pg-mode button[aria-pressed=true], .pg-file-tabs button[aria-pressed=true] { color: #e6f5c9; background: #335641; border-color: #65855e }
+.pg-canvas { height: 415px; position: relative; background: #1b372e }
+.pg .react-flow.dark { background-color: transparent; --xy-attribution-background-color: #203d31; --xy-controls-button-background-color: #f5f6e9; --xy-controls-button-color: #283c2b }
+.pg .react-flow__attribution a { color: #cfddd0 }
+.pg .react-flow__node-resource { width: 165px }
+.pg-tile { padding: 11px; border-radius: 8px; border: 1px solid #90aa85; background: #eff4e7; color: #244332; box-shadow: 0 3px 8px #102b2450 }
+.pg-tile.current { outline: 2px solid #d2ef98; outline-offset: 3px }
+.pg-tile-title { display: flex; align-items: center; gap: 9px }
+.pg-tile-title > span { background: #dce9c9; border-radius: 6px; width: 30px; height: 30px; display: grid; place-items: center }
+.pg-tile.network { background: #eeebf4; border-color: #a79ac0; color: #4d4262 }.pg-tile.network .pg-tile-title > span { background: #e0d9ed }
+.pg-tile.volume { background: #f4efdf; border-color: #bcad80; color: #674f2d }.pg-tile.volume .pg-tile-title > span { background: #eadebe }
+.pg-tile.postgres, .pg-tile.redis { background: #e7eff1; color: #2d4d57; border-color: #89a7ab }.pg-tile.postgres .pg-tile-title > span, .pg-tile.redis .pg-tile-title > span { background: #d1e2e5 }
+.pg-tile-title > div { min-width: 0 }
+.pg-tile-title small, .pg-tile-title strong { display: block; word-break: break-word }
+.pg-tile-title small { font: 10px var(--mono) }.pg-tile-title strong { font: 600 16px var(--display); margin-top: 2px }
+.pg-tile code { display: block; border-top: 1px solid #83967b50; padding-top: 6px; margin-top: 8px; font-size: 11px }
+.pg .react-flow__handle { width: 12px; height: 12px; border: 2px solid #e6f4d9; background: #42724a }
+.pg-empty { position: absolute; top: 43%; width: 100%; text-align: center; pointer-events: none }
+.pg-canvas-help { padding: 10px 15px; font-size: 11px; line-height: 1.6; color: #d1dfcd; border-top: 1px solid #405b49; background: #142f25 }
+.pg-yaml { height: 415px; overflow: auto; padding: 15px; line-height: 1.65; font-size: 13px; color: #e0edcd }
+.pg-inspector, .pg-validation, .pg-build-result { padding: 18px }
+.pg-inspector { display: grid; gap: 12px; align-content: start; min-width: 0 }
+.pg-inspector label, .pg-port-readout { display: grid; gap: 4px; font-size: 11px; font-weight: 600; color: #45574a }
+.pg-inspector input:not([type=radio]), .pg-inspector select { width: 100%; min-width: 0; font: 12px 'Inter Variable', sans-serif; color: #243e2c; border: 1px solid #b9c5b6; border-radius: 5px; background: #fffefa; padding: 8px }
+.pg-fact { display: flex; justify-content: space-between; gap: 4px; font-size: 11px; line-height: 1.5 }.pg-fact code { overflow-wrap: anywhere }
+.pg-ports { display: grid; grid-template-columns: 1fr 1fr; gap: 9px }
+.pg-port-readout code { align-self: center; font-size: 13px }
+.pg-wiring { border-top: 1px solid var(--line); padding-top: 12px; display: grid; gap: 6px }
+.pg-link { border: 1px solid var(--line); border-radius: 5px; padding: 7px; font-size: 11px; background: #f5f7ee }
+.pg-link > div { display: flex; align-items: center; justify-content: space-between; overflow-wrap: anywhere }
+.pg-link button { display: grid; place-items: center; border: none; padding: 4px; background: transparent; color: #526456 }
+.pg-link label { margin-top: 6px }.pg-remove { justify-self: start; color: #834537 }
+.pg-message { font-size: 12px; color: #3d6044 }
+.pg-validation { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px }
+.pg-validation > div:first-child { flex: 1 1 330px }.pg-validation h2, .pg-build-result h2 { margin: 6px 0 }
+.pg p, .pg-validation li { font-size: 13px; line-height: 1.6 }.pg-validation p, .pg-inspector p, .pg-build-result p { color: #4f6053 }
+.pg-validation small, .pg-build-result > small { display: block; margin-top: 7px; color: #536456; font-size: 11px; line-height: 1.5 }
+.pg-validation ul { margin: 7px 0; padding-left: 19px; color: #80502e }
+.pg-frameworks { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 8px }
+.pg-frameworks button { display: flex; align-items: center; gap: 9px; text-align: left; padding: 12px; background: #fffefa; border: 1px solid var(--line); border-radius: 8px; color: #344d38 }
+.pg-frameworks button[aria-pressed=true] { border-color: #6a895d; background: #edf4df; box-shadow: inset 0 -2px #799b57 }
+.pg-framework-icon { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 5px; background: #dce9cc; flex-shrink: 0 }
+.pg-frameworks strong, .pg-frameworks small { display: block }.pg-frameworks strong { font: 600 18px var(--display) }.pg-frameworks small { font: 10px var(--mono); margin-top: 3px }
+.pg-file-tabs { padding: 9px; display: flex; flex-wrap: wrap; gap: 3px; border-bottom: 1px solid #405b49 }
+.pg-file-tabs button { font: 11px var(--mono) }
+.pg-editor { display: block; padding: 18px; width: 100%; height: 295px; border: 0; border-radius: 0; margin: 0; resize: vertical; overflow: auto; font: 13px/1.8 var(--mono); background: #172f28; color: #dbedbf; tab-size: 2 }
+.pg-editor:focus-visible { outline-offset: -3px }
+.pg-predict { border: 0; margin: 0; padding: 0; display: grid; gap: 6px }.pg-predict legend { font: 600 16px var(--display); margin-bottom: 8px }
+.pg-predict label { display: flex; flex-direction: row; align-items: center; gap: 7px; font-size: 12px; font-weight: 500 }
+.pg-hint { border-left: 2px solid #ad925c; padding-left: 8px }
+.pg-steps { padding-left: 27px; display: grid; gap: 6px; margin: 15px 0; font-size: 12px; color: #435e42 }
+.pg-steps li { padding-left: 4px }.pg-steps code, .pg-steps span { display: block; overflow-wrap: anywhere }.pg-steps span { color: #59675b; font-size: 11px; margin-top: 3px }
+@media (max-width:1100px) { .pg-layout { grid-template-columns: minmax(0,1fr) 213px; gap: 10px }.pg-inspector { padding: 14px }.pg-frameworks button { padding: 9px }.pg-framework-icon { display: none } }
+@media (max-width:850px) { .pg-layout { grid-template-columns: 1fr }.pg-inspector { grid-template-columns: repeat(2,minmax(0,1fr)); align-items: end }.pg-inspector > .micro, .pg-inspector > h2 { grid-column: 1/-1 }.pg-canvas { height: 340px } }
+@media (max-width:600px) { .pg-frameworks { grid-template-columns: repeat(2,minmax(0,1fr)) }.pg-framework-icon { display: grid }.pg-inspector { display: grid; grid-template-columns: 1fr }.pg-editor { padding: 12px; font-size: 12px }.pg-palette { padding: 11px }.pg-add { padding: 8px 6px }.pg-canvas,.pg-yaml { height: 320px }.pg-mode { gap: 1px }.pg-board-head { padding-inline: 9px } }

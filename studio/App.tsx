@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { ArrowRight, BookOpen, Box, Check, CheckCheck, ChevronRight, Circle, CircleDot, Container, FlaskConical, FolderCode, HardDrive, Layers3, Menu, Route, SquareTerminal, UserRound, X } from 'lucide-react';
 import { Activity } from './Activity';
 import { Topology } from './Topology';
@@ -6,9 +6,14 @@ import { FieldNotes, ProjectFiles } from './Resources';
 import { milestones } from './lab/content';
 import type { Stage } from './lab/journey';
 import { useProject } from './useProject';
+import { FileCode2, Workflow } from 'lucide-react';
+
+const Playgrounds = lazy(() => import('./playgrounds/Playgrounds'));
 
 const pages = [
   { id: 'lab', name: 'Lab workspace', icon: FlaskConical },
+  { id: 'graph', name: 'Resource playground', icon: Workflow },
+  { id: 'dockerfile', name: 'Dockerfile playground', icon: FileCode2 },
   { id: 'notes', name: 'Field notes', icon: BookOpen },
   { id: 'files', name: 'Project files', icon: FolderCode },
 ] as const;
@@ -40,7 +45,10 @@ export default function App() {
   const currentPage = pages.find(p => p.id === page)!;
   const title = page === 'lab' ? 'The unreachable container' : currentPage.name;
   const intro = page === 'lab' ? 'A Flask service is running inside Docker. Trace a request from your browser to the application and find out where the connection breaks.' :
+    page === 'graph' ? 'Connect services, networks and storage. Inspect the Compose file that describes your stack.' :
+    page === 'dockerfile' ? 'Build a container recipe for a sample application. Predict the result, inspect its layers and use the checked image recipe in your stack.' :
     page === 'notes' ? 'Container networking concepts and the evidence from your investigation.' : 'Inspect the sample application, export a verified build, and manage your guest project.';
+  const playground = page === 'graph' || page === 'dockerfile';
   return <div className="shell">
     <a href="#main" className="skip" onClick={e => { e.preventDefault(); heading.current?.focus(); }}>Skip to workspace</a>
     <aside className={'sidebar ' + (menu ? 'open' : '')}>
@@ -52,11 +60,11 @@ export default function App() {
         <div className="side-bottom"><div className="profile"><span><UserRound size={17}/></span><div><b>Guest workspace</b><small>Local session</small></div></div></div>
       </div>
     </aside>
-    <div className="workspace"><header className="topbar"><div><Layers3 size={16}/>Studio<ChevronRight size={12}/><b>{currentPage.name}</b></div><span className="storage"><HardDrive size={14}/>{status}</span></header>
-    <main id="main"><div className="intro"><div className="micro"><Container size={16}/>Docker networking</div>
+    <div className="workspace"><header className="topbar"><div><Layers3 size={16}/>Studio<ChevronRight size={12}/><b>{currentPage.name}</b></div>{!playground && <span className="storage"><HardDrive size={14}/>{status}</span>}</header>
+    <main id="main"><div className="intro"><div className="micro"><Container size={16}/>{playground ? 'Docker studio' : 'Docker networking'}</div>
       <h1 ref={heading} tabIndex={-1}>{title}</h1><p>{intro}</p>
     </div>
-    {notice && <div className="notice" role="alert"><span>{notice}</span><button className="quiet" onClick={() => setNotice('')} aria-label="Dismiss message"><X size={15}/></button></div>}
+    {notice && !playground && <div className="notice" role="alert"><span>{notice}</span><button className="quiet" onClick={() => setNotice('')} aria-label="Dismiss message"><X size={15}/></button></div>}
     {page === 'lab' ? <div className="lab-layout"><div className="work-column">
       <Topology session={session} key={session.lab.name}/>
       <Activity session={session} act={act} busy={busy} key={session.stage} showFiles={() => nextPage('files')}/>
@@ -69,7 +77,8 @@ export default function App() {
       <section className="brief card"><div className="micro"><Box size={15}/>Lab brief</div><p>Make <code>localhost:{session.lab.host}</code> reach the <strong>{session.lab.name}</strong> service through a published TCP port.</p>
         <a href="#notes">Open field notes<ArrowRight size={15}/></a></section>
       <div className="engine-note"><SquareTerminal size={14}/>Powered by DockerLab</div>
-    </aside></div> : page === 'notes' ? <FieldNotes project={workspace.project}/> : <ProjectFiles workspace={workspace} goLab={() => nextPage('lab')}/>}
+    </aside></div> : playground ? <Suspense fallback={<p role="status">Opening playground…</p>}><Playgrounds page={page}/></Suspense> :
+      page === 'notes' ? <FieldNotes project={workspace.project}/> : <ProjectFiles workspace={workspace} goLab={() => nextPage('lab')}/>}
     <footer><span>JIJO Learning Studio</span><span><CheckCheck size={14}/>Browser-based simulation</span></footer></main></div>
   </div>;
 }
