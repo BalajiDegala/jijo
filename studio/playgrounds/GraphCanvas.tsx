@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useLayoutEffect, useMemo } from 'react';
 import { Background, Controls, Handle, MarkerType, Position, ReactFlow, useNodesState, useReactFlow, ReactFlowProvider, type Node, type NodeProps } from '@xyflow/react';
 import { AppWindow, Database, Globe, HardDrive, Network, Server } from 'lucide-react';
 import '@xyflow/react/dist/style.css';
@@ -23,7 +23,7 @@ type Props = { graph: Graph; selected: string; select: (id: string) => void; con
 function Canvas({ graph, selected, select, connect, move }: Props) {
   const flow = useReactFlow();
   const [nodes, setNodes, onNodesChange] = useNodesState<Tile>([]);
-  useEffect(() => {
+  useLayoutEffect(() => {
     setNodes(graph.nodes.map(r => ({ id: r.id, type: 'resource', ariaLabel: r.name + ', ' + labels[r.kind],
       position: { x: r.x, y: r.y }, data: { resource: r, current: r.id === selected } })));
   }, [graph.nodes, selected, setNodes]);
@@ -38,9 +38,8 @@ function Canvas({ graph, selected, select, connect, move }: Props) {
       labelStyle: { fill: '#eef4df', fontSize: 11 }, labelBgStyle: { fill: '#233e32' } };
   }), [graph]);
   const nodeIds = graph.nodes.map(n => n.id).join(',');
-  useEffect(() => {
-    const timer = window.setTimeout(() => { void flow.fitView({ padding: .2, maxZoom: 1.2 }); }, 70);
-    return () => clearTimeout(timer);
+  useLayoutEffect(() => {
+    if (nodeIds) void flow.fitView({ padding: .2, maxZoom: 1.2 });
   }, [nodeIds, flow.fitView]);
   return <ReactFlow<Tile> nodes={nodes} edges={edges} nodeTypes={nodeTypes} minZoom={0.15} maxZoom={2.5}
     onNodesChange={onNodesChange} onNodeClick={(_, n) => select(n.id)}

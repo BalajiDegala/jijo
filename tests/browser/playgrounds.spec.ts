@@ -95,14 +95,7 @@ test('dragging a wire on the canvas creates a Compose mount', async ({ page }) =
   await page.getByRole('button', { name: 'Add Volume' }).click();
   const start = page.getByLabel('Connect from nginx', { exact: true });
   const end = page.getByLabel('Connect to volume', { exact: true });
-  await start.hover();
-  const a = await start.boundingBox();
-  const b = await end.boundingBox();
-  if (!a || !b) throw new Error('Graph handles are missing.');
-  await page.mouse.move(a.x + a.width / 2, a.y + a.height / 2);
-  await page.mouse.down();
-  await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2, { steps: 16 });
-  await page.mouse.up();
+  await start.dragTo(end, { steps: 16 });
   await expect(page.getByRole('group', { name: 'nginx mounts volume' })).toBeVisible();
   await page.getByRole('button', { name: 'Compose YAML' }).click();
   await expect(page.getByLabel('Generated Compose YAML')).toContainText('volume:/data');
