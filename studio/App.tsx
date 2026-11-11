@@ -1,71 +1,92 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
-import { ArrowRight, BookOpen, Box, Check, CheckCheck, ChevronRight, Circle, CircleDot, Container, FlaskConical, FolderCode, HardDrive, Layers3, Menu, Route, SquareTerminal, UserRound, X } from 'lucide-react';
+import { ArrowRight, Box, Check, CheckCheck, ChevronRight, Circle, CircleDot, HardDrive, PanelLeftClose, PanelLeftOpen, Route, SquareTerminal, X } from 'lucide-react';
 import { Activity } from './Activity';
 import { Topology } from './Topology';
 import { FieldNotes, ProjectFiles } from './Resources';
+import { Brand, DockerOverview, ModuleLibrary } from './ModuleLibrary';
+import { pages, readPage, StudioNavigation, type Page } from './StudioNavigation';
 import { milestones } from './lab/content';
 import type { Stage } from './lab/journey';
 import { useProject } from './useProject';
-import { FileCode2, Workflow } from 'lucide-react';
 
 const Playgrounds = lazy(() => import('./playgrounds/Playgrounds'));
-
-const pages = [
-  { id: 'lab', name: 'Lab workspace', icon: FlaskConical },
-  { id: 'graph', name: 'Resource playground', icon: Workflow },
-  { id: 'dockerfile', name: 'Dockerfile playground', icon: FileCode2 },
-  { id: 'notes', name: 'Field notes', icon: BookOpen },
-  { id: 'files', name: 'Project files', icon: FolderCode },
-] as const;
-type Page = (typeof pages)[number]['id'];
-const readPage = (): Page => pages.find(p => p.id === window.location.hash.slice(1))?.id ?? 'lab';
 const finished: Record<Stage, number> = { predict: 0, repair: 1, explain: 2, transfer: 3, complete: 4 };
 const objectives = ['Record a prediction', 'Get a verified HTTP response', 'Connect the evidence', 'Repair a different service'];
+const sidebarPreference = 'jijo.sidebar';
+function readPreference() {
+  try {
+    const saved = localStorage.getItem(sidebarPreference);
+    return saved === 'open' ? true : saved === 'closed' ? false : null;
+  } catch { return null; }
+}
 
 export default function App() {
   const workspace = useProject();
   const { session, act, busy, status, notice, setNotice } = workspace;
   const [page, setPage] = useState<Page>(readPage);
-  const [menu, setMenu] = useState(false);
+  const [preference, setPreference] = useState(readPreference);
+  const [mobile, setMobile] = useState(() => matchMedia('(max-width: 650px)').matches);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const heading = useRef<HTMLHeadingElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
+  const playground = page === 'graph' || page === 'dockerfile';
+  const library = page === 'modules';
+  const open = !library && (mobile ? mobileOpen : (preference ?? !playground));
+  const title = page === 'lab' ? 'The unreachable container' : pages[page];
+
   useEffect(() => {
-    const navigate = () => { setPage(readPage()); setMenu(false); requestAnimationFrame(() => heading.current?.focus()); };
+    const navigate = () => {
+      setPage(readPage());
+      setMobileOpen(false);
+      requestAnimationFrame(() => { window.scrollTo(0, 0); heading.current?.focus({ preventScroll: true }); });
+    };
+    const media = matchMedia('(max-width: 650px)');
+    const resize = () => { setMobile(media.matches); setMobileOpen(false); };
     window.addEventListener('hashchange', navigate);
-    return () => window.removeEventListener('hashchange', navigate);
+    media.addEventListener('change', resize);
+    return () => { window.removeEventListener('hashchange', navigate); media.removeEventListener('change', resize); };
   }, []);
+  useEffect(() => { document.title = title + ' · JIJO Learning Studio'; }, [title]);
   useEffect(() => {
-    if (!menu) return;
-    const escape = (e: KeyboardEvent) => { if (e.key === 'Escape') { setMenu(false); menuButton.current?.focus(); } };
+    if (!mobile || !mobileOpen) return;
+    const escape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { setMobileOpen(false); menuButton.current?.focus(); }
+    };
     window.addEventListener('keydown', escape);
     return () => window.removeEventListener('keydown', escape);
-  }, [menu]);
+  }, [mobile, mobileOpen]);
+  function toggleSidebar() {
+    if (mobile) {
+      setMobileOpen(!open);
+      if (!open) requestAnimationFrame(() => document.querySelector<HTMLAnchorElement>('#side-navigation .all-modules')?.focus());
+    } else {
+      setPreference(!open);
+      try { localStorage.setItem(sidebarPreference, open ? 'closed' : 'open'); } catch { /* The toggle still works for this session. */ }
+    }
+  }
   const nextPage = (id: Page) => { window.location.hash = id; };
   const count = finished[session.stage];
-  const currentPage = pages.find(p => p.id === page)!;
-  const title = page === 'lab' ? 'The unreachable container' : currentPage.name;
-  const intro = page === 'lab' ? 'A Flask service is running inside Docker. Trace a request from your browser to the application and find out where the connection breaks.' :
-    page === 'graph' ? 'Connect services, networks and storage. Inspect the Compose file that describes your stack.' :
-    page === 'dockerfile' ? 'Build a container recipe for a sample application. Predict the result, inspect its layers and use the checked image recipe in your stack.' :
-    page === 'notes' ? 'Container networking concepts and the evidence from your investigation.' : 'Inspect the sample application, export a verified build, and manage your guest project.';
-  const playground = page === 'graph' || page === 'dockerfile';
-  return <div className="shell">
+  const intro = page === 'lab' ? 'Trace a browser request to a Flask service and find where the connection breaks.' :
+    page === 'notes' ? 'Container networking concepts and evidence from your investigation.' :
+    page === 'files' ? 'Inspect the sample application, export a verified build and manage your guest project.' :
+    page === 'modules' ? 'Choose a module to start learning.' : '';
+  return <div className={'shell' + (open ? '' : ' nav-closed') + (library ? ' library-shell' : '')}>
     <a href="#main" className="skip" onClick={e => { e.preventDefault(); heading.current?.focus(); }}>Skip to workspace</a>
-    <aside className={'sidebar ' + (menu ? 'open' : '')}>
-      <div className="brand-row"><a className="brand" href="#lab" aria-label="JIJO lab workspace"><img alt="" src="/jijo.svg"/>JIJO<span className="brand-period">.</span></a>
-        <button ref={menuButton} className="mobile-toggle" aria-expanded={menu} aria-controls="side-navigation" aria-label="Toggle navigation" onClick={() => setMenu(!menu)}>{menu ? <X/> : <Menu/>}</button></div>
-      <div className="side-body" id="side-navigation">
-        <div className="nav-caption">Learning studio</div>
-        <nav aria-label="Workspace">{pages.map(p => <a key={p.id} aria-current={page === p.id ? 'page' : undefined} href={'#' + p.id} onClick={() => setMenu(false)}><p.icon size={18}/>{p.name}{page === p.id && <ChevronRight className="nav-arrow" size={14}/>}</a>)}</nav>
-        <div className="side-bottom"><div className="profile"><span><UserRound size={17}/></span><div><b>Guest workspace</b><small>Local session</small></div></div></div>
-      </div>
-    </aside>
-    <div className="workspace"><header className="topbar"><div><Layers3 size={16}/>Studio<ChevronRight size={12}/><b>{currentPage.name}</b></div>{!playground && <span className="storage"><HardDrive size={14}/>{status}</span>}</header>
-    <main id="main"><div className="intro"><div className="micro"><Container size={16}/>{playground ? 'Docker studio' : 'Docker networking'}</div>
-      <h1 ref={heading} tabIndex={-1}>{title}</h1><p>{intro}</p>
-    </div>
-    {notice && !playground && <div className="notice" role="alert"><span>{notice}</span><button className="quiet" onClick={() => setNotice('')} aria-label="Dismiss message"><X size={15}/></button></div>}
-    {page === 'lab' ? <div className="lab-layout"><div className="work-column">
+    {!library && <StudioNavigation page={page} open={open} onNavigate={() => { setMobileOpen(false); if (mobile) menuButton.current?.focus(); }}/>}
+    <div className="workspace">
+      {library ? <header className="directory-bar"><Brand/><span>Learning studio</span></header> :
+        <header className="topbar"><div>
+          <button ref={menuButton} type="button" className="sidebar-toggle" aria-label={mobile ? 'Toggle navigation' : open ? 'Close sidebar' : 'Open sidebar'}
+            title={open ? 'Close sidebar' : 'Open sidebar'} aria-expanded={open} aria-controls="side-navigation" onClick={toggleSidebar}>
+            {open ? <PanelLeftClose size={19}/> : <PanelLeftOpen size={19}/>}
+          </button>
+          <a href="#modules">Modules</a><ChevronRight size={12}/>
+          {page === 'docker' ? <b>Docker</b> : <><a href="#docker">Docker</a><ChevronRight size={12}/><b>{pages[page]}</b></>}
+        </div>{!playground && <span className="storage"><HardDrive size={14}/>{status}</span>}</header>}
+      <main id="main" className={library ? 'library-main' : playground ? 'playground-main' : page === 'docker' ? 'overview-main' : ''}>
+        <div className="intro"><h1 ref={heading} tabIndex={-1}>{title}</h1>{intro && <p>{intro}</p>}</div>
+        {notice && !playground && !library && <div className="notice" role="alert"><span>{notice}</span><button className="quiet" onClick={() => setNotice('')} aria-label="Dismiss message"><X size={15}/></button></div>}
+    {library ? <ModuleLibrary/> : page === 'docker' ? <DockerOverview completed={count}/> : page === 'lab' ? <div className="lab-layout"><div className="work-column">
       <Topology session={session} key={session.lab.name}/>
       <Activity session={session} act={act} busy={busy} key={session.stage} showFiles={() => nextPage('files')}/>
     </div><aside className="right-column">
@@ -79,6 +100,6 @@ export default function App() {
       <div className="engine-note"><SquareTerminal size={14}/>Powered by DockerLab</div>
     </aside></div> : playground ? <Suspense fallback={<p role="status">Opening playground…</p>}><Playgrounds page={page}/></Suspense> :
       page === 'notes' ? <FieldNotes project={workspace.project}/> : <ProjectFiles workspace={workspace} goLab={() => nextPage('lab')}/>}
-    <footer><span>JIJO Learning Studio</span><span><CheckCheck size={14}/>Browser-based simulation</span></footer></main></div>
+    {!library && <footer><span>JIJO Learning Studio</span><span><CheckCheck size={14}/>Browser-based simulation</span></footer>}</main></div>
   </div>;
 }

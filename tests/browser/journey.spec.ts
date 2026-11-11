@@ -14,6 +14,8 @@ test('repairs both services, retries an explanation, resumes and exports the ver
   const errors: string[] = [];
   page.on('pageerror', e => errors.push(e.message));
   await page.goto('/');
+  await page.getByRole('link', { name: /Docker.*Open module/ }).click();
+  await page.getByRole('link', { name: /The unreachable container.*Start lesson/ }).click();
   await expect(page.getByText('Saved on this device')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Record prediction & test' })).toBeDisabled();
   await page.getByRole('button', { name: 'Dockerfile', exact: true }).click();
@@ -58,12 +60,13 @@ test('repairs both services, retries an explanation, resumes and exports the ver
 
 test('mobile navigation, backup import, reset, and invalid-file recovery', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/');
+  await page.goto('/#lab');
   await expect(page.getByText('Saved on this device')).toBeVisible();
   await page.screenshot({ path: 'test-results/jijo-mobile.png', fullPage: true });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await predict(page);
   await page.getByRole('button', { name: 'Toggle navigation' }).click();
+  await page.locator('summary').filter({ hasText: 'Reference' }).click();
   await page.getByRole('link', { name: 'Project files' }).click();
   const pending = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Save backup' }).click();
@@ -75,6 +78,7 @@ test('mobile navigation, backup import, reset, and invalid-file recovery', async
   await page.getByRole('button', { name: 'Confirm replacement' }).click();
   await expect(page.getByRole('heading', { name: 'What will the browser receive?' })).toBeVisible();
   await page.getByRole('button', { name: 'Toggle navigation' }).click();
+  await page.locator('summary').filter({ hasText: 'Reference' }).click();
   await page.getByRole('link', { name: 'Project files' }).click();
   await page.getByLabel('Choose project backup').setInputFiles(backup!);
   await page.getByRole('button', { name: 'Confirm replacement' }).click();
@@ -83,18 +87,19 @@ test('mobile navigation, backup import, reset, and invalid-file recovery', async
 
 test('competing tabs recover from stale revisions', async ({ page, context }) => {
   const other = await context.newPage();
-  await Promise.all([page.goto('/'), other.goto('/')]);
+  await Promise.all([page.goto('/#lab'), other.goto('/#lab')]);
   await expect(page.getByText('Saved on this device')).toBeVisible();
   await expect(other.getByText('Saved on this device')).toBeVisible();
   await predict(page);
   await predict(other);
   await expect(other.getByRole('alert')).toContainText('Another tab saved first');
+  await other.locator('summary').filter({ hasText: 'Reference' }).click();
   await other.getByRole('link', { name: 'Field notes', exact: true }).click();
   await expect(other.locator('.journal li')).toHaveCount(1);
 });
 
 test('keyboard prediction and WCAG checks on the prediction and repair screens', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#lab');
   await expect(page.getByText('Saved on this device')).toBeVisible();
   await page.addScriptTag({ content: axe.source });
   async function checkAccessibility() {
@@ -116,14 +121,14 @@ test('keyboard prediction and WCAG checks on the prediction and repair screens',
 
 test('denied browser storage keeps the journey usable', async ({ page }) => {
   await page.addInitScript(() => Object.defineProperty(window, 'indexedDB', { get() { throw new Error('blocked'); } }));
-  await page.goto('/');
+  await page.goto('/#lab');
   await expect(page.getByText('Session only', { exact: true })).toBeVisible();
   await predict(page);
   await expect(page.getByRole('alert')).toContainText('download a backup');
 });
 
 test('damaged progress is preserved until the learner confirms replacement', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#lab');
   await expect(page.getByText('Saved on this device')).toBeVisible();
   await page.evaluate(() => new Promise<void>((resolve, reject) => {
     const request = indexedDB.open('jijo-studio', 1);
@@ -136,6 +141,7 @@ test('damaged progress is preserved until the learner confirms replacement', asy
   }));
   await page.reload();
   await expect(page.getByText('Recovery needed', { exact: true })).toBeVisible();
+  await page.locator('summary').filter({ hasText: 'Reference' }).click();
   await page.getByRole('link', { name: 'Project files' }).click();
   await page.getByRole('button', { name: 'Start again' }).click();
   await page.getByRole('button', { name: 'Confirm replacement' }).click();

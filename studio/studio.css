@@ -37,21 +37,13 @@ button, a { touch-action: manipulation }
 .brand { text-decoration: none; color: #f5f8e9; display: flex; align-items: center; font: 700 31px/1 var(--display); letter-spacing: -1.8px }
 .brand img { height: 34px; width: 34px; margin-right: 10px; border: 1px solid #6a8a60; border-radius: 8px }
 .brand-period { color: var(--accent) }
-.side-body { flex: 1; display: flex; flex-direction: column; padding: 34px 14px 0; min-height: 0 }
-.nav-caption, .micro { font-size: 10px; font-weight: 700; letter-spacing: .125em; text-transform: uppercase }
-.nav-caption { color: #b0c2b6; margin: 0 12px 14px }
+.side-body { flex: 1; min-height: 0; overflow-y: auto; padding: 16px 12px }
+.micro { font-size: 10px; font-weight: 700; letter-spacing: .125em; text-transform: uppercase }
 nav { display: grid; gap: 6px }
 nav a { color: #c4d4ca; display: flex; gap: 12px; align-items: center; padding: 12px; text-decoration: none; border-radius: 6px; font-size: 13px; font-weight: 550 }
 nav a:hover { background: #26453a }
 nav a[aria-current] { color: #ebf5d8; background: #315443; box-shadow: inset 3px 0 #c2e889 }
 nav a[aria-current] svg { color: #c6e98a }
-.nav-arrow { margin-left: auto }
-.side-bottom { margin-top: auto; padding: 22px 4px; border-top: 1px solid #375147 }
-.profile { display: flex; align-items: center; gap: 10px }
-.profile > span { background: #2d493b; color: #d5e4bf; border: 1px solid #52674f; border-radius: 50%; display: grid; place-items: center; width: 33px; height: 33px }
-.profile b, .profile small { display: block; font-size: 12px; font-weight: 550 }
-.profile small { margin-top: 4px; font-size: 10px; font-weight: 400; color: #becdbf }
-.mobile-toggle { display: none }
 .workspace { min-width: 0 }
 .topbar { display: flex; justify-content: space-between; align-items: center; height: 65px; background: #fcfcf9; border-bottom: 1px solid var(--line); padding: 0 clamp(20px, 3.2vw, 62px); font-size: 12px; color: var(--muted) }
 .topbar > div, .storage, .micro, .engine-note, footer span { display: flex; align-items: center; gap: 8px }
@@ -178,8 +170,8 @@ summary { cursor: pointer }
   .activity, .reference { padding: 18px } .journey, .brief { padding: 16px }
 }
 @media (max-width: 900px) {
-  .shell { grid-template-columns: 150px minmax(0, 1fr) }
-  nav a { gap: 8px; font-size: 12px } .nav-arrow { display: none }
+  .shell { grid-template-columns: 176px minmax(0, 1fr) }
+  nav a { gap: 8px; font-size: 12px }
   .lab-layout { grid-template-columns: 1fr }
   .right-column { grid-template-columns: 1fr 1fr; align-items: start }
   .engine-note { display: none }
@@ -187,13 +179,11 @@ summary { cursor: pointer }
 }
 @media (max-width: 650px) {
   .shell { display: block }
-  .sidebar { height: auto; z-index: 3 }
-  .brand-row { justify-content: space-between; height: 51px; padding-inline: 17px }
+  .sidebar { position: fixed; z-index: 5; inset: 48px 0 auto; height: auto; max-height: calc(100dvh - 48px); box-shadow: 0 12px 22px #16342b30 }
+  .sidebar .brand-row { display: none }
   .brand { font-size: 25px } .brand img { width: 28px; height: 28px }
-  .mobile-toggle { display: grid; place-items: center; width: 38px; height: 38px; background: transparent; border: none; color: #e5edde }
-  .side-body { display: none } .open .side-body { display: block; padding: 14px 16px; border-bottom: 1px solid #4b6555 }
-  .side-bottom, .nav-caption { display: none }
-  .topbar { height: 40px; padding: 0 16px; font-size: 11px }.storage { font-size: 10px }
+  .topbar { position: sticky; top: 0; z-index: 4 }
+  .topbar { height: 48px; padding: 0 12px; font-size: 11px }.storage { font-size: 10px }
   main { padding: 21px 14px 18px }.intro { margin-bottom: 18px }.intro p { font-size: 13px }
   h1 { font-size: 34px } h2 { font-size: 21px }
   .topo-head { padding: 14px 13px 9px } .topo-tabs { padding-left: 14px }
@@ -204,3 +194,95 @@ summary { cursor: pointer }
   .mapping-form { gap: 7px }.mapping-form input { width: 100px }.activity, .reference { padding: 16px }
 }
 @media (prefers-reduced-motion: no-preference) { button, nav a { transition: background-color .14s, border-color .14s } }
+
+.shell.nav-closed { grid-template-columns: minmax(0, 1fr) }
+.sidebar[hidden] { display: none }
+.sidebar nav { gap: 3px }
+.sidebar nav a, .sidebar summary { padding: 10px 9px; gap: 9px }
+.sidebar nav svg { flex: none }
+.sidebar summary { display: flex; align-items: center; list-style: none; color: #c4d4ca; font-size: 13px; font-weight: 550; border-radius: 6px }
+.sidebar summary:hover { background: #26453a }
+.sidebar summary::-webkit-details-marker { display: none }
+.sidebar summary svg:last-child { margin-left: auto; transform: rotate(-90deg) }
+.sidebar details[open] > summary svg:last-child { transform: none }
+.sidebar details a { font-size: 12px; margin-left: 10px }
+.all-modules, .module-nav-title { display: flex; align-items: center; gap: 8px }
+.all-modules { text-decoration: none; color: #c7d9cb; padding: 7px 9px; font-size: 12px }
+.all-modules:hover, .topbar a:hover { text-decoration: underline }
+.module-nav-title { padding: 20px 9px 10px; font: 650 19px var(--display); color: #edf7e6 }
+.sidebar-toggle { display: inline-grid; place-items: center; flex: none; width: 34px; height: 34px; color: var(--forest); background: transparent; border: 1px solid #cdd7cd; border-radius: 6px; margin-right: 4px }
+.sidebar-toggle:hover { background: #e8eee3 }
+.topbar { height: 49px; padding-inline: clamp(12px, 2vw, 34px) }
+.topbar a { text-decoration: none }
+.directory-bar { display: flex; align-items: center; height: 63px; padding-inline: max(20px, calc((100vw - 1024px) / 2)); background: #142e29; color: #dfe9df; gap: 22px }
+.directory-bar > span { padding-left: 19px; border-left: 1px solid #526659; font-size: 13px }
+.library-main, .overview-main { width: 100%; max-width: 1080px; padding: clamp(24px, 4vw, 56px) clamp(16px, 3vw, 40px) }
+.overview-main { margin-inline: 0; padding-block: 28px }
+.library-main h1, .overview-main h1 { margin-top: 0 }
+.module-directory, .docker-overview { display: grid; gap: 25px }
+.module-feature, .lesson-card { display: flex; gap: 18px; align-items: center; text-decoration: none; padding: 24px; border-radius: 12px }
+.module-feature { color: #edf4e7; background: #1c4036; border: 1px solid #345b49 }
+.module-feature:hover { background: #244b3f }
+.module-symbol { display: grid; place-items: center; flex: none; width: 55px; height: 55px; border-radius: 12px; color: #d7f0a8; background: #315541; border: 1px solid #55775c }
+.module-feature h2 { font-size: 29px }
+.module-feature p, .lesson-card p, .studio-card p, .tool-list p { margin: 5px 0; font-size: 13px; line-height: 1.5 }
+.module-feature p { color: #d8e4d7 }
+.module-feature small, .lesson-card small { font: 11px var(--mono) }
+.module-feature small { color: #cee7b3 }
+.module-action { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 650; white-space: nowrap }
+.module-feature .module-action { background: #d3eaa7; color: #233e2a; padding: 10px 13px; border-radius: 6px }
+.library-label { font-size: 19px; margin-bottom: 10px }
+.studio-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px }
+.studio-card, .lesson-card, .tool-list { background: #fffefa; border: 1px solid var(--line) }
+.studio-card { display: grid; grid-template-columns: 1fr auto; align-content: start; align-items: start; border-radius: 10px; padding: 17px; text-decoration: none }
+.studio-card:hover, .lesson-card:hover, .tool-list a:hover { background: #eff3e9; border-color: #9eafa0 }
+.studio-icon { width: 38px; height: 38px; border-radius: 8px; display: grid; place-items: center }
+.git .studio-icon { background: #f5e8dd; color: #8c523c }
+.network .studio-icon { background: #dfedf2; color: #345e72 }
+.terraform .studio-icon { background: #eae6f3; color: #5e4782 }
+.outbound { color: #627067 }
+.studio-card h3, .studio-card p { grid-column: 1 / -1 }
+.studio-card h3 { font-size: 22px; margin-top: 13px }
+.studio-card p, .lesson-card p, .tool-list p { color: #53615b }
+.library-reference, .module-references a { display: inline-flex; align-items: center; gap: 8px; width: fit-content; color: #375d45; text-underline-offset: 3px; font-size: 13px }
+.lesson-card { padding: 18px; gap: 14px }
+.lesson-card .module-symbol { background: #e6efdc; color: #416343; border: none }
+.lesson-card h3, .tool-list h3 { font-size: 20px }
+.lesson-card small { color: #53654e }
+.tool-list { border-radius: 10px; overflow: hidden }
+.tool-list a { display: flex; gap: 16px; align-items: center; padding: 14px 18px; text-decoration: none; color: #375b43 }
+.tool-list a + a { border-top: 1px solid var(--line) }
+.tool-list a > svg { flex: none }
+.tool-list a > svg:last-child { margin-left: auto }
+.tool-list h3 { color: #233c2f }
+.tool-list p { margin: 3px 0 0 }
+.module-references { display: flex; flex-wrap: wrap; gap: 18px }
+.playground-main { max-width: none; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px 8px; padding: 16px clamp(12px, 2vw, 34px) 18px }
+.playground-main .intro { margin: 0; align-self: center }
+.playground-main h1 { margin: 0; font-size: clamp(24px, 2.2vw, 34px) }
+.playground-main .pg { display: contents }
+.playground-main .pg > *, .playground-main > footer, .playground-main > [role=status] { grid-column: 1 / -1 }
+.playground-main .pg .pg-status { grid-row: 1; grid-column: 2; justify-content: end; gap: 12px; padding: 0; border: 0 }
+@media (min-width: 901px) {
+  .playground-main .pg-canvas, .playground-main .pg-yaml { height: clamp(380px, calc(100dvh - 250px), 760px) }
+}
+@media (max-width: 650px) {
+  .topbar { height: 48px }
+  .sidebar .side-body { padding: 8px 14px 16px }
+  .module-nav-title { padding-top: 9px }
+  .topbar > div { gap: 4px }
+  .storage { font-size: 10px; gap: 4px }
+  .directory-bar { height: 52px }
+  .studio-grid { grid-template-columns: 1fr }
+  .studio-card { grid-template-columns: auto 1fr auto; gap: 2px 12px; padding: 12px }
+  .studio-icon { grid-row: 1 / 3; align-self: center }
+  .studio-card h3, .studio-card p { grid-column: 2; margin: 0 }
+  .studio-card h3 { grid-row: 1 }
+  .outbound { grid-column: 3; grid-row: 1 / 3; align-self: center }
+  .module-feature, .lesson-card { display: grid; grid-template-columns: auto minmax(0,1fr); padding: 16px; gap: 10px }
+  .module-symbol { width: 40px; height: 40px; border-radius: 8px }
+  .module-action { grid-column: 2; margin: 0; justify-self: start }
+  .tool-list a { padding: 12px; gap: 10px }
+  .playground-main { grid-template-columns: minmax(0, 1fr); gap: 9px }
+  .playground-main .pg .pg-status { grid-row: auto; grid-column: 1; justify-content: space-between }
+}

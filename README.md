@@ -17,7 +17,7 @@ Open [the local studio](http://127.0.0.1:4178). Guest progress is saved in Index
 
 ## Docker playgrounds
 
-Two playgrounds are available from the studio navigation.
+Open **Docker** from the learning module directory. Its overview groups the guided lesson and two playgrounds. The sidebar opens from the top left and remembers a desktop preference on this device. Git, Networking and Terraform open their standalone studios.
 
 - **Resource playground** (`#graph`) supports application, Nginx, PostgreSQL, Redis, network and volume nodes. Drag the handles or use the inspector to connect resources. Resolve validation errors to download the generated Compose file or a ZIP with each application's build context.
 - **Dockerfile playground** (`#dockerfile`) includes Flask, FastAPI, Express and Fastify starters and repair exercises. Edit a Dockerfile, predict the result, run the simulated build, then add the checked recipe to the graph. Use **Edit service Dockerfile** in the inspector to update an existing service.
