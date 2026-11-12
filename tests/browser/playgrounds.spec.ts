@@ -103,8 +103,8 @@ test('dragging a wire on the canvas creates a Compose mount', async ({ page }) =
   await page.goto('/#graph');
   await addNode(page,'Nginx');
   await addNode(page,'Volume');
-  const start = page.getByLabel('Connect from nginx', { exact: true });
-  const end = page.getByLabel('Connect to volume', { exact: true });
+  const start = page.getByTitle('Connect from nginx', { exact: true });
+  const end = page.getByTitle('Connect to volume', { exact: true });
   await start.dragTo(end, { steps: 16 });
   await expect(page.getByRole('group', { name: 'nginx mounts volume' })).toBeVisible();
   await page.getByRole('button', { name: 'Compose YAML' }).click();

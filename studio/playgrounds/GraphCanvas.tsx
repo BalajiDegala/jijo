@@ -16,8 +16,8 @@ type Tile = Node<{ item: CanvasItem; current: boolean; signal: string; menu: Sho
 function TileView({ data }: NodeProps<Tile>) {
   const { item, signal } = data;
   return <div className={'pg-tile ' + item.color + (data.current ? ' current' : '') + (signal ? ' wire-' + signal : '')}>
-    <Handle id="vertical-in" type="target" position={Position.Top} className="vertical-port" aria-label={'Top input on ' + item.name}/>
-    <Handle id="in" type="target" position={item.reverse ? Position.Right : Position.Left} aria-label={'Connect to ' + item.name}/>
+    <Handle id="vertical-in" type="target" position={Position.Top} className="vertical-port" aria-hidden="true" title={'Top input on ' + item.name}/>
+    <Handle id="in" type="target" position={item.reverse ? Position.Right : Position.Left} aria-hidden="true" title={'Connect to ' + item.name}/>
     <div className="pg-tile-title"><span><item.icon size={18}/></span><div><small>{item.kind}</small><strong>{item.name || '(unnamed)'}</strong></div>
       {!signal && <button className="node-actions nodrag nopan" aria-label={'Actions for ' + item.name} onClick={e => {
         e.stopPropagation(); const box = e.currentTarget.getBoundingClientRect(); data.menu(item.id, box.left, box.bottom);
@@ -25,8 +25,8 @@ function TileView({ data }: NodeProps<Tile>) {
     </div>
     <code>{item.detail}</code>
     {(signal === 'source' || signal === 'target') && <span className="wire-label">{signal === 'source' ? 'Connecting…' : 'Connect here'}</span>}
-    {item.source && <><Handle id="out" type="source" position={item.reverse ? Position.Left : Position.Right} aria-label={'Connect from ' + item.name}/>
-      <Handle id="vertical-out" type="source" position={Position.Bottom} className="vertical-port" aria-label={'Bottom output on ' + item.name}/></>}
+    {item.source && <><Handle id="out" type="source" position={item.reverse ? Position.Left : Position.Right} aria-hidden="true" title={'Connect from ' + item.name}/>
+      <Handle id="vertical-out" type="source" position={Position.Bottom} className="vertical-port" aria-hidden="true" title={'Bottom output on ' + item.name}/></>}
   </div>;
 }
 const nodeTypes = { tile: TileView };
