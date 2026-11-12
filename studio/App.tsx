@@ -87,7 +87,7 @@ export default function App() {
         <div className="intro">{playground && <span className={'page-icon ' + page} aria-hidden="true">{page === 'graph' ? <Workflow size={20}/> : <FileCode2 size={20}/>}</span>}<h1 ref={heading} tabIndex={-1}>{title}</h1>{intro && <p>{intro}</p>}</div>
         {notice && !playground && !library && <div className="notice" role="alert"><span>{notice}</span><button className="quiet" onClick={() => setNotice('')} aria-label="Dismiss message"><X size={15}/></button></div>}
     {library ? <ModuleLibrary/> : page === 'docker' ? <DockerOverview completed={count}/> : page === 'lab' ? <div className="lab-layout"><div className="work-column">
-      <Topology session={session} key={session.lab.name}/>
+      <Topology session={session} act={act} busy={busy} key={session.lab.name}/>
       <Activity session={session} act={act} busy={busy} key={session.stage} showFiles={() => nextPage('files')}/>
     </div><aside className="right-column">
       <section className="card journey"><div className="section-heading"><span className="icon-tile"><Route size={18}/></span><h2>Lab journey</h2></div>

@@ -9,6 +9,13 @@ export interface Lab {
 export const guided: Lab = { name: 'flask-web', image: 'jijo/flask-web:v1', host: 8080, listener: 5000 };
 export const transfer: Lab = { name: 'weather-api', image: 'jijo/weather-api:v1', host: 9090, listener: 7000, initialTarget: 5000 };
 
+export function portExperiments(lab: Lab) {
+  return [
+    { name: 'Change the host port', host: lab.host + 1, target: lab.listener },
+    { name: 'Change the container port', host: lab.host, target: lab.listener + 1 },
+  ];
+}
+
 export const milestones = ['Predict the response', 'Repair the connection', 'Explain the fix', 'Solve a new case'];
 export const frameworks = ['Flask', 'FastAPI', 'Express', 'Fastify'] as const;
 export type Framework = typeof frameworks[number];

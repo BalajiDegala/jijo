@@ -99,6 +99,54 @@ h1:focus { outline: none }
 .topo-code { padding: 12px 16px; overflow: auto; min-height: 186px }
 .topo-code pre { font-size: 12px; line-height: 1.7; color: var(--secondary-text) }
 .topo-code i { color: var(--muted); font-style: normal; margin-right: 12px }
+.mission-browser { padding: 14px 18px; background: var(--panel) }
+.browser-toolbar { display: flex; align-items: center; gap: 10px; padding: 5px 6px 5px 10px; border: 1px solid var(--line-strong); border-radius: 8px 8px 0 0; background: var(--surface); color: var(--muted); min-height: 36px }
+.browser-toolbar code { flex: 1; font-size: 12px; color: var(--secondary-text); overflow-wrap: anywhere }
+.browser-toolbar button, .trace-controls button { display: inline-flex; align-items: center; justify-content: center; gap: 5px; border: 1px solid var(--line-strong); border-radius: 5px; background: var(--panel); color: var(--secondary-text); font-size: 12px; min-height: 30px; padding: 4px 8px }
+.browser-toolbar button { color: var(--ink); background: var(--accent); border-color: var(--accent); font-weight: 650 }
+.browser-receipt { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 10px; font-size: 12px; background: var(--canvas); color: var(--muted); border: 1px solid var(--line-strong); border-top: 0; border-radius: 0 0 8px 8px }
+.browser-receipt strong, .request-comparison span { display: inline-flex; align-items: center; gap: 4px }
+.pass-text { color: var(--mint) } .stop-text { color: var(--amber) }
+.request-stale { color: var(--amber); font-size: 12px; margin-top: 8px }
+.mission-circuit { border-top: 1px solid var(--line) }
+.mission-devices { --device-span: clamp(70px, 6vw, 92px) }
+.mission-devices .reached:not(:first-child)::before { content: ''; position: absolute; top: 48px; right: calc(50% + var(--device-span) / 2); width: calc(100% - var(--device-span) + 4px); height: 2px; background: var(--cyan); box-shadow: 0 0 6px var(--cyan); pointer-events: none }
+.mission-devices .current-hop .device { filter: drop-shadow(0 0 6px #4fdec877) }
+.mission-devices .stopped .device { filter: drop-shadow(0 0 6px #ffc17a88) }
+.mission-devices .stopped strong { color: var(--amber) }
+.trace-console { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; padding: 12px 18px; background: #101824db; border-top: 1px solid var(--line) }
+.trace-readout { flex: 1 1 220px; display: grid; gap: 4px; color: var(--muted); font-size: 12px; line-height: 1.5 }
+.trace-readout strong { color: var(--cyan) } .trace-readout .stop-text { color: var(--amber) }
+.trace-controls { display: flex; align-items: center; gap: 3px }
+.trace-controls button:hover:not(:disabled) { border-color: var(--cyan) }
+.request-comparison { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); border-top: 1px solid var(--line); background: var(--panel) }
+.request-comparison > div { display: grid; gap: 5px; padding: 12px 18px; font-size: 12px }
+.request-comparison > div + div { border-left: 1px solid var(--line) }
+.request-comparison small { color: var(--muted); font-size: 11px }
+.port-experiment { border-top: 1px solid var(--line); padding: 12px 18px; font-size: 12px }
+.port-experiment summary { color: var(--cyan); cursor: pointer; font-weight: 600 }
+.port-experiment summary svg { vertical-align: middle; margin-inline: 4px 6px }
+.trial-body { color: var(--secondary-text); line-height: 1.6 }
+.trial-body > label { display: flex; align-items: center; flex-wrap: wrap; gap: 8px }
+.trial-body select { background: var(--canvas); border: 1px solid var(--line-strong); border-radius: 5px; color: var(--text); padding: 6px }
+.trial-ports { display: flex; gap: 24px; margin: 12px 0 }
+.trial-ports dt { color: var(--muted) } .trial-ports dd { margin: 0; font: 14px/1.8 var(--mono); color: var(--text) }
+.trial-ports del { color: var(--muted) }
+.trial-choices legend { margin-bottom: 6px; font-weight: 600 }
+.trial-body .trial-choices { grid-template-columns: repeat(auto-fit,minmax(130px,1fr)); margin-bottom: 9px }
+.trial-result { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line) }
+.trial-result div { display: flex; align-items: baseline; gap: 12px; margin-top: 4px }
+.trial-result p { margin-bottom: 0 }
+@media (prefers-reduced-motion: no-preference) {
+  .mission-devices .current-hop:not(:first-child)::before, .mission-devices .stopped:not(:first-child)::before { animation: trace-hop .36s ease-out; transform-origin: left }
+  @keyframes trace-hop { from { transform: scaleX(0) } to { transform: scaleX(1) } }
+}
+@media (max-width: 650px) {
+  .mission-browser { padding: 10px }
+  .browser-toolbar { gap: 6px } .browser-toolbar code, .browser-toolbar button { font-size: 11px }
+  .trace-console, .request-comparison > div { padding: 10px 12px }
+  .mission-devices { --device-span: 59px } .mission-devices .reached:not(:first-child)::before { top: 35px }
+}
 .activity, .reference { padding: 22px 24px 24px }
 h2 { font-weight: 650; font-size: 21px; letter-spacing: -.025em; line-height: 1.2 }
 .activity-kicker { color: var(--amber) }

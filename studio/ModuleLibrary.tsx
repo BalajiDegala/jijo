@@ -38,7 +38,7 @@ export function DockerOverview({ completed }: { completed: number }) {
   return <div className="docker-overview">
     <section aria-labelledby="lesson-heading"><h2 className="library-label" id="lesson-heading">Guided lesson</h2>
       <a href="#lab" className="lesson-card">
-        <span className="module-symbol"><FlaskConical size={24}/></span><div><h3>The unreachable container</h3><p>Trace a failed HTTP request and repair the port mapping.</p>
+        <span className="module-symbol"><FlaskConical size={24}/></span><div><h3>The unreachable container</h3><p>Send a browser request, trace where it stops, and repair the route to Flask.</p>
         <small>{completed} of 4 steps complete</small></div>
         <span className="module-action">{completed === 4 ? 'Review lesson' : completed ? 'Resume lesson' : 'Start lesson'} <ArrowRight size={16}/></span>
       </a></section>

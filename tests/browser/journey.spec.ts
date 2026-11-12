@@ -85,6 +85,48 @@ test('mobile navigation, backup import, reset, and invalid-file recovery', async
   await expect(page.getByRole('heading', { name: 'Connect the missing port' })).toBeVisible();
 });
 
+test('steps through observed hops, compares port repairs and tests a prediction on an isolated copy', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/#lab');
+  const response = page.getByRole('group', { name: 'Simulated browser response' });
+  await expect(response).toContainText('when you record your prediction');
+  await expect(page.getByRole('button', { name: 'Send request' })).toHaveCount(0);
+  await page.getByRole('button', { name: 'Make a prediction' }).click();
+  await expect(page.getByLabel('The app responds')).toBeFocused();
+  await predict(page);
+  await expect(response).toContainText('Connection failed');
+  await page.getByRole('button', { name: 'Previous hop' }).click();
+  await expect(page.locator('.trace-readout')).toContainText('Hop 1');
+  await page.getByRole('button', { name: 'Next hop' }).click();
+  await expect(page.locator('.trace-readout')).toContainText('Stopped at Host port');
+  await page.getByLabel('Container port', { exact: true }).fill('4000');
+  await page.getByRole('button', { name: 'Apply mapping' }).click();
+  await expect(page.getByText(/Configuration changed/)).toBeVisible();
+  await page.getByRole('button', { name: 'Send request' }).click();
+  await expect(page.locator('.trace-readout')).toContainText('Stopped at Flask container');
+  await page.getByLabel('Container port', { exact: true }).fill('5000');
+  await page.getByRole('button', { name: 'Apply mapping' }).click();
+  await page.getByRole('button', { name: 'Send request' }).click();
+  await expect(response).toContainText('Hello from flask-web!');
+  await page.reload();
+  const comparison = page.getByRole('region', { name: 'Request comparison' });
+  await expect(comparison).toContainText('Unpublished');
+  await expect(comparison).toContainText('8080:5000');
+  await page.getByRole('button', { name: 'Replay' }).click();
+  await expect(page.getByRole('button', { name: 'Pause' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Replay' })).toBeVisible();
+  await page.getByText('Try changing one port', { exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Test both addresses' })).toBeDisabled();
+  await page.getByLabel('localhost:8081', { exact: true }).check();
+  await page.getByRole('button', { name: 'Test both addresses' }).click();
+  await expect(page.locator('.trial-result')).toContainText('Your prediction matched');
+  await page.getByRole('combobox', { name: 'Experiment', exact: true }).selectOption('1');
+  await page.getByLabel('Neither address').check();
+  await page.getByRole('button', { name: 'Test both addresses' }).click();
+  await expect(page.locator('.trial-result')).toContainText('Flask was listening on port 5000');
+  await expect(response).toContainText('HTTP 200 OK');
+});
+
 test('competing tabs recover from stale revisions', async ({ page, context }) => {
   const other = await context.newPage();
   await Promise.all([page.goto('/#lab'), other.goto('/#lab')]);

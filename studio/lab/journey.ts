@@ -17,6 +17,17 @@ export interface Project {
   events: Event[];
 }
 export interface Entry { command: string; output: string; success: boolean }
+export interface PortRoute {
+  binding: string;
+  target?: number;
+  process: string;
+  listener?: number;
+}
+export interface RequestRecord {
+  route: PortRoute;
+  success: boolean;
+  output: string;
+}
 export interface Session {
   engine: DockerEngine;
   lab: Lab;
@@ -27,6 +38,7 @@ export interface Session {
   hints: number;
   feedback: string;
   success: boolean;
+  requests: RequestRecord[];
 }
 export const maxEvents = 512;
 export const emptyProject = (): Project => ({ version: 1, journey: 'container-path-v1', events: [] });
@@ -42,7 +54,19 @@ export function createEngine(lab: Lab) {
 }
 
 export function start(): Session {
-  return { engine: createEngine(guided), lab: guided, stage: 'predict', log: [], hints: 0, feedback: '', success: false };
+  return { engine: createEngine(guided), lab: guided, stage: 'predict', log: [], hints: 0, feedback: '', success: false, requests: [] };
+}
+
+export function portRoute({ engine, lab }: Session): PortRoute {
+  const service = engine.state.containers.find(container => container.name === lab.name);
+  const port = service?.ports[0];
+  const running = service?.status === 'running';
+  return {
+    binding: port ? port.host + ':' + port.container + (port.protocol === 'tcp' ? '' : '/' + port.protocol) : 'Unpublished',
+    target: running && port?.host === lab.host && port.protocol === 'tcp' ? port.container : undefined,
+    process: service?.status ?? 'absent',
+    listener: running ? engine.listeningPorts(service)[0] : undefined,
+  };
 }
 
 function execute(s: Session, command: string) {
@@ -50,6 +74,10 @@ function execute(s: Session, command: string) {
   // Replayed activities preserve the log messages without displaying a new wall-clock time.
   const displayed = /^docker\s+logs\s/.test(command) ? output.replace(/^\d{2}:\d{2}:\d{2} /gm, '') : output;
   s.log.push({ command, success, output: displayed });
+  const args = tokenize(command);
+  if (args[0] === 'curl' && Number(args[1]?.match(/^http:\/\/(?:localhost|127\.0\.0\.1):(\d+)\/?$/)?.[1]) === s.lab.host) {
+    s.requests.push({ route: portRoute(s), success, output: displayed });
+  }
   return success;
 }
 
@@ -87,6 +115,7 @@ function apply(s: Session, event: Event) {
       s.lab = transfer;
       s.engine = createEngine(transfer);
       s.log = [];
+      s.requests = [];
       s.feedback = 'A different Flask service already publishes a port. Diagnose its current mapping.';
       s.hints = 0;
     } else {
@@ -141,6 +170,17 @@ export function replay(project: Project): Session {
   const session = start();
   for (const event of project.events) apply(session, event);
   return session;
+}
+
+export function testPortExperiment(session: Session, mapping: { host: number; target: number }): Entry[] {
+  const copy: Session = { ...session, engine: new DockerEngine(session.engine.state), stage: 'repair', log: [], requests: [] };
+  apply(copy, { type: 'map', host: mapping.host, target: mapping.target });
+  const run = copy.log.at(-1)!;
+  if (!run.success) throw new Error(run.output);
+  return [session.lab.host, session.lab.host + 1].map(port => {
+    execute(copy, 'curl http://localhost:' + port);
+    return copy.log.at(-1)!;
+  });
 }
 
 export function append(project: Project, event: Event): Project {

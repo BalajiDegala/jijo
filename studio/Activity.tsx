@@ -27,8 +27,9 @@ function Terminal({ session, act, busy }: Props) {
 function Repair(props: Props) {
   const { session, act, busy } = props;
   const { lab, stage } = session;
-  const [host, setHost] = useState(String(lab.host));
-  const [target, setTarget] = useState(lab.initialTarget ? String(lab.initialTarget) : '');
+  const port = session.engine.state.containers.find(c => c.name === lab.name)?.ports[0];
+  const [host, setHost] = useState(String(port?.host ?? lab.host));
+  const [target, setTarget] = useState(port ? String(port.container) : '');
   return <>
     <p className="activity-description">{stage === 'repair' ? 'Inspect the container and its logs. Recreate it with a port mapping, then verify the request.' :
       'Restore access to the weather service at localhost:' + lab.host + '. Use the evidence in this environment to choose both ports.'}</p>

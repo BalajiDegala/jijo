@@ -4,7 +4,7 @@ import { unzipSync, strFromU8 } from 'fflate';
 import { parse } from 'yaml';
 import { archive, buildBundle } from '../studio/lab/artifacts';
 import { guided, transfer } from '../studio/lab/content';
-import { append, emptyProject, maxEvents, replay, restore } from '../studio/lab/journey';
+import { append, emptyProject, maxEvents, replay, restore, testPortExperiment } from '../studio/lab/journey';
 import type { Event } from '../studio/lab/journey';
 
 const prediction: Event = { type: 'predict', choice: 1 };
@@ -36,6 +36,31 @@ test('the host port, listener, protocol and running process all affect verificat
     assert.equal(run(...variation).stage, 'repair');
   }
   assert.equal(run(prediction, repair, verify).stage, 'explain');
+});
+
+test('request traces capture the route at test time and replay version-one progress', () => {
+  assert.deepEqual(run().requests, []);
+  const steps: Event[] = [prediction, { type: 'map', host: 8080, target: 4000 }, verify, repair,
+    { type: 'command', text: 'curl http://127.0.0.1:8080/' }, { type: 'command', text: 'curl http://localhost:8090' }, verify];
+  const s = replay(restore(project(...steps)));
+  assert.deepEqual(s.requests.map(item => [item.route.binding, item.route.target, item.success]), [
+    ['Unpublished', undefined, false], ['8080:4000', 4000, false], ['8080:5000', 5000, true], ['8080:5000', 5000, true],
+  ]);
+  assert.match(s.requests.at(-1)!.output, /Hello from flask-web!/);
+  assert.deepEqual(run(...steps, explain).requests, []);
+  const stopped = run(prediction, repair, { type: 'command', text: 'docker stop flask-web' }, verify).requests.at(-1)!;
+  assert.equal(stopped.route.binding, '8080:5000');
+  assert.equal(stopped.route.target, undefined);
+});
+
+test('changing one port tests two addresses on a separate copy of the verified container', () => {
+  const s = run(prediction, repair, verify);
+  const before = structuredClone(s.engine.state);
+  assert.deepEqual(testPortExperiment(s, { host: 8081, target: 5000 }).map(r => r.success), [false,true]);
+  assert.deepEqual(testPortExperiment(s, { host: 8080, target: 5001 }).map(r => r.success), [false,false]);
+  assert.deepEqual(s.engine.state, before);
+  assert.equal(s.stage, 'explain');
+  assert.equal(s.requests.length, 2);
 });
 
 test('a learner can remove and run the service from the terminal instead of using the form', () => {
