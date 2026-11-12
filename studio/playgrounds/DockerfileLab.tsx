@@ -31,10 +31,10 @@ export function DockerfileLab({ name, source, serviceName, select, edit, useReci
   const tooLarge = steps.length > 80;
   const items = useMemo(() => tooLarge ? [] : steps.map((s,i) => {
     const row = Math.floor(i / 3);
-    return { id: String(i), name: s.verb, kind: 'Step ' + (i + 1), color: 'instruction', icon: FileCode2,
+    return { id: String(i), name: s.verb, kind: 'Step ' + (i + 1), color: 'instruction', icon: FileCode2, reverse: row % 2 === 1,
       detail: s.text.trimStart().slice(s.verb.length).trim(), x: (row % 2 ? 2 - i % 3 : i % 3) * 238, y: row * 138, source: s.verb !== 'CMD' };
   }), [steps, tooLarge]);
-  const links = useMemo(() => items.slice(1).map((n,i) => ({ from: String(i), to: n.id, color: '#a2bb86', label: 'next' })), [items]);
+  const links = useMemo(() => items.slice(1).map((n,i) => ({ from: String(i), to: n.id, kind: 'sequence' as const, label: 'next' })), [items]);
   function write(next: Instruction[], focus: number) {
     const updated = writeInstructions(doc,next);
     if (updated.length > maxRecipe) { setMessage('This recipe exceeds the 6000-character limit.'); return; }

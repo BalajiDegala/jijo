@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Cable, Code2, GitFork, Maximize2, Minimize2, PanelRight, Plus, Search, Settings2, X, type LucideIcon } from 'lucide-react';
-import { GraphCanvas, type CanvasItem, type CanvasLink, type ShowMenu } from './GraphCanvas';
+import { GraphCanvas, wireColors, type CanvasItem, type CanvasLink, type ShowMenu } from './GraphCanvas';
 
 export interface PaletteEntry { id: string; name: string; description: string; icon: LucideIcon; disabled?: boolean }
 interface Props {
@@ -106,6 +106,7 @@ export function GraphWorkbench(props: Props) {
     document.addEventListener('keydown',key);
     return () => document.removeEventListener('keydown',key);
   });
+  const legend = new Map(links.map(link => [link.kind, link.label]));
   const filtered = palette.filter(n => (n.name + ' ' + n.description).toLowerCase().includes(query.trim().toLowerCase()));
   function changeView(code: boolean) { setSource(''); setMenu(null); setFeedback(''); setShowCode(code); }
   return <div ref={root} className={'graph-workbench' + (full ? ' expanded' : '') + (properties ? ' with-properties' : '')}
@@ -135,7 +136,9 @@ export function GraphWorkbench(props: Props) {
           {sourceItem && <div className="connect-banner" role="status"><Cable size={15}/>Connecting from {sourceItem.name}. Select a highlighted node.
             <button aria-label="Cancel connection" onClick={() => { setSource(''); focusCanvas(); }}><X size={15}/></button></div>}
         </div>}
-        <div className="workbench-status"><span>{items.length} nodes · Simulation</span>
+        <div className="workbench-status"><span>{items.length} nodes · {links.length} connections{full && ' · Simulation'}</span>
+          {!showCode && legend.size > 0 && <div className="wire-legend" aria-label="Connection types">{Array.from(legend, ([kind,label]) =>
+            <span key={kind}><i style={{ backgroundColor: wireColors[kind] }}/>{label}</span>)}</div>}
           <span aria-live="polite">{props.message || feedback || (showCode ? props.alternateName : 'Right-click a node for actions')}</span></div>
       </section>
       {properties && <aside className="pg-inspector graph-properties" aria-label="Node properties"><div className="properties-head"><h2>Properties</h2><button aria-label="Hide properties" onClick={() => setProperties(false)}><X size={16}/></button></div>{props.properties}</aside>}

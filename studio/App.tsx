@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
-import { ArrowRight, Box, Check, CheckCheck, ChevronRight, Circle, CircleDot, HardDrive, PanelLeftClose, PanelLeftOpen, Route, SquareTerminal, X } from 'lucide-react';
+import { ArrowRight, Box, Check, CheckCheck, ChevronRight, Circle, CircleDot, HardDrive, PanelLeftClose, PanelLeftOpen, Route, SquareTerminal, Workflow, FileCode2, X } from 'lucide-react';
 import { Activity } from './Activity';
 import { Topology } from './Topology';
 import { FieldNotes, ProjectFiles } from './Resources';
@@ -69,7 +69,7 @@ export default function App() {
   const intro = page === 'lab' ? 'Trace a browser request to a Flask service and find where the connection breaks.' :
     page === 'notes' ? 'Container networking concepts and evidence from your investigation.' :
     page === 'files' ? 'Inspect the sample application, export a verified build and manage your guest project.' :
-    page === 'modules' ? 'Choose a module to start learning.' : '';
+    '';
   return <div className={'shell' + (open ? '' : ' nav-closed') + (library ? ' library-shell' : '')}>
     <a href="#main" className="skip" onClick={e => { e.preventDefault(); heading.current?.focus(); }}>Skip to workspace</a>
     {!library && <StudioNavigation page={page} open={open} onNavigate={() => { setMobileOpen(false); if (mobile) menuButton.current?.focus(); }}/>}
@@ -80,11 +80,11 @@ export default function App() {
             title={open ? 'Close sidebar' : 'Open sidebar'} aria-expanded={open} aria-controls="side-navigation" onClick={toggleSidebar}>
             {open ? <PanelLeftClose size={19}/> : <PanelLeftOpen size={19}/>}
           </button>
-          <a href="#modules">Modules</a><ChevronRight size={12}/>
+          {!open && <img className="crumb-mark" src="/jijo.svg" alt=""/>}<a href="#modules">Modules</a><ChevronRight size={12}/>
           {page === 'docker' ? <b>Docker</b> : <><a href="#docker">Docker</a><ChevronRight size={12}/><b>{pages[page]}</b></>}
         </div>{!playground && <span className="storage"><HardDrive size={14}/>{status}</span>}</header>}
       <main id="main" className={library ? 'library-main' : playground ? 'playground-main' : page === 'docker' ? 'overview-main' : ''}>
-        <div className="intro"><h1 ref={heading} tabIndex={-1}>{title}</h1>{intro && <p>{intro}</p>}</div>
+        <div className="intro">{playground && <span className={'page-icon ' + page} aria-hidden="true">{page === 'graph' ? <Workflow size={20}/> : <FileCode2 size={20}/>}</span>}<h1 ref={heading} tabIndex={-1}>{title}</h1>{intro && <p>{intro}</p>}</div>
         {notice && !playground && !library && <div className="notice" role="alert"><span>{notice}</span><button className="quiet" onClick={() => setNotice('')} aria-label="Dismiss message"><X size={15}/></button></div>}
     {library ? <ModuleLibrary/> : page === 'docker' ? <DockerOverview completed={count}/> : page === 'lab' ? <div className="lab-layout"><div className="work-column">
       <Topology session={session} key={session.lab.name}/>

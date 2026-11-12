@@ -34,7 +34,7 @@ export default function Playgrounds({ page }: { page: 'graph' | 'dockerfile' }) 
     changeProject(p => ({ ...p, graph: { ...p.graph, nodes } }));
     setSelected(node.id); setEditing(null); setIssue(''); window.location.hash = 'graph';
   }
-  return <div className="pg"><div className="pg-status"><span>Design &amp; simulation</span><small><HardDrive size={13}/>{state.status}</small></div>
+  return <div className="pg"><div className="pg-status"><span>Browser simulation</span><small><HardDrive size={13}/>{state.status}</small></div>
     {state.message && <p className="notice" role="status">{state.message}{state.recovery && <button className="secondary" onClick={() => changeProject(p => p, true)}>Replace damaged save</button>}</p>}
     {issue && <p className="notice" role="alert">{issue}</p>}
     {state.ready ? page === 'graph' ? <ResourceLab graph={graph} selected={selected} select={setSelected} editRecipe={editService}/> :

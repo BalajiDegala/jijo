@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { CheckCircle2, Download, FolderDown, Trash2, TriangleAlert, X } from 'lucide-react';
 import { download } from '../download';
 import { archive } from '../lab/artifacts';
-import { icons } from './GraphCanvas';
+import { icons, type CanvasLink } from './GraphCanvas';
 import { GraphWorkbench } from './GraphWorkbench';
 import { compileGraph, connect, connectionProblem, imageFor, isService, kinds, labels, listener, makeNode, maxNodes, relation, removeNode, stackFiles, type Graph, type Kind, type Resource } from './graph';
 import { changeProject } from './workspace';
@@ -19,9 +19,9 @@ export function ResourceLab({ graph, selected, select, editRecipe }: Props) {
   const valid = useCallback((a: string,b: string) => !connectionProblem(graph,a,b), [graph]);
   const items = useMemo(() => graph.nodes.map(r => ({ ...r, color: r.kind, kind: r.recipe?.framework ?? labels[r.kind], icon: icons[r.kind], source: isService(r.kind),
     detail: isService(r.kind) ? (r.host ? r.host + ' → ' + listener(r) : 'Internal · ' + listener(r)) : descriptions[r.kind] })), [graph.nodes]);
-  const links = useMemo(() => graph.links.map(e => {
+  const links = useMemo<CanvasLink[]>(() => graph.links.map(e => {
     const kind = graph.nodes.find(n => n.id === e.to)!.kind;
-    return { ...e, label: relation(kind), color: kind === 'network' ? '#ae99d8' : kind === 'volume' ? '#ccac61' : '#96bc83' };
+    return { ...e, label: relation(kind), kind: kind === 'network' ? 'network' : kind === 'volume' ? 'mount' : 'dependency' };
   }), [graph]);
   function add(id: string) {
     const kind = kinds.find(k => k === id);
@@ -51,9 +51,10 @@ export function ResourceLab({ graph, selected, select, editRecipe }: Props) {
               <div className="pg-port-readout">Container port<code>{listener(node)}</code></div></div>
             {node.recipe && <button className="inline" onClick={() => editRecipe(node)}>Edit service Dockerfile</button>}
           </>}
+          {outgoing.length > 0 && <h3 className="relation-heading">Outgoing connections</h3>}
           {outgoing.map(e => {
             const other = graph.nodes.find(n => n.id === e.to)!;
-            return <div className="pg-link" key={e.to}><div><span>{relation(other.kind)} <b>{other.name}</b></span>
+            return <div className={'pg-link ' + other.kind} key={e.to}><div><span>{relation(other.kind)} <b>{other.name}</b></span>
               <button aria-label={'Disconnect ' + other.name} onClick={() => update({ ...graph, links: graph.links.filter(l => l !== e) })}><X size={14}/></button></div>
               {other.kind === 'volume' && <label>Mount path<input maxLength={100} value={e.mount ?? ''} onChange={event => update({ ...graph, links: graph.links.map(l => l === e ? { ...l, mount: event.target.value } : l) })}/></label>}</div>;
           })}

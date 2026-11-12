@@ -1,3 +1,4 @@
+import { Device } from './Topology';
 import { ArrowRight, ArrowUpRight, Blocks, BookOpen, Boxes, Container, FileCode2, FlaskConical, GitBranch, Network, Workflow } from 'lucide-react';
 
 export function Brand() {
@@ -13,10 +14,16 @@ const modules = [
 export function ModuleLibrary() {
   return <div className="module-directory">
     <a className="module-feature" href="#docker">
-      <span className="module-symbol"><Container size={28}/></span>
-      <div><h2>Docker</h2><p>Build containers, connect services and export a Compose stack.</p>
-        <small>1 guided lesson · 2 playgrounds</small></div>
-      <span className="module-action">Open module <ArrowRight size={17}/></span>
+      <div className="feature-copy"><div className="feature-title"><Container size={28}/><h2>Docker</h2></div>
+        <p>Build containers, connect services and export a Compose stack.</p>
+        <small>1 guided lesson · 2 playgrounds</small>
+        <span className="module-action">Open module <ArrowRight size={17}/></span>
+      </div>
+      <div className="request-preview" aria-hidden="true">
+        <span><Device kind="host"/><small>Browser</small></span>
+        <span><Device kind="mapping"/><small>Host port</small></span>
+        <span><Device kind="container"/><small>Container</small></span>
+      </div>
     </a>
     <section aria-labelledby="studio-heading"><h2 className="library-label" id="studio-heading">Standalone studios</h2>
       <div className="studio-grid">{modules.map(m => <a key={m.name} href={m.href} className={'studio-card ' + m.color}>
@@ -37,8 +44,8 @@ export function DockerOverview({ completed }: { completed: number }) {
       </a></section>
     <section aria-labelledby="tools-heading"><h2 className="library-label" id="tools-heading">Playgrounds</h2>
       <div className="tool-list">
-        <a href="#graph"><Workflow/><div><h3>Resource playground</h3><p>Connect resources on a canvas, validate the graph and download Compose YAML.</p></div><ArrowRight size={17}/></a>
-        <a href="#dockerfile"><FileCode2/><div><h3>Dockerfile playground</h3><p>Edit and test recipes for Flask, FastAPI, Express and Fastify.</p></div><ArrowRight size={17}/></a>
+        <a href="#graph"><span className="tool-symbol"><Workflow/></span><div><h3>Resource playground</h3><p>Connect resources on a canvas, validate the graph and download Compose YAML.</p></div><ArrowRight size={17}/></a>
+        <a href="#dockerfile"><span className="tool-symbol recipe"><FileCode2/></span><div><h3>Dockerfile playground</h3><p>Edit and test recipes for Flask, FastAPI, Express and Fastify.</p></div><ArrowRight size={17}/></a>
       </div></section>
     <div className="module-references"><a href="#notes"><BookOpen size={15}/>Field notes</a><a href="#files"><Blocks size={15}/>Project files</a></div>
   </div>;

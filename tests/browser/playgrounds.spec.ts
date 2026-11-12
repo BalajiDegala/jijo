@@ -163,3 +163,20 @@ test('Dockerfile nodes edit the same recipe as Source and share the fullscreen a
   await page.keyboard.type('f');
   await expect(page.getByRole('button', { name: 'Full screen', exact: true })).toBeVisible();
 });
+
+test('selecting a resource traces its labeled connections and honors reduced motion', async ({ page }) => {
+  await page.goto('/#graph');
+  const dependency = page.getByRole('group', { name: 'api depends on database', exact: true });
+  const mount = page.getByRole('group', { name: 'database mounts db-data', exact: true });
+  await expect(dependency.locator('.graph-wire')).toHaveClass(/highlighted/);
+  await expect(mount.locator('.graph-wire')).not.toHaveClass(/highlighted/);
+  await node(page, 'db-data').click();
+  await expect(mount.locator('.graph-wire')).toHaveClass(/highlighted/);
+  await expect(dependency.locator('.graph-wire')).not.toHaveClass(/highlighted/);
+  await expect(mount.locator('.wire-caption text')).toHaveText('mounts');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(mount.locator('.wire-trace')).toHaveCSS('display', 'none');
+  await expect(mount.locator('.wire-caption')).toBeVisible();
+  expect(await mount.locator('.wire-aura').evaluate(path => (path as SVGPathElement).getTotalLength())).toBeGreaterThan(0);
+  await expect(mount.locator('.wire-aura')).toHaveCSS('visibility', 'visible');
+});
