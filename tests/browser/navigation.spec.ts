@@ -54,6 +54,6 @@ test('mobile module navigation can be dismissed with Escape and closes after a s
   await sidebar.getByRole('link', { name: 'Dockerfile playground' }).click();
   await expect(page.getByRole('heading', { name: 'Dockerfile playground' })).toBeFocused();
   await expect(menu).toHaveAttribute('aria-expanded', 'false');
-  await expect(page.getByLabel('Dockerfile editor')).toBeVisible();
+  await expect(page.getByRole('application', { name: 'Dockerfile instruction graph' })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });

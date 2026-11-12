@@ -19,8 +19,8 @@ Open [the local studio](http://127.0.0.1:4178). Guest progress is saved in Index
 
 Open **Docker** from the learning module directory. Its overview groups the guided lesson and two playgrounds. The sidebar opens from the top left and remembers a desktop preference on this device. Git, Networking and Terraform open their standalone studios.
 
-- **Resource playground** (`#graph`) supports application, Nginx, PostgreSQL, Redis, network and volume nodes. Drag the handles or use the inspector to connect resources. Resolve validation errors to download the generated Compose file or a ZIP with each application's build context.
-- **Dockerfile playground** (`#dockerfile`) includes Flask, FastAPI, Express and Fastify starters and repair exercises. Edit a Dockerfile, predict the result, run the simulated build, then add the checked recipe to the graph. Use **Edit service Dockerfile** in the inspector to update an existing service.
+- **Resource playground** (`#graph`) supports application, Nginx, PostgreSQL, Redis, network and volume nodes. Press Tab on the canvas to add a node. Right-click a service (or use its actions button), choose Connect, then select a highlighted target. F expands either playground and Esc exits. Resolve validation errors to download the generated Compose file or a ZIP with each application's build context.
+- **Dockerfile playground** (`#dockerfile`) includes Flask, FastAPI, Express and Fastify starters and repair exercises. Select and edit instruction nodes or switch to Source. Connecting two instruction nodes places the later step immediately after the source. Predict the result, run the simulated build, then add the checked recipe to the graph. Use **Edit service Dockerfile** in the inspector to update an existing service.
 
 ## Existing projects
 

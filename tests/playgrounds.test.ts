@@ -43,7 +43,7 @@ test('duplicate ports and names, bad mount paths, isolated dependencies and cycl
     if (rule === 'name') db.name = app.name;
     if (rule === 'mount') graph.links.find(e => e.mount)!.mount = '../escape';
     if (rule === 'network') graph.links = graph.links.filter(e => !(e.from === db.id && e.to === net.id));
-    if (rule === 'cycle') graph = connect(graph, db.id, app.id);
+    if (rule === 'cycle') graph.links.push({ from: db.id, to: app.id });
     const result = compileGraph(graph);
     assert.ok(result.issues.length, rule);
     assert.throws(() => stackFiles(result));
@@ -55,6 +55,7 @@ test('invalid connections fail; removing a resource releases its edges', () => {
   assert.throws(() => connect(graph, net.id, db.id), /Start/);
   assert.throws(() => connect(graph, app.id, app.id), /itself/);
   assert.throws(() => connect(graph, app.id, db.id), /already/);
+  assert.throws(() => connect(graph, db.id, app.id), /cycle/);
   const trimmed = removeNode(graph, db.id);
   assert.ok(trimmed.links.every(e => e.from !== db.id && e.to !== db.id));
   assert.equal(compileGraph(trimmed).issues.length, 0);

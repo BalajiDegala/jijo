@@ -59,3 +59,10 @@ export function sources(lab: Lab) {
     ].join('\n'),
   };
 }
+
+export const dockerfileInstructions = [
+  ['FROM', 'Select the base image'], ['WORKDIR', 'Set the working directory'], ['COPY', 'Copy files from the build context'],
+  ['ADD', 'Add files to the image'], ['ARG', 'Define a build argument'], ['ENTRYPOINT', 'Set the image entry point'],
+  ['RUN', 'Run a build command'], ['ENV', 'Set an environment variable'], ['USER', 'Set the runtime user'],
+  ['EXPOSE', 'Document a container port'], ['CMD', 'Set the startup command'],
+] as const;

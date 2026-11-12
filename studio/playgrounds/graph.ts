@@ -54,13 +54,30 @@ export function initialPlayground(): Playground {
   ] } };
 }
 
-export function connect(graph: Graph, from: string, to: string): Graph {
+export function connectionProblem(graph: Graph, from: string, to: string): string | undefined {
   const a = graph.nodes.find(r => r.id === from);
   const b = graph.nodes.find(r => r.id === to);
-  if (!a || !b || !isService(a.kind)) throw new Error('Start a connection at a service.');
-  if (from === to) throw new Error('A service cannot depend on itself.');
-  if (graph.links.some(e => e.from === from && e.to === to)) throw new Error('These resources are already connected.');
-  if (graph.links.length >= maxLinks) throw new Error('This workspace supports 128 connections.');
+  if (!a || !b || !isService(a.kind)) return 'Start a connection at a service.';
+  if (from === to) return 'A service cannot depend on itself.';
+  if (graph.links.some(e => e.from === from && e.to === to)) return 'These resources are already connected.';
+  if (graph.links.length >= maxLinks) return 'This workspace supports 128 connections.';
+  if (!isService(b.kind)) return;
+  const pending = [to];
+  const visited = new Set<string>();
+  while (pending.length) {
+    const id = pending.pop()!;
+    if (id === from) return 'That dependency would create a cycle.';
+    if (visited.has(id)) continue;
+    visited.add(id);
+    for (const edge of graph.links) if (edge.from === id) pending.push(edge.to);
+  }
+}
+
+export function connect(graph: Graph, from: string, to: string): Graph {
+  const issue = connectionProblem(graph, from, to);
+  if (issue) throw new Error(issue);
+  const a = graph.nodes.find(n => n.id === from)!;
+  const b = graph.nodes.find(n => n.id === to)!;
   const mount = a.kind === 'postgres' ? '/var/lib/postgresql/data' : '/data';
   return { ...graph, links: [...graph.links, { from, to, ...(b.kind === 'volume' && { mount }) }] };
 }

@@ -38,7 +38,7 @@ flowchart LR
 
 ## Verification
 
-The two playgrounds share a separate versioned IndexedDB record for the graph, framework drafts and node positions. Service-to-service edges specify startup dependencies, service-to-network edges attach endpoints, and service-to-volume edges specify mount paths. The inspector provides the same connection operations as the canvas. A dependency representing communication must share a network with its target.
+The two playgrounds share a separate versioned IndexedDB record for the graph, framework drafts and node positions. Service-to-service edges specify startup dependencies, service-to-network edges attach endpoints, and service-to-volume edges specify mount paths. Right-click a node or use its actions button to start a connection on the canvas. Both playgrounds share the node picker, full-screen controls, target highlighting and properties panel. A dependency representing communication must share a network with its target.
 
 The graph compiler checks names, published-port conflicts, mount paths, network membership and dependency cycles. It passes the generated YAML and its explicit set of build directories to DockerLab’s Compose parser. The ZIP contains the exact Dockerfile snapshot attached to each application. PostgreSQL uses a required environment variable for its password. These samples illustrate configuration; application-level database clients and readiness checks require additional code.
 
