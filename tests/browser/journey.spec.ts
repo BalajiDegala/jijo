@@ -15,6 +15,7 @@ test('repairs both services, retries an explanation, resumes and exports the ver
   page.on('pageerror', e => errors.push(e.message));
   await page.goto('/');
   await page.getByRole('link', { name: /Docker.*Open module/ }).click();
+  await page.getByRole('navigation', {name:'Docker module'}).getByRole('link', {name:'Scenarios'}).click();
   await page.getByRole('link', { name: /The unreachable container.*Start lesson/ }).click();
   await expect(page.getByText('Saved on this device')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Record prediction & test' })).toBeDisabled();

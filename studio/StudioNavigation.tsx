@@ -1,9 +1,12 @@
-import { ArrowLeft, BookOpen, ChevronDown, Container, FileCode2, FlaskConical, FolderCode, LayoutDashboard, Library, PanelsTopLeft, Workflow } from 'lucide-react';
+import { ArrowLeft, BookOpen, ChevronDown, Container, FileCode2, FolderCode, Layers, Library, PanelsTopLeft, SquareTerminal, Target, Workflow } from 'lucide-react';
 import { Brand } from './ModuleLibrary';
 
 export const pages = {
   modules: 'Learning modules',
-  docker: 'Docker',
+  docker: 'Docker playground',
+  templates: 'Templates',
+  scenarios: 'Scenarios',
+  investigation: 'Scenario workspace',
   lab: 'Lab workspace',
   graph: 'Resource playground',
   dockerfile: 'Dockerfile playground',
@@ -25,8 +28,8 @@ export function StudioNavigation({ page, open, onNavigate }: { page: Page; open:
       <a className="all-modules" href="#modules" onClick={onNavigate}><ArrowLeft size={14}/>All modules</a>
       <div className="module-nav-title"><Container size={18}/>Docker</div>
       <nav aria-label="Docker module">
-        {link('docker', LayoutDashboard, 'Overview')}{link('lab', FlaskConical, 'Guided lesson')}
-        <details key={'tools-' + page} open={page === 'graph' || page === 'dockerfile'}><summary><PanelsTopLeft size={16}/>Playgrounds<ChevronDown size={14}/></summary>
+        {link('docker', SquareTerminal, 'Playground')}{link('templates', Layers)}{link('scenarios', Target)}
+        <details key={'tools-' + page} open={page === 'graph' || page === 'dockerfile'}><summary><PanelsTopLeft size={16}/>Graph editors<ChevronDown size={14}/></summary>
           {link('graph', Workflow)}{link('dockerfile', FileCode2)}</details>
         <details key={'reference-' + page} open={page === 'notes' || page === 'files'}><summary><Library size={16}/>Reference<ChevronDown size={14}/></summary>
           {link('notes', BookOpen)}{link('files', FolderCode)}</details>

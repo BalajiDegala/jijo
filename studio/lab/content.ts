@@ -1,3 +1,88 @@
+import { COMPOSE_EXAMPLES } from '../../dockerlab/src/data/examples';
+
+export const runtimeTemplates = [
+  { id: 'web', example: COMPOSE_EXAMPLES[1], probe: 'curl http://localhost:8080' },
+  { id: 'database', example: COMPOSE_EXAMPLES[0], probe: 'curl http://localhost:5000' },
+  { id: 'cache', example: COMPOSE_EXAMPLES[2], probe: 'curl http://localhost:5000' },
+] as const;
+
+export const interviewCases = [
+  { question: 68, id: 'persistence', title: 'Where did the database data go?', topic: 'Named volumes' },
+  { question: 69, id: 'networks', title: 'Two containers cannot communicate on the same host', topic: 'Container networking' },
+  { question: 74, id: 'permissions', title: 'A mounted volume denies writes', topic: 'Volume permissions' },
+] as const;
+
+// Source order follows the Docker Interview Preparation Guide, index pages 1–4.
+export const dockerQuestionTopics = [
+  'Docker and virtual machines', 'Client, daemon and registry', 'Image versus container', 'Dockerfile instructions',
+  'CMD and ENTRYPOINT', 'COPY and ADD', 'Image layers and cache', 'Multi-stage builds', 'Volume, bind and tmpfs mounts',
+  'Network drivers', 'Exposing and publishing ports', 'Using .dockerignore', 'Environment and build variables', 'Compose fundamentals',
+  'Exec and attach', 'Container lifecycle', 'Logs and startup failures', 'Image registries', 'Image tagging', 'Build context',
+  'Save, export and commit', 'Docker Desktop and Engine', 'Ordering Dockerfile instructions', 'Choosing a base image',
+  'Non-root containers', 'Health checks', 'Compose in production', 'Memory and CPU limits', 'Container DNS',
+  'Persistent storage patterns', 'Image scanning', 'Reducing image size', 'CI build caching', 'Multi-platform builds',
+  'Build secrets', 'Container logging', 'PID 1 and child processes', 'Graceful shutdown', 'Language-specific Dockerfiles',
+  'Docker-in-Docker and socket mounting', 'Private registries', 'ARG scope and ONBUILD', 'Migrating Compose versions',
+  'Container design mistakes', 'Daemon settings and log rotation', 'Swarm fundamentals', 'Container design patterns',
+  'Docker contexts', 'Namespaces and cgroups', 'OCI standards', 'Container runtimes', 'Rootless containers',
+  'Storage drivers', 'Network internals', 'Layer deduplication', 'BuildKit architecture', 'Enterprise image governance',
+  'Signing and supply-chain integrity', 'Capabilities and security profiles', 'Docker Bench checks', 'Docker socket access',
+  'Migrating Compose to Kubernetes', 'Diagnose a restart loop', 'Speed up a slow build', 'Shrink an oversized image',
+  'Diagnose a production-only crash', 'Respond to a secret in an image layer', 'Investigate lost database data',
+  'Restore communication between containers', 'Handle registry rate limits in CI', 'Respond to a compromised container',
+  'Plan a monolith migration', 'Investigate an OOM kill', 'Repair a volume permission mismatch',
+  'Investigate zombie processes', 'Diagnose Docker disk usage', 'Investigate intermittent DNS', 'Diagnose slow shutdown',
+  'Respond to a compromised base image', 'Investigate repeated CI cache misses',
+] as const;
+
+export const referenceCommands = [
+  ['Images', 'docker pull nginx', 'Download an image into the simulated engine.'],
+  ['Images', 'docker images', 'List local images and tags.'],
+  ['Images', 'docker image ls', 'List images using the object command.'],
+  ['Images', 'docker image inspect nginx', 'Inspect metadata, entrypoint, and files.'],
+  ['Images', 'docker rmi nginx', 'Remove an unused image.'],
+  ['Containers', 'docker run -d --name web -p 8080:80 nginx', 'Create a container and forward host port 8080.'],
+  ['Containers', 'docker ps', 'List running containers.'],
+  ['Containers', 'docker ps -a', 'Include exited containers.'],
+  ['Containers', 'docker ps -a --filter status=exited', 'Show containers whose main process exited.'],
+  ['Containers', 'docker ps -aq --filter status=exited', 'Return just the IDs of exited containers.'],
+  ['Containers', 'docker container ls -a --format "{{.Names}} {{.State}}"', 'Display selected fields from the container list.'],
+  ['Containers', 'docker inspect web', 'Inspect the current configuration and state.'],
+  ['Containers', 'docker logs web', 'Read the process log.'],
+  ['Containers', 'docker stats', 'Show illustrative resource usage.'],
+  ['Containers', 'docker stop web', 'Stop the process and retain the container.'],
+  ['Containers', 'docker start web', 'Start the same container again.'],
+  ['Containers', 'docker restart web', 'Restart the container process.'],
+  ['Containers', 'docker rm web', 'Remove a stopped container.'],
+  ['Containers', 'docker exec -it web sh', 'Enter the simulated container shell. Use exit to return.'],
+  ['Networks', 'docker network create backend', 'Create a user-defined bridge.'],
+  ['Networks', 'docker network ls', 'List available networks.'],
+  ['Networks', 'docker network connect backend web', 'Attach a running service to a network.'],
+  ['Networks', 'docker network inspect backend', 'Inspect network membership and addresses.'],
+  ['Networks', 'docker network disconnect backend web', 'Detach the service.'],
+  ['Networks', 'docker network rm backend', 'Remove an unused network.'],
+  ['Volumes', 'docker volume create data', 'Create persistent storage.'],
+  ['Volumes', 'docker volume ls', 'List volumes.'],
+  ['Volumes', 'docker volume inspect data', 'Inspect storage and its mounts.'],
+  ['Volumes', 'docker volume rm data', 'Remove an unused volume.'],
+  ['Build and registry', 'docker build -t status:v1 .', 'Build the included Flask project.'],
+  ['Build and registry', 'docker login -u learner', 'Select a virtual registry account.'],
+  ['Build and registry', 'docker tag nginx learner/web:v1', 'Add a registry tag.'],
+  ['Build and registry', 'docker push learner/web:v1', 'Publish to the simulated registry.'],
+  ['Build and registry', 'docker logout', 'Leave the virtual registry session.'],
+  ['Compose', 'docker compose config', 'Inspect the normalized project configuration.'],
+  ['Compose', 'docker compose build', 'Build project images.'],
+  ['Compose', 'docker compose up -d', 'Create or start the stack.'],
+  ['Compose', 'docker compose ps', 'Inspect project services.'],
+  ['Compose', 'docker compose logs', 'Read service logs.'],
+  ['Compose', 'docker compose stop', 'Stop project services.'],
+  ['Compose', 'docker compose start', 'Resume project services.'],
+  ['Compose', 'docker compose down', 'Remove project containers and networks.'],
+  ['Diagnostics', 'curl http://localhost:8080', 'Test a published HTTP listener.'],
+  ['Diagnostics', 'docker exec web ping database', 'Check container-to-container reachability.'],
+  ['Diagnostics', 'docker exec web nslookup database', 'Resolve a service name.'],
+] as const;
+
 export interface Lab {
   name: string;
   image: string;

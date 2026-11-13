@@ -14,7 +14,7 @@ test('the module directory leads to a scoped workspace and the sidebar gives the
   await page.getByRole('link', { name: /Docker.*Open module/ }).click();
   const sidebar = page.getByRole('navigation', { name: 'Docker module' });
   await expect(sidebar.getByRole('link', { name: 'Resource playground' })).toBeHidden();
-  await sidebar.getByText('Playgrounds', { exact: true }).click();
+  await sidebar.getByText('Graph editors', { exact: true }).click();
   await sidebar.getByRole('link', { name: 'Resource playground' }).click();
   await expect(page).toHaveTitle('Resource playground · JIJO Learning Studio');
   await expect(sidebar).toBeHidden();
@@ -50,7 +50,7 @@ test('mobile module navigation can be dismissed with Escape and closes after a s
   await expect(menu).toHaveAttribute('aria-expanded', 'false');
   await menu.click();
   const sidebar = page.getByRole('navigation', { name: 'Docker module' });
-  await sidebar.getByText('Playgrounds', { exact: true }).click();
+  await sidebar.getByText('Graph editors', { exact: true }).click();
   await sidebar.getByRole('link', { name: 'Dockerfile playground' }).click();
   await expect(page.getByRole('heading', { name: 'Dockerfile playground' })).toBeFocused();
   await expect(menu).toHaveAttribute('aria-expanded', 'false');

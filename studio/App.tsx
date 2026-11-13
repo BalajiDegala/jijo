@@ -3,13 +3,14 @@ import { ArrowRight, Box, Check, CheckCheck, ChevronRight, Circle, CircleDot, Ha
 import { Activity } from './Activity';
 import { Topology } from './Topology';
 import { FieldNotes, ProjectFiles } from './Resources';
-import { Brand, DockerOverview, ModuleLibrary } from './ModuleLibrary';
+import { Brand, ModuleLibrary } from './ModuleLibrary';
 import { pages, readPage, StudioNavigation, type Page } from './StudioNavigation';
 import { milestones } from './lab/content';
 import type { Stage } from './lab/journey';
 import { useProject } from './useProject';
 
 const Playgrounds = lazy(() => import('./playgrounds/Playgrounds'));
+const DockerStudio = lazy(() => import('./playgrounds/DockerStudio'));
 const finished: Record<Stage, number> = { predict: 0, repair: 1, explain: 2, transfer: 3, complete: 4 };
 const objectives = ['Record a prediction', 'Get a verified HTTP response', 'Connect the evidence', 'Repair a different service'];
 const sidebarPreference = 'jijo.sidebar';
@@ -30,6 +31,7 @@ export default function App() {
   const heading = useRef<HTMLHeadingElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
   const playground = page === 'graph' || page === 'dockerfile';
+  const runtime = page === 'docker' || page === 'templates' || page === 'scenarios' || page === 'investigation';
   const library = page === 'modules';
   const open = !library && (mobile ? mobileOpen : (preference ?? !playground));
   const title = page === 'lab' ? 'The unreachable container' : pages[page];
@@ -83,10 +85,10 @@ export default function App() {
           {!open && <img className="crumb-mark" src="/jijo.svg" alt=""/>}<a href="#modules">Modules</a><ChevronRight size={12}/>
           {page === 'docker' ? <b>Docker</b> : <><a href="#docker">Docker</a><ChevronRight size={12}/><b>{pages[page]}</b></>}
         </div>{!playground && <span className="storage"><HardDrive size={14}/>{status}</span>}</header>}
-      <main id="main" className={library ? 'library-main' : playground ? 'playground-main' : page === 'docker' ? 'overview-main' : ''}>
+      <main id="main" className={library ? 'library-main' : playground || runtime ? 'playground-main' : ''}>
         <div className="intro">{playground && <span className={'page-icon ' + page} aria-hidden="true">{page === 'graph' ? <Workflow size={20}/> : <FileCode2 size={20}/>}</span>}<h1 ref={heading} tabIndex={-1}>{title}</h1>{intro && <p>{intro}</p>}</div>
         {notice && !playground && !library && <div className="notice" role="alert"><span>{notice}</span><button className="quiet" onClick={() => setNotice('')} aria-label="Dismiss message"><X size={15}/></button></div>}
-    {library ? <ModuleLibrary/> : page === 'docker' ? <DockerOverview completed={count}/> : page === 'lab' ? <div className="lab-layout"><div className="work-column">
+    {library ? <ModuleLibrary/> : runtime ? <Suspense fallback={<p role="status">Opening Docker workspace…</p>}><DockerStudio page={page} completed={count}/></Suspense> : page === 'lab' ? <div className="lab-layout"><div className="work-column">
       <Topology session={session} act={act} busy={busy} key={session.lab.name}/>
       <Activity session={session} act={act} busy={busy} key={session.stage} showFiles={() => nextPage('files')}/>
     </div><aside className="right-column">

@@ -2,6 +2,16 @@ import { describe,it,expect } from 'vitest';
 import { DockerEngine } from './DockerEngine';
 
 describe('Phase 1 · resource lifecycle and CLI validation',()=>{
+  it('lists stopped container IDs, formats selected fields and accepts the container ls alias',()=>{
+    const e=new DockerEngine();
+    const web=e.run('nginx',{name:'web'}), old=e.run('nginx',{name:'old'});
+    e.stop(old.id);
+    expect(e.execute('docker ps -q').output).toBe(web.id);
+    expect(e.execute('docker ps -aq --filter status=exited').output).toBe(old.id);
+    expect(e.execute('docker container ls -a --format "{{.Names}} {{.State}}"').output).toBe('web running\nold exited');
+    expect(e.execute('docker ps --filter unsupported=x').success).toBe(false);
+    expect(e.execute('docker ps --format "{{.Missing}}"').success).toBe(false);
+  });
   it('completes the acceptance workflow with synchronized references and events',()=>{
     const e=new DockerEngine();
     for(const command of ['docker pull nginx','docker run -d --name web -p 8080:80 nginx','docker network create app-network','docker network connect app-network web','docker ps','docker network ls'])expect(e.execute(command).success,command).toBe(true);
